@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from classes.guest import Guest
-from classes.hotel import Hotel
-from classes.room_type import RoomType
-from classes.facility import Facility
+from model.hotel import Hotel
+from model.room_type import RoomType
+from model.facility import Facility
 
 
 class Room:

@@ -1,4 +1,4 @@
-from classes.address import Address
+from model.address import Address
 
 class Guest:
     def __init__(self, guest_id:int, first_name:str, last_name:str, email:str, address:Address):

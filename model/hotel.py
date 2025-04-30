@@ -1,5 +1,5 @@
-from classes.address import Address
-from classes.room import Room
+from model.address import Address
+from model.room import Room
 from datetime import datetime
 
 class Hotel:

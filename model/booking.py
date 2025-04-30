@@ -1,6 +1,6 @@
 from datetime import datetime
-from classes.guest import Guest
-from classes.room import Room
+from model.guest import Guest
+from model.room import Room
 
 class Booking:
     def __init__(self, booking_id:int, check_in_date:datetime, check_out_date:datetime, is_cancelled:bool, total_amount:float, guest:Guest, room:Room):

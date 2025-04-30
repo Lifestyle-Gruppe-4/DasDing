@@ -1,5 +1,5 @@
 from datetime import datetime
-from classes.booking import Booking
+from model.booking import Booking
 
 
 
