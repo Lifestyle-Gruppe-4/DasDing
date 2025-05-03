@@ -11,3 +11,15 @@ class Booking:
         self.total_amount = total_amount
         self.guest = guest
         self.room = room
+
+    def make_booking(self):
+        pass
+
+    def cancel_booking(self):
+        pass
+
+    def view_booking_history(self):
+        pass
+
+    def get_booking(self):
+        pass
