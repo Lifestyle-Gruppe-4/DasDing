@@ -36,9 +36,9 @@ class GuestManager:
                      last_name: Optional[str] = None,
                      email: Optional[str] = None,
                      address: Optional[Address] = None) -> Guest:
-        """
-        Aktualisiert Attribute eines bestehenden Gastes.
-        """
+
+        #Aktualisiert Attribute eines bestehenden Gastes.
+
         guest = self.get_guest(guest_id)
         if guest is None:
             raise KeyError(f"No guest with id {guest_id}.")
@@ -53,17 +53,17 @@ class GuestManager:
         return guest
 
     def delete_guest(self, guest_id: int) -> None:
-        """
-        Entfernt einen Gast aus dem Manager.
-        """
+
+        #Entfernt einen Gast aus dem Manager.
+
         if guest_id not in self._guests:
             raise KeyError(f"No guest with id {guest_id}.")
         del self._guests[guest_id]
 
     def list_guests(self) -> List[Guest]:
-        """
-        Gibt alle erstellten Gäste zurück.
-        """
+
+        #Gibt alle erstellten Gäste zurück.
+
         if not self._guests:
             print("No guests yet.")
             return
