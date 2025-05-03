@@ -10,5 +10,6 @@ class Address:
                f"Street: {self.street}, City: {self.city}, Zip: {self.zip})")
 
 addr1 = Address(address_id=1,street="Hauptstrasse 5",city="Basel", zip="4051")
-addr2 = Address(address_id=2,street="Bahnhofstrasse 27",city="Bern", zip="3001")
+addr2 = Address(address_id=2,street="Allmendweg 69",city="Sissach", zip="4450")
+addr3 = Address(address_id=3,street="Oberer Chriesmattweg 5",city="Böckten",zip="4461")
 

@@ -76,8 +76,8 @@ class Guest:
 
 
 
-guest1 = Guest(guest_id=1,first_name="Hans",last_name="Muster",email="hanst.muster@bluewin.ch",address=addr1)
-guest2 = Guest(guest_id=2,first_name="Peter",last_name="Müller",email="peter.müller@outlook.com",address=addr2)
+#guest1 = Guest(guest_id=1,first_name="Hans",last_name="Muster",email="hanst.muster@bluewin.ch",address=addr1)
+#guest2 = Guest(guest_id=2,first_name="Peter",last_name="Müller",email="peter.müller@outlook.com",address=addr2)
 
 
-print(guest2)
+#print(guest2)
