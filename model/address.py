@@ -33,7 +33,7 @@ class Address:
 
 
 addr1 = Address(address_id=1,street="Hauptstrasse 5",city="Basel", zip="4051")
-addr2 = Address(address_id=2,street="Allmendweg 69",city="Sissach", zip="4450")
+addr2 = Address(address_id=2,street="Allendweg 69",city="Sissach", zip="4450")
 addr3 = Address(address_id=3,street="Oberer Chriesmattweg 5",city="Böckten",zip="4461")
 
 print(addr1)
