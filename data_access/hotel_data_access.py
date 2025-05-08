@@ -15,7 +15,6 @@ print(hotel_by_id)
 
 
 hotel_dao = HotelDataAccess()
-
 hotels = hotel_dao.get_all_hotels()
 for hotel in hotels:
     print(hotel)
