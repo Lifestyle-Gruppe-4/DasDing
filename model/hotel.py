@@ -22,15 +22,36 @@ class Hotel:
     @property
     def hotel_id(self):
         return self.__hotel_id
+
     @property
     def name(self):
         return self.__name
+    @name.setter
+    def name(self, value):
+        if not value:
+            raise ValueError("Name darf nicht leer sein")
+        self.__name = value
+
     @property
     def stars(self):
         return self.__stars
+    @stars.setter
+    def stars(self, value):
+        if not isinstance(value, int):
+            raise TypeError("Sterne müssen eine ganze Zahl sein")
+        if value < 1 or value > 5:
+            raise ValueError("Sterne müssen zwischen 1 und 5 liegen")
+        self.__stars = value
+
     @property
     def address(self):
         return self.__address
+    @address.setter
+    def address(self, value):
+        if not isinstance(value, Address):
+            raise TypeError("Die Adresse muss ein Address-Objekt sein")
+        self.__address = value
+
     @property
     def rooms(self):
         return self.__rooms
