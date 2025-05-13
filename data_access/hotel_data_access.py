@@ -34,3 +34,4 @@ def get_all_hotels_by_stars(stars):
         cursor.execute("SELECT hotel_id, name, stars FROM Hotel WHERE stars = ?", params)
         return cursor.fetchall()
 
+get_all_hotels()
