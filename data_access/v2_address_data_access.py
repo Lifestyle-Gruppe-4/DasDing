@@ -1,4 +1,4 @@
-from data_access.base_data_access import BaseDataAccess
+from data_access.v2_base_data_access import BaseDataAccess
 
 class AddressDataAccess(BaseDataAccess):
     def get_all_address(self) -> list:

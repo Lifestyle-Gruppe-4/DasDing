@@ -83,4 +83,5 @@ guest2 = manager.create_guest(2, "Michele","Lepori",email="michele.lepori@el.com
 guest3 = manager.create_guest(3, "Thomas","Bartels",email="tm.bartels@outlook.com",address=addr1)
 
 #print(manager.list_guests())
-print(manager.get_guest(1))
+#print(manager.get_guest(1))
+print(manager.list_guests())

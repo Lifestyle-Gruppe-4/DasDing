@@ -1,20 +1,36 @@
-from data_access.base_data_access import BaseDataAccess
+from data_access.base_data_access import connect
 
-class HotelDataAccess(BaseDataAccess):
-    def get_all_hotels(self) -> list:
-        sql = "SELECT hotel_id, name FROM Hotel"
-        return self.fetchall(sql)
+#Alle Hotels
+def get_all_hotels():
+    with connect() as conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute(
+                "SELECT h.hotel_id, h.name, h.stars, "
+                "a.address_id, a.street, a.zip_code, a.city "
+                "FROM Hotel h "
+                "JOIN Address a ON h.address_id = a.address_id"
+            )
+            result = cursor.fetchall()
+            print("DB-Ergebnis:", result)
+            return result
+        except Exception as e:
+            print("Error in SQL query:", e)
+            return None
 
-    def get_hotel_by_id(self, hotel_id: int) -> list:
-        sql = "SELECT hotel_id, name FROM Hotel WHERE hotel_id = ?"
-        return self.fetchall(sql, [hotel_id])
+#Nach Name
+def get_all_hotels_by_name(name):
+    with connect() as conn:
+        params = tuple([""])
+        cursor = conn.cursor()
+        cursor.execute("SELECT hotel_id, name FROM Hotel WHERE name ?", params)
+        return cursor.fetchone()
 
-dao = HotelDataAccess()
-hotel_by_id = dao.get_hotel_by_id(1)
-print(hotel_by_id)
+#Nach Sternen
+def get_all_hotels_by_stars(stars):
+    with connect() as conn:
+        params = tuple([5])
+        cursor = conn.cursor()
+        cursor.execute("SELECT hotel_id, name, stars FROM Hotel WHERE stars = ?", params)
+        return cursor.fetchall()
 
-
-hotel_dao = HotelDataAccess()
-hotels = hotel_dao.get_all_hotels()
-for hotel in hotels:
-    print(hotel)

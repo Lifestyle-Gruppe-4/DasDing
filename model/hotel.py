@@ -1,4 +1,4 @@
-from model.address import Address, addr1
+from model.address import Address
 from datetime import datetime
 
 
@@ -83,14 +83,14 @@ class Hotel:
         return self.name, self.stars, self.address, self.rooms
 
 
-hotel = Hotel(hotel_id= 1,name= "Hotel Sunshine",stars= 4, address= addr1)
-print(hotel)
+#hotel = Hotel(hotel_id= 1,name= "Hotel Sunshine",stars= 4, address= addr1)
+#print(hotel)
 
 
 
-hotel.add_room("Room 101")
-hotel.add_room("Room 102")
+#hotel.add_room("Room 101")
+#hotel.add_room("Room 102")
 
-print(hotel.rooms)
+#print(hotel.rooms)
 
 
