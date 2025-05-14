@@ -1,19 +1,19 @@
 #Address Class with private variables
 class Address:
-    def __init__(self, address_id: int, street: str, city: str, zip: str):
+    def __init__(self, address_id: int, street: str, city: str, zip_code: str):
         if not address_id:
             raise ValueError("Address ID is required")
         if not street:
             raise ValueError("Street is required")
         if not city:
             raise ValueError("City is required")
-        if not zip:
+        if not zip_code:
             raise ValueError("Zip is required")
 
         self.__address_id = address_id
         self.__street = street
         self.__city = city
-        self.__zip = zip
+        self.__zip_code = zip_code
 
     @property
     def address_id(self) -> int:
@@ -26,7 +26,7 @@ class Address:
         return self.__city
     @property
     def zip(self) -> str:
-        return self.__zip
+        return self.__zip_code
 
     def __repr__(self):
         return f"Address ID: {self.address_id}, Street: {self.street}, City: {self.city}, ZIP: {self.zip}"

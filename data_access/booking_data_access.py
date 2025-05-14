@@ -1,17 +1,21 @@
 #import the data access from class v2_base_data_access. 13.05.2025
-
+import model
 from data_access.v2_base_data_access import BaseDataAccess
 
 class BookingDataAccess(BaseDataAccess):
+    def __init__(self, db_path: str = None):
+        super().__init__(db_path)
 
-    def get_all_bookings(self):
-        sql = """
+    def read_all_bookings(self) -> list[model.Booking]:
+            sql = """
             SELECT b.booking_id, b.check_in_date, b.check_out_date, b.total_amount, g.first_name, g.last_name, r.room_number, r.price_per_night
             FROM Booking b
             JOIN Guest g ON b.guest_id = g.guest_id
             JOIN Room r ON r.room_id = r.room_id
             """
-        return self.fetchall(sql)
+            bookings = self.fetchall(sql)
+
+            return [model.Booking(booking_id=booking_id) for booking_id in booking]
 
     def get_booking_by_id(self, booking_id: int):
         sql = """
