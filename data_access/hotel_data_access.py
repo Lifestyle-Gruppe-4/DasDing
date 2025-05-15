@@ -1,37 +1,39 @@
-from data_access.base_data_access import connect
+import model.hotel as model
+from base_data_access import BaseDataAccess
+from model.address import Address
 
-#Alle Hotels
-def get_all_hotels():
-    with connect() as conn:
-        cursor = conn.cursor()
-        try:
-            cursor.execute(
-                "SELECT h.hotel_id, h.name, h.stars, "
-                "a.address_id, a.street, a.zip_code, a.city "
-                "FROM Hotel h "
-                "JOIN Address a ON h.address_id = a.address_id"
+class HotelDataAccess(BaseDataAccess):
+    def __init__(self, db_path:str=None):
+        super().__init__(db_path)
+
+    def read_all_hotels(self) -> list[model.Hotel]:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code
+        FROM Hotel h
+        JOIN Address a ON h.address_id = a.address_id
+        """
+        hotels = self.fetchall(sql)
+
+        return [
+            model.Hotel(
+                hotel_id=row[0],
+                name=row[1],
+                stars=row[2],
+                address=Address(
+                    address_id=row[3],
+                    street=row[4],
+                    city=row[5],
+                    zip_code=row[6]
+                )
             )
-            result = cursor.fetchall()
-            print("DB-Ergebnis:", result)
-            return result
-        except Exception as e:
-            print("Error in SQL query:", e)
-            return None
+            for row in hotels
+        ]
 
-#Nach Name
-def get_all_hotels_by_name(name):
-    with connect() as conn:
-        params = tuple([""])
-        cursor = conn.cursor()
-        cursor.execute("SELECT hotel_id, name FROM Hotel WHERE name ?", params)
-        return cursor.fetchone()
+if __name__ == "__main__":
+    db_path = "../database/hotel_sample.db"
+    hotel_dal = HotelDataAccess(db_path)
+    hotels = hotel_dal.read_all_hotels()
 
-#Nach Sternen
-def get_all_hotels_by_stars(stars):
-    with connect() as conn:
-        params = tuple([5])
-        cursor = conn.cursor()
-        cursor.execute("SELECT hotel_id, name, stars FROM Hotel WHERE stars = ?", params)
-        return cursor.fetchall()
+    for hotel in hotels:
+        print(hotel)
 
-get_all_hotels()

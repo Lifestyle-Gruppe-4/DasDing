@@ -1,6 +1,5 @@
-#import the data access from class v2_base_data_access. 13.05.2025
-import model
-from data_access.v2_base_data_access import BaseDataAccess
+import model.hotel as model
+from base_data_access import BaseDataAccess
 
 class BookingDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
