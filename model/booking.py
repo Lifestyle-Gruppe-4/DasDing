@@ -7,16 +7,89 @@ class Booking:
     booking_counter = 1
 
     def __init__(self, check_in_date: datetime, check_out_date: datetime, guest: Guest, room: Room):
-        self.booking_id = Booking.booking_counter
+        self.__booking_id = Booking.booking_counter
         Booking.booking_counter += 1
 
-        self.check_in_date = check_in_date
-        self.check_out_date = check_out_date
-        self.guest = guest
-        self.room = room
-        self.is_cancelled = False
-        self.total_amount = self.calculate_total_amount()
-        self.invoice = None
+        self.__check_in_date = check_in_date
+        self.__check_out_date = check_out_date
+        self.__guest = guest
+        self.__room = room
+        self.__is_cancelled = False
+        self.__total_amount = self.calculate_total_amount()
+        self.__invoice = None
+
+    @property
+    def booking_id(self):
+        return self.__booking_id
+
+    @property
+    def check_in_date(self):
+        return self.__check_in_date
+
+    @check_in_date.setter
+    def check_in_date(self, value):
+        if not isinstance(value, datetime):
+            raise ValueError('check_in_date must be a datetime')
+        self.__check_in_date = value
+        self.__total_amount = self.calculate_total_amount()
+
+    @property
+    def check_out_date(self):
+        return self.__check_out_date
+
+    @check_out_date.setter
+    def check_out_date(self, value):
+        if not isinstance(value, datetime):
+            raise ValueError('check_out_date must be a datetime')
+        self.__check_out_date = value
+        self.__total_amount = self.calculate_total_amount()
+
+    @property
+    def guest(self):
+        return self.__guest
+
+    @guest.setter
+    def guest(self, value):
+        if not isinstance(value, Guest):
+            raise ValueError('Guest must be an instance of Guest!')
+        self.__guest = value
+
+    @property
+    def room(self):
+        return self.__room
+
+    @room.setter
+    def room(self, value):
+        if not isinstance(value, Room):
+            raise ValueError('Room must be an instance of Room!')
+        self.__room = value
+        self.__total_amount = self.calculate_total_amount()
+
+    @property
+    def is_cancelled(self):
+        return self.__is_cancelled
+
+    @is_cancelled.setter
+    def is_cancelled(self, value):
+        if not isinstance(value, bool):
+            raise ValueError('is_cancelled must be a bool')
+        self.__is_cancelled = value
+
+    @property
+    def total_amount(self):
+        return self.__total_amount
+
+    @property
+    def invoice(self):
+        return self.__invoice
+
+    @invoice.setter
+    def invoice(self, value):
+        if not isinstance(value, Invoice) and value is not None:
+            raise ValueError('invoice must be an instance of Invoice or None!')
+        self.__invoice = value
+
+#Methode which can be used for testing
 
     def get_booking_details(self) -> str:
         booking_status = "Cancelled" if self.is_cancelled else "Active"
@@ -29,7 +102,7 @@ class Booking:
             raise ValueError("Check-out must be the same or after check-in date!")
         self.check_in_date = new_check_in
         self.check_out_date = new_check_out
-        self.total_amount = self.calculate_total_amount()
+        self.__total_amount = self.calculate_total_amount()
 
     def calculate_total_amount(self) -> float:
         nights = (self.check_out_date - self.check_in_date).days
