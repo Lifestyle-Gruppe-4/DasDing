@@ -6,14 +6,50 @@ class Invoice:
     invoice_counter = 1
 
     def __init__(self, total_amount: float, booking: Booking):
-        self.invoice_id = Invoice.invoice_counter
+        self.__invoice_id = Invoice.invoice_counter
         Invoice.invoice_counter += 1
 
-        self.total_amount =  total_amount
-        self.issue_date = datetime.today()
-        self.is_paid = False
-        self.booking = booking
+        self.__total_amount =  total_amount
+        self.__issue_date = datetime.today()
+        self.__is_paid = False
+        self.__booking = booking
 
+    @property
+    def invoice_id(self):
+        return self.__invoice_id
+
+    @property
+    def total_amount(self):
+        return self.__total_amount
+
+    @total_amount.setter
+    def total_amount(self, value):
+        if self.__is_paid:
+            raise ValueError("Cannot modify invoice after paid")
+        if not isinstance(value, (int, float)) or value < 0:
+            raise ValueError("Total amount must be a positive number.")
+        self.__total_amount = value
+
+    @property
+    def issue_date(self):
+        return self.__issue_date
+
+    @property
+    def is_paid(self):
+        return self.__is_paid
+
+    @is_paid.setter
+    def is_paid(self, value):
+        if not isinstance(value, bool):
+            raise ValueError("IsPaid must be a boolean.")
+        self.__is_paid = value
+
+    @property
+    def booking(self):
+        return self.__booking
+
+
+# Methode to use for testing
     def mark_as_paid(self):
         self.is_paid = True
         print(f"Invoice {self.invoice_id} is marked as paid.")
