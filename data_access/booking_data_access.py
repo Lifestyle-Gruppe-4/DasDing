@@ -1,4 +1,5 @@
 import model.hotel as model
+from model.booking import Booking
 from base_data_access import BaseDataAccess
 
 class BookingDataAccess(BaseDataAccess):
@@ -14,7 +15,7 @@ class BookingDataAccess(BaseDataAccess):
             """
             bookings = self.fetchall(sql)
 
-            return [model.Booking(booking_id=booking_id) for booking_id in booking]
+            return [model.Booking(booking_id=booking_id) for booking_id in Booking]
 
     def get_booking_by_id(self, booking_id: int):
         sql = """
