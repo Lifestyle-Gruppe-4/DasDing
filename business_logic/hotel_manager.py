@@ -11,6 +11,6 @@ def list_all_hotels():
         hotels.append(hotel)
     return hotels
 
-list_all_hotels()
+
 
 
