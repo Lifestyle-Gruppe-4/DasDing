@@ -40,3 +40,4 @@ class GuestManager:
 
 guest_dal = GuestDataAccess("../database/hotel_sample.db")
 manager = GuestManager(guest_dal)
+print(manager.get_all_guests())
