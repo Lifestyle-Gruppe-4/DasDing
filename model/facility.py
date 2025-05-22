@@ -20,8 +20,3 @@ class Facility:
             raise ValueError("facility_name must be a string")
         self.__facility_name = facility_name
 
-
-
-tv = Facility(1, "TV")
-
-print(tv)

@@ -1,4 +1,4 @@
-from base_data_access import BaseDataAccess
+from data_access.base_data_access import BaseDataAccess
 from model.guest import Guest
 from model.address import Address
 
@@ -30,11 +30,45 @@ class GuestDataAccess(BaseDataAccess):
             for row in guests
         ]
 
-if __name__ == "__main__":
-    db_path = "../database/hotel_sample.db"
-    guest_dal = GuestDataAccess(db_path)
-    guests = guest_dal.read_all_guests()
+    def create_guest(self, guest: Guest) -> int:
+        sql = """
+        INSERT INTO Guest (first_name, last_name, email, address_id)
+        VALUES (?,?,?,?)
+        """
 
-    for guest in guests:
-        print(guest)
+        params = (guest.first_name, guest.last_name, guest.email, guest.address.address_id)
+        guest_id, _ = self.execute(sql, params) # "_" anstelle von rows_affected. nicht nötig bei Insert.
+        return guest_id
+
+    def update_guest(self, guest: Guest) -> bool:
+        sql = """
+        UPDATE Guest
+        SET first_name = ?, last_name = ?, email = ?, address_id = ?
+        WHERE guest_id = ?
+        """
+        params = (
+            guest.first_name,
+            guest.last_name,
+            guest.email,
+            guest.address.address_id,
+            guest.guest_id
+        )
+        _, rows_affected = self.execute(sql, params)
+        return rows_affected > 0
+
+    def delete_guest(self, guest_id: int) -> bool:
+        sql = """
+        DELETE FROM Guest WHERE guest_id = ?
+        """
+        params = (guest_id,)
+        _, rows_affected = self.execute(sql, params)
+        return rows_affected > 0
+
+# if __name__ == "__main__":
+#     db_path = "../database/hotel_sample.db"
+#     guest_dal = GuestDataAccess(db_path)
+#     guests = guest_dal.read_all_guests()
+#
+#     for guest in guests:
+#         print(guest)
 
