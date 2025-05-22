@@ -12,16 +12,23 @@ address_dal = AddressDataAccess(db_path)
 guest_manager = GuestManager(guest_dal)
 address_manager = AddressManager(address_dal)
 
-first_name = input("Enter First Name: ")
-last_name = input("Enter Last Name: ")
-email = input("Enter Email: ")
+# first_name = input("Enter First Name: ")
+# last_name = input("Enter Last Name: ")
+# email = input("Enter Email: ")
+#
+# address = address_manager.find_address_by_id(1)
+#
+# if address is None:
+#     print("Address Not Found")
+# else:
+#     new_guest = Guest(guest_id=None, first_name=first_name, last_name=last_name, email=email, address=address)
+#
+# guest_id = guest_manager.add_guest(new_guest)
+# print(f"Gast gespeichert mit ID: {guest_id}")
 
-address = address_manager.find_address_by_id(1)
+# delete_id = input("Enter ID to delete")
+#
+# delete_guest = guest_manager.delete_guest(delete_id)
 
-if address is None:
-    print("Address Not Found")
-else:
-    new_guest = Guest(guest_id=None, first_name=first_name, last_name=last_name, email=email, address=address)
-
-guest_id = guest_manager.add_guest(new_guest)
-print(f"Gast gespeichert mit ID: {guest_id}")
+for guest in guest_manager.get_all_guests():
+    print(guest)
