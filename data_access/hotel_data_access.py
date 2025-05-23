@@ -1,4 +1,4 @@
-import model.hotel as model
+from model.hotel import Hotel
 from base_data_access import BaseDataAccess
 from model.address import Address
 
@@ -6,7 +6,7 @@ class HotelDataAccess(BaseDataAccess):
     def __init__(self, db_path:str=None):
         super().__init__(db_path)
 
-    def read_all_hotels(self) -> list[model.Hotel]:
+    def read_all_hotels(self) -> list[Hotel]:
         sql = """
         SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code
         FROM Hotel h
@@ -15,7 +15,7 @@ class HotelDataAccess(BaseDataAccess):
         hotels = self.fetchall(sql)
 
         return [
-            model.Hotel(
+            Hotel(
                 hotel_id=row[0],
                 name=row[1],
                 stars=row[2],
@@ -29,8 +29,10 @@ class HotelDataAccess(BaseDataAccess):
             for row in hotels
         ]
 
-    def add_new_hotel(self):
-        pass
+    def add_new_hotel(self, hotel: Hotel) -> int:
+        sql = """
+        
+        """
 
     def remove_hotel(self):
         pass
