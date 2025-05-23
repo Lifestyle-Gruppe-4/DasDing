@@ -29,23 +29,45 @@ class HotelDataAccess(BaseDataAccess):
             for row in hotels
         ]
 
-    def add_new_hotel(self, hotel: Hotel) -> int:
+    def create_hotel(self, hotel: Hotel) -> int:
         sql = """
-        
+        INSERT INTO Hotel(name, stars, address_id)
+            VALUES (?, ?, ?)
         """
 
-    def remove_hotel(self):
-        pass
+        params = (hotel.name, hotel.stars, hotel.address_id,)
+        hotel_id, _ = self.execute(sql, params)
+        return hotel_id
 
-    def update_hotel(self):
-        pass
+    def delete_hotel(self, hotel_id: int) -> bool:
+        sql = """
+        DELETE FROM Hotel WHERE hotel_id = ?
+        """
+        params = (hotel_id,)
+        _, rows_affected = self.execute(sql, params)
+        return rows_affected > 0
+
+    def update_hotel(self, hotel: Hotel) -> bool:
+        sql = """
+        UPDATE Hotel 
+        SET name = ?, stars = ?, address_id = ?
+        WHERE hotel_id = ?
+        """
+        params = (
+            hotel.name,
+            hotel.stars,
+            hotel.address.address_id,
+            hotel.hotel_id,
+        )
+        _, rows_affected = self.execute(sql, params)
+        return rows_affected > 0
 
 
-# if __name__ == "__main__":
-#     db_path = "../database/hotel_sample.db"
-#     hotel_dal = HotelDataAccess(db_path)
-#     hotels = hotel_dal.read_all_hotels()
+#if __name__ == "__main__":
+#    db_path = "../database/hotel_sample.db"
+#    hotel_dal = HotelDataAccess(db_path)
+#    hotels = hotel_dal.read_all_hotels()
 #
-#     for hotel in hotels:
-#         print(hotel)
+#    for hotel in hotels:
+#        print(hotel)
 

@@ -32,7 +32,7 @@ class Address:
         return f"Address ID: {self.address_id}, Street: {self.street}, City: {self.city}, ZIP: {self.zip}"
 
 
-#addr1 = Address(address_id=1,street="Hauptstrasse 5",city="Basel", zip_code="4051", country="Schweiz")
+addr1 = Address(address_id=1,street="Hauptstrasse 5",city="Basel", zip_code="4051")
 # addr2 = Address(address_id=2,street="Allendweg 69",city="Sissach", zip="4450")
 # addr3 = Address(address_id=3,street="Oberer Chriesmattweg 5",city="Böckten",zip="4461")
 #

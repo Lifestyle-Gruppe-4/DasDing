@@ -13,6 +13,7 @@ class Guest:
             raise ValueError("email is required")
         if not address:
             raise ValueError("address is required")
+
         self.__guest_id:int = guest_id
         self.__first_name = first_name
         self.__last_name = last_name
@@ -29,15 +30,19 @@ class Guest:
     @property
     def guest_id(self)-> int:
         return self.__guest_id
+
     @property
     def first_name(self)-> str:
         return self.__first_name
+
     @property
     def last_name(self)-> str:
         return self.__last_name
+
     @property
     def email(self)-> str:
         return self.__email
+
     @property
     def address(self)-> Address:
         return self.__address
