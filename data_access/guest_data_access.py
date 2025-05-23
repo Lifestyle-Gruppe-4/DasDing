@@ -64,11 +64,11 @@ class GuestDataAccess(BaseDataAccess):
         _, rows_affected = self.execute(sql, params)
         return rows_affected > 0
 
-if __name__ == "__main__":
-    db_path = "../database/hotel_sample.db"
-    guest_dal = GuestDataAccess(db_path)
-    guests = guest_dal.read_all_guests()
-
-    for guest in guests:
-        print(guest)
+# if __name__ == "__main__":
+#     db_path = "../database/hotel_sample.db"
+#     guest_dal = GuestDataAccess(db_path)
+#     guests = guest_dal.read_all_guests()
+#
+#     for guest in guests:
+#         print(guest)
 

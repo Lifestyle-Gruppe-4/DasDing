@@ -41,11 +41,11 @@ class HotelDataAccess(BaseDataAccess):
         pass
 
 
-if __name__ == "__main__":
-    db_path = "../database/hotel_sample.db"
-    hotel_dal = HotelDataAccess(db_path)
-    hotels = hotel_dal.read_all_hotels()
-
-    for hotel in hotels:
-        print(hotel)
+# if __name__ == "__main__":
+#     db_path = "../database/hotel_sample.db"
+#     hotel_dal = HotelDataAccess(db_path)
+#     hotels = hotel_dal.read_all_hotels()
+#
+#     for hotel in hotels:
+#         print(hotel)
 
