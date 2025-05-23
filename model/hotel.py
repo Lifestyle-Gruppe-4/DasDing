@@ -4,8 +4,8 @@ from datetime import datetime
 
 class Hotel:
     def __init__(self, hotel_id: int, name: str, stars: int, address: Address):
-        if not hotel_id:
-            raise ValueError("Address ID is required")
+        if hotel_id is not None and hotel_id < 0:
+            raise ValueError("Address ID must be positive if provided")
         if not name:
             raise ValueError("Street is required")
         if not stars:
@@ -13,7 +13,7 @@ class Hotel:
         if not address:
             raise ValueError("Zip is required")
 
-        self.__hotel_id = hotel_id
+        self.__hotel_id:int = hotel_id
         self.__name = name
         self.__stars = stars
         self.__address = address

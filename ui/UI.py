@@ -2,38 +2,38 @@ from business_logic.guest_manager import GuestManager
 from business_logic.address_manager import AddressManager
 from data_access.address_data_access import AddressDataAccess
 from data_access.guest_data_access import GuestDataAccess
+from data_access.hotel_data_access import HotelDataAccess
+from business_logic.hotel_manager import HotelManager
 from model.address import Address
 from model.guest import Guest
+from model.hotel import Hotel
 
-# db_path = "../database/hotel_sample.db"
-# guest_dal = GuestDataAccess(db_path)
-# address_dal = AddressDataAccess(db_path)
-#
-# guest_manager = GuestManager(guest_dal)
-# address_manager = AddressManager(address_dal)
+db_path = "../database/hotel_sample.db"
+hotel_dal = HotelDataAccess(db_path)
+address_dal = AddressDataAccess(db_path)
 
-# first_name = input("Enter First Name: ")
-# last_name = input("Enter Last Name: ")
-# email = input("Enter Email: ")
+hotel_manager = HotelManager(hotel_dal)
+address_manager = AddressManager(address_dal)
+
+# hotel_name = input("Enter Hotel Name: ")
+# stars = input("Enter Hotel Stars: ")
 #
 # address = address_manager.find_address_by_id(1)
 #
 # if address is None:
 #     print("Address Not Found")
 # else:
-#     new_guest = Guest(guest_id=None, first_name=first_name, last_name=last_name, email=email, address=address)
+#     new_hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address)
 #
-# guest_id = guest_manager.add_guest(new_guest)
-# print(f"Gast gespeichert mit ID: {guest_id}")
+# hotel_id = hotel_manager.create_hotel(new_hotel)
+# print(f"Gast gespeichert mit ID: {hotel_id}")
 
 # delete_id = input("Enter ID to delete")
 #
-# delete_guest = guest_manager.delete_guest(delete_id)
-
-# for guest in guest_manager.get_all_guests():
-#     print(guest)
-
-
+# delete_hotel = hotel_manager.delete_hotel(delete_id)
+#
+# for hotel in hotel_manager.get_all_hotels():
+#     print(hotel)
 
 
 
@@ -62,9 +62,18 @@ while is_continue:
         user_choice = get_user_choice()
 
         if user_choice == 1:
-            print("-> alle hotels anzeigen")
+            print("Hier sind alle Hotels")
+            for hotel in hotel_manager.get_all_hotels():
+                print(hotel)
         elif user_choice == 2:
-            print("-> Hotel suchen")
+            search_input = input("gib den Name des Hotels ein: ")
+            results = hotel_manager.find_by_name(search_input)
+            if results:
+                for hotel in results:
+                    print(hotel)
+            else:
+                print("kein Hotel Gefunden")
+
         elif user_choice == 3:
             mode = "admin"
         elif user_choice == 4:

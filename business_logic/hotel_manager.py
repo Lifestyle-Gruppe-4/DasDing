@@ -1,16 +1,31 @@
-from data_access.hotel_data_access import get_all_hotels, get_all_hotels_by_name, get_all_hotels_by_stars
+from data_access.hotel_data_access import HotelDataAccess
 from model.hotel import Hotel
-from model.address import Address
 
-def list_all_hotels():
-    rows = get_all_hotels()
-    hotels = []
-    for row in rows:
-        address = Address(row[3], row[4], row[5], row[6])
-        hotel = Hotel(row[0], row[1], row[2], address)
-        hotels.append(hotel)
-    return hotels
+class HotelManager:
+    def __init__(self, hotel_dal: HotelDataAccess):
+        self.hotel_dal = hotel_dal
 
+    def get_all_hotels(self) -> list[Hotel]:
+        return self.hotel_dal.read_all_hotels()
 
+    def create_hotel(self, hotel: Hotel) -> int:
+        return self.hotel_dal.create_hotel(hotel)
+
+    def delete_hotel(self, hotel_id:int) -> bool:
+        return self.hotel_dal.delete_hotel(hotel_id)
+
+    def find_by_id(self, hotel_id:int) -> Hotel:
+        hotels = self.hotel_dal.read_all_hotels()
+        for hotel in hotels:
+            if hotels.hotel_id == hotel_id:
+                return hotel
+        return None
+
+    def find_by_name(self, name:str) -> list[Hotel]:
+        name = name.lower()
+        return [
+            hotel for hotel in self.hotel_dal.read_all_hotels()
+            if hotel.name.lower() == name
+        ]
 
 

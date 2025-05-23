@@ -1,5 +1,5 @@
 from model.hotel import Hotel
-from base_data_access import BaseDataAccess
+from data_access.base_data_access import BaseDataAccess
 from model.address import Address
 
 class HotelDataAccess(BaseDataAccess):
@@ -35,7 +35,7 @@ class HotelDataAccess(BaseDataAccess):
             VALUES (?, ?, ?)
         """
 
-        params = (hotel.name, hotel.stars, hotel.address_id,)
+        params = (hotel.name, hotel.stars, hotel.address.address_id,)
         hotel_id, _ = self.execute(sql, params)
         return hotel_id
 
@@ -63,11 +63,11 @@ class HotelDataAccess(BaseDataAccess):
         return rows_affected > 0
 
 
-#if __name__ == "__main__":
-#    db_path = "../database/hotel_sample.db"
-#    hotel_dal = HotelDataAccess(db_path)
-#    hotels = hotel_dal.read_all_hotels()
-#
-#    for hotel in hotels:
-#        print(hotel)
+if __name__ == "__main__":
+   db_path = "../database/hotel_sample.db"
+   hotel_dal = HotelDataAccess(db_path)
+   hotels = hotel_dal.read_all_hotels()
+
+   for hotel in hotels:
+       print(hotel)
 
