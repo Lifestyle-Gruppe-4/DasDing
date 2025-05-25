@@ -66,13 +66,13 @@ while is_continue:
             for hotel in hotel_manager.get_all_hotels():
                 print(hotel)
         elif user_choice == 2:
-            search_input = input("gib den Name des Hotels ein: ")
+            search_input = input("Gib den Name des Hotels ein: ")
             results = hotel_manager.find_by_name(search_input)
             if results:
                 for hotel in results:
                     print(hotel)
             else:
-                print("kein Hotel Gefunden")
+                print("Kein Hotel mit diesem Name gefunden")
 
         elif user_choice == 3:
             mode = "admin"
