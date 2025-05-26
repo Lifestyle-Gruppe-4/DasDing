@@ -28,4 +28,20 @@ class HotelManager:
             if hotel.name.lower() == name
         ]
 
+    def find_by_city(self, city:str) -> list[Hotel]:
+        city = city.lower()
+        return [
+            hotel for hotel in self.hotel_dal.read_all_hotels()
+            if hotel.address.city.lower() == city
+        ]
+
+    def find_by_city_and_min_stars(self, city:str, stars:int) -> list[Hotel]:
+        city = city.lower()
+        return [
+            hotel for hotel in self.hotel_dal.read_all_hotels()
+            if hotel.address.city.lower() == city and hotel.stars >= stars
+        ]
+
+
+
 

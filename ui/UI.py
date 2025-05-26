@@ -41,8 +41,10 @@ def get_user_choice():
     print("\n -----------Welcome to our Hotel Reservation System!-----------\n")
     print("1. Display available hotels")
     print("2. Search for hotels")
-    print("3. Admin center")
-    print("4. Exit")
+    print("3. Search for hotels by city")
+    print("4. Erweiterte Suche")
+    print("5. Admin center")
+    print("6. Exit")
     return int(input("Enter your choice: "))
 
 def get_admin_choice():
@@ -50,10 +52,28 @@ def get_admin_choice():
     print("1. Add new hotel")
     print("2. Delete existing hotel")
     print("3. Update existing hotel")
-    print("4. Exit")
+    print("4. Display all hotels")
+    print("5. Exit")
     return int(input("Enter your choice: "))
 
-# start im Guest-Modus
+def get_user_choice_plus():
+    print("\nBitte gib hier deine Kriterien ein")
+
+    city = input("Enter your city: ")
+
+    while True:
+        stars_input = input("Enter your minimum stars: ")
+        try:
+            stars = int(stars_input)
+            if stars < 1 or stars > 5:
+                print("Bitte gib eine Zahl zwischen 1 und 5 ein.")
+            else:
+                break
+        except ValueError:
+            print("Ungültige Eingabe - bitte eine Zahl eingeben")
+    return city, stars
+
+#start im Guest-Modus
 mode = "guest"
 is_continue = True
 
@@ -64,35 +84,62 @@ while is_continue:
         if user_choice == 1:
             print("Hier sind alle Hotels")
             for hotel in hotel_manager.get_all_hotels():
-                print(hotel)
+                print(f"{hotel.name} ({hotel.stars} Sterne) in {hotel.address.city}")
         elif user_choice == 2:
             search_input = input("Gib den Name des Hotels ein: ")
             results = hotel_manager.find_by_name(search_input)
             if results:
                 for hotel in results:
-                    print(hotel)
+                    print(f"{hotel.name} ({hotel.stars} Sterne) in {hotel.address.city}")
             else:
                 print("Kein Hotel mit diesem Name gefunden")
-
         elif user_choice == 3:
-            mode = "admin"
+            search_input = input("Gib die Stadt des Hotels ein: ")
+            results = hotel_manager.find_by_city(search_input)
+            if results:
+                for hotel in results:
+                    print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sternen (Strasse: {hotel.address.street})")
+            else:
+                print("Kein Hotel in dieser Stadt gefunden")
         elif user_choice == 4:
+            mode = "erweiterte_suche"
+        elif user_choice == 5:
+            mode = "admin"
+        elif user_choice == 6:
             print("Exit")
             is_continue = False
         else:
             print("Invalid choice, try again")
 
-    elif mode =="admin":
-        admin_choice = get_admin_choice()
-
-        if admin_choice == 1:
-            print("-> neues Hotel hinzufügen")
-        elif admin_choice == 2:
-            print("-> Hotel löschen")
-        elif admin_choice == 3:
-            print("-> Hotel aktualisieren")
-        elif admin_choice == 4:
-            print("Exit")
-            is_continue = False
+    elif mode =="erweiterte_suche":
+        city, stars = get_user_choice_plus()
+        result = hotel_manager.find_by_city_and_min_stars(city, stars)
+        if result:
+            for hotel in result:
+                print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sterne (Strasse: {hotel.address.street})")
+                is_continue = False
         else:
-            print("Invalid choice, try again")
+            print("Kein passendes Hotel gefunden")
+
+
+
+
+
+
+    # elif mode =="admin":
+    #     admin_choice = get_admin_choice()
+    #
+    #     if admin_choice == 1:
+    #         print("-> neues Hotel hinzufügen")
+    #     elif admin_choice == 2:
+    #         print("-> Hotel löschen")
+    #     elif admin_choice == 3:
+    #         print("-> Hotel aktualisieren")
+    #     elif admin_choice == 4:
+    #         for hotel in hotel_manager.get_all_hotels():
+    #             print(hotel)
+    #     elif admin_choice == 5:
+    #         print("Exit")
+    #         is_continue = False
+    #     else:
+    #         print("Invalid choice, try again")
