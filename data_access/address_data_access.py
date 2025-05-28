@@ -93,13 +93,12 @@ class AddressDataAccess(BaseDataAccess):
                         )
                 for row in rows]
 
-## if __name__ == "__main__":
-#     db_path = "../database/hotel_sample.db"
-#     address_dal = AddressDataAccess(db_path)
-#     addresses = address_dal.read_all_addresses()
-#
-#     for address in addresses:
-#         print(address)
+if __name__ == "__main__":
+    db_path = "../database/hotel_sample.db"
+    address_dal = AddressDataAccess(db_path)
+    addresses = address_dal.read_all_addresses()
+    for address in addresses:
+        print(address)
 
 
 # def get_all_addresses() -> list[Address]:
