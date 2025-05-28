@@ -46,7 +46,6 @@ def get_user_choice():
     print("5. Admin center")
     print("6. Exit")
     return int(input("Enter your choice: "))
-
 def get_admin_choice():
     print("\n -----------Welcome to our Admin Center!-----------\n")
     print("1. Add new hotel")

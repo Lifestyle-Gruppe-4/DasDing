@@ -5,10 +5,10 @@ from model.room_type import RoomType
 from model.facility import Facility
 
 class Room:
-    def __init__(self, room_id: int, room_nr: str, price_per_night: float, hotel: Hotel, room_type: RoomType, facility: Facility):
+    def __init__(self, room_id: int, room_number: str, price_per_night: float, hotel: Hotel, room_type: RoomType, facilities: list[Facility]):
         if not room_id:
             raise ValueError("Room ID is required")
-        if not room_nr:
+        if not room_number:
             raise ValueError("Room number is required")
         if price_per_night < 0:
             raise ValueError("Price per night must be non-negative")
@@ -16,27 +16,24 @@ class Room:
             raise ValueError("Hotel is required")
         if not room_type:
             raise ValueError("Room type is required")
-        if not facility:
+        if facilities is None:
             raise ValueError("Facility is required")
 
         self.__room_id = room_id
-        self.__room_nr = room_nr
+        self.__room_number = room_number
         self.__price_per_night = price_per_night
         self.__hotel = hotel
         self.__room_type = room_type
-        self.__facility = facility
+        self.__facilities = facilities
         self.__bookings = []  # List to store bookings for this room
-
-        def is_available(self, start_date: datetime, end_date: datetime):
-            pass
 
     @property
     def room_id(self) -> int:
         return self.__room_id
 
     @property
-    def room_nr(self) -> str:
-        return self.__room_nr
+    def room_number(self) -> str:
+        return self.__room_number
 
     @property
     def price_per_night(self) -> float:
@@ -51,27 +48,17 @@ class Room:
         return self.__room_type
 
     @property
-    def facility(self) -> Facility:
-        return self.__facility
+    def facilities(self) -> list[Facility]:
+        return self.__facilities
 
     @property
     def bookings(self) -> list:
         return self.__bookings
 
-    def add_booking(self, booking):
-        self.__bookings.append(booking)
-
-    def is_available(self, start_date: datetime, end_date: datetime) -> bool:
-        for booking in self.__bookings:
-            if not booking.is_cancelled:
-                # Prüfen ob Zeiträume sich überschneiden
-                if (start_date < booking.check_out_date and end_date > booking.check_in_date):
-                    return False
-        return True
-
     def __repr__(self):
-        return (f"Room(ID: {self.room_id}, Nr: {self.room_nr}, Price: {self.price_per_night:.2f} CHF, "
-                f"Type: {self.room_type.description}, Facility: {self.facility.facility_name}, "
+        facility_names = ','.join(f.facility_name for f in self.__facilities)
+        return (f"Room(ID: {self.room_id}, Nr: {self.room_number}, Price: {self.price_per_night:.2f} CHF, "
+                f"Type: {self.room_type.description}, Facilities: [{facility_names}], "
                 f"Hotel: {self.hotel.name})")
 
 
