@@ -36,7 +36,7 @@ class RoomDataAccess(BaseDataAccess):
                     description=row[4],
                     max_guests=row[5]
                 ),
-                hotel=Hotel(
+                hotel_id=Hotel(
                     hotel_id=row[6],
                     name=row[7],
                     stars=row[8],
@@ -62,6 +62,16 @@ class RoomDataAccess(BaseDataAccess):
         """
         rows = self.fetchall(sql, (room_id,))
         return [Facility(facility_id=row[0], facility_name=row[1]) for row in rows]
+
+    def create_room(self, room: Room) -> int:
+        sql = """
+        INSERT INTO Room (hotel_id, room_number, type_id, price_per_night)
+        VALUES (?,?,?,?)
+        """
+
+        params = (room.hotel_id, room.room_number,room.room_type.room_type_id, room.price_per_night)
+        room_id, _ = self.fetchone(sql, params)
+        return room_id
 
 if __name__ == "__main__":
    db_path = "../database/hotel_sample.db"
