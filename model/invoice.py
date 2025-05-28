@@ -3,17 +3,19 @@ from datetime import timedelta
 from model.booking import Booking
 
 class Invoice:
-    invoice_counter = 1
+    invoice_counter = 1 # Automatische vergebene Rechnungs-ID (nur Interne Verwendung)
 
     def __init__(self, total_amount: float, booking: Booking):
+        # Automatisch vergebene Rechnungs-ID
         self.__invoice_id = Invoice.invoice_counter
         Invoice.invoice_counter += 1
 
-        self.__total_amount =  total_amount
-        self.__issue_date = datetime.today()
-        self.__is_paid = False
-        self.__booking = booking
+        self.__total_amount =  total_amount # Rechnungsbetrag
+        self.__issue_date = datetime.today() # Datum der Rechnungserstellung
+        self.__is_paid = False # Bezahlstatus
+        self.__booking = booking # Zugehörige Buchung
 
+    # Getter/Setter für Eigenschaften (mit Validierungen)
     @property
     def invoice_id(self):
         return self.__invoice_id
@@ -50,22 +52,28 @@ class Invoice:
 
 
 # Methode to use for testing
+
+    # Setzt Rechnung als bezahlt
     def mark_as_paid(self):
         self.is_paid = True
         print(f"Invoice {self.invoice_id} is marked as paid.")
 
+    # Gint alle Details zurück
     def get_invoice_details(self) -> str:
         status = "Is Paid" if self.is_paid else "Payment Pending"
         return (f"Invoice ID: {self.invoice_id}, Amount: {self.total_amount:.2f} CHF, "
                 f"Issue Date: {self.issue_date.isoformat()}, Status: {status}, Booking ID: {self.booking.booking_id}")
 
+    # "Versendet" die rechnung (Simulation über Print)
     def send_invoice_by_email(self, email_address: str):
         print(f"Invoice {self.invoice_id} is sent to email: {email_address}")
 
+    # Prüft, ob die Rechnung überfällig ist
     def is_overdue(self) -> bool:
         due_date = self.issue_date + timedelta(days=14)
         return not self.is_paid and datetime.today() > due_date
 
+    # Wendet Rabatt an (falls noch nicht bezahlt)
     def apply_discount(self, percent: float):
 
         if percent < 0 or percent > 100:
@@ -79,11 +87,13 @@ class Invoice:
         else:
             print("Cannot apply discount. Invoice already paid.")
 
+    # Gibt kurze Zusammenfassung der Rechnung
     def get_invoice_summary(self) -> str:
         status = "Is Paid" if self.is_paid else "Payment Pending"
         return (f"[Invoice #{self.invoice_id}] Date: {self.issue_date} | Total: {self.total_amount:.2f} CHF | "
                   f"Status: {status} | Booking ID: {self.booking.booking_id}")
 
+    # Storniert unbezahlte Rechnung
     def cancel_invoice(self):
         if self.is_paid:
             print("Invoice already paid. Cannot be cancelled")
