@@ -70,3 +70,4 @@ if __name__ == "__main__":
 
    for room in rooms:
        print(room)
+
