@@ -6,11 +6,13 @@ from model.booking import Booking
 
 class BookingManager:
     def __init__(self, booking_dal: BookingDataAccess):
-        self.booking_dal = booking_dal
+        self.booking_dal = booking_dal # Zufriff auf DB-Schicht
 
+    # Gibt alle Buchunge zurück
     def get_all_bookings(self) -> List[Booking]:
         return self.booking_dal.read_all_bookings()
 
+    # Neue Buchungen erstellen (Logik inkl. Preisberechnung)
     def create_booking(self, check_in: datetime, check_out: datetime, guest_id: int, room_id: int, price_per_night: float) -> Booking:
         if check_out <= check_in:
             raise ValueError("Check-out must be the same or after check-in date!")
@@ -26,6 +28,7 @@ class BookingManager:
             total_amount = total_price,
         )
 
+    # Buchung aktualisieren (z.B. neue Daten)
     def update_booking(self, booking_id: int, new_check_in: datetime, new_check_out: datetime, new_total: float) -> bool:
         return self.booking_dal.update_booking(
             booking_id = booking_id,
@@ -34,6 +37,7 @@ class BookingManager:
             total_amount = new_total,
         )
 
+    # Buchung löschen
     def delete_booking(self, booking_id: int) -> bool:
         return self.booking_dal.delete_booking(booking_id)
 
