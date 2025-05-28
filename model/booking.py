@@ -4,20 +4,23 @@ from model.room import Room
 from model.invoice import Invoice
 
 class Booking:
-    booking_counter = 1
+    booking_counter = 1 #Zählt automatisch alle Buchungen (nur intern genutzt)
 
     def __init__(self, check_in_date: datetime, check_out_date: datetime, guest: Guest, room: Room):
+        # Automatisch vergebene Buchungs-ID
         self.__booking_id = Booking.booking_counter
         Booking.booking_counter += 1
 
+        # Wichtige Buchungsdaten
         self.__check_in_date = check_in_date
         self.__check_out_date = check_out_date
-        self.__guest = guest
-        self.__room = room
+        self.__guest = guest # Gast-Objekt
+        self.__room = room # Zimmer-Objekt
         self.__is_cancelled = False
-        self.__total_amount = self.calculate_total_amount()
-        self.__invoice = None
+        self.__total_amount = self.calculate_total_amount() # Preis berechnen
+        self.__invoice = None # Rechnung (falls erstellt)
 
+    # Getter/Setter für Datenfelder, mit Validierung
     @property
     def booking_id(self):
         return self.__booking_id
@@ -89,13 +92,26 @@ class Booking:
             raise ValueError('invoice must be an instance of Invoice or None!')
         self.__invoice = value
 
-#Methode which can be used for testing
+#Methoden Liste
 
+    # Gibt Buchungsinfo als String zurück
     def get_booking_details(self) -> str:
         booking_status = "Cancelled" if self.is_cancelled else "Active"
         return (f"Booking ID: {self.booking_id},  Guest: {self.guest.first_name} {self.guest.last_name} "
                 f"Room: {self.room.room_nr}, From: {self.check_in_date}, to: {self.check_out_date} "
                 f"Total: {self.total_amount} CHF, Status: {booking_status}")
+
+    # Berechnet Preis: Anzahl Nächte x Zimmerpreis
+    def calculate_total_amount(self) -> float:
+        nights = (self.check_out_date - self.check_in_date).days
+        if nights <= 0:
+            raise ValueError("Booking must be at least 1 night.")
+        return nights * self.room.price_per_night
+
+    # Methoden für Buchungslogik
+    def cancel_booking(self):
+        self.is_cancelled = True
+        print(f"Booking ID: {self.booking_id} has been cancelled.")
 
     def update_dates(self, new_check_in: datetime, new_check_out: datetime):
         if new_check_out < new_check_in:
@@ -103,16 +119,6 @@ class Booking:
         self.check_in_date = new_check_in
         self.check_out_date = new_check_out
         self.__total_amount = self.calculate_total_amount()
-
-    def calculate_total_amount(self) -> float:
-        nights = (self.check_out_date - self.check_in_date).days
-        if nights <= 0:
-            raise ValueError("Booking must be at least 1 night.")
-        return nights * self.room.price_per_night
-
-    def cancel_booking(self):
-        self.is_cancelled = True
-        print(f"Booking ID: {self.booking_id} has been cancelled.")
 
     def generate_invoice(self):
         if not self.invoice:
