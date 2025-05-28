@@ -41,5 +41,8 @@ class AddressManager:
 
 address_dal = AddressDataAccess("../database/hotel_sample.db")
 manager = AddressManager(address_dal)
-for address in manager.get_all_addresses():
-    print(manager.get_all_addresses())
+
+
+addresses = manager.get_all_addresses()
+for addr in addresses:
+    print(addr)
