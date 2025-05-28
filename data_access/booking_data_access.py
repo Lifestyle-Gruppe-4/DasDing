@@ -11,7 +11,7 @@ from model.hotel import Hotel
 from model.room_type import RoomType
 from model.facility import Facility
 
-
+# Wandelt SQL-Zeile in Booking-Objekte um
 def _create_booking(row):
     return Booking(
         check_in_date=row[1],
@@ -51,8 +51,9 @@ def _create_booking(row):
 
 class BookingDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
-        super().__init__(db_path)
+        super().__init__(db_path) # Verbindung zur DB aufbauen
 
+    # Holt alle Buchungen aus der DB
     def read_all_bookings(self) -> list[Booking]:
         sql = """
             SELECT b.booking_id, b.check_in_date, b.check_out_date, b.total_amount,
@@ -74,6 +75,7 @@ class BookingDataAccess(BaseDataAccess):
         results = self.fetchall(sql)
         return [_create_booking(row) for row in results]
 
+    # Holt 1 Buchung anhand der ID
     def get_booking_by_id(self, booking_id: int) -> Booking | None:
         sql = """
             SELECT b.booking_id, b.check_in_date, b.check_out_date, b.total_amount,
@@ -96,6 +98,7 @@ class BookingDataAccess(BaseDataAccess):
         row = self.fetchone(sql, (booking_id,))
         return _create_booking(row) if row else None
 
+    # Neue Buchungen in DB einfügen
     def create_booking(self, check_in_date: str, check_out_date: str, guest_id: int, room_id: int, total_amount: float):
         sql = """
             INSERT INTO Booking (check_in_date, check_out_date, guest_id, room_id, total_amount)
@@ -103,6 +106,7 @@ class BookingDataAccess(BaseDataAccess):
         """
         return self.execute(sql, (check_in_date, check_out_date, guest_id, room_id, total_amount))
 
+    # Vorhandene Buchungen aktualisieren
     def update_booking(self, booking_id: int, check_in_date: str, check_out_date: str, total_amount: float):
         sql = """
             UPDATE Booking
@@ -111,6 +115,7 @@ class BookingDataAccess(BaseDataAccess):
         """
         return self.execute(sql, (check_in_date, check_out_date, total_amount, booking_id))
 
+    # Buchung löschen
     def delete_booking(self, booking_id: int):
         sql = """
             DELETE FROM Booking WHERE booking_id = ?
