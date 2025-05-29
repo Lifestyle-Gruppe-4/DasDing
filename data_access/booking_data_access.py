@@ -46,7 +46,7 @@ def _create_booking(row):
                 stars=row[21]
             ),
             room_type=RoomType(row[22], row[23], row[24]),
-            facility=Facility(row[25], row[26])
+            facility=[]
         )
     )
 
@@ -63,7 +63,7 @@ class BookingDataAccess(BaseDataAccess):
                    a.address_id, a.street, a.city, a.zip_code,
                    r.room_id, r.room_number, r.price_per_night,
                    h.hotel_id, h.name, ha.address_id, ha.street, ha.city, ha.zip_code, h.stars,
-                   rt.room_type_id, rt.description, rt.max_guests,
+                   rt.type_id, rt.description, rt.max_guests,
                    f.facility_id, f.facility_name
             FROM Booking b
             JOIN Guest g ON b.guest_id = g.guest_id
@@ -71,8 +71,9 @@ class BookingDataAccess(BaseDataAccess):
             JOIN Room r ON b.room_id = r.room_id
             JOIN Hotel h ON r.hotel_id = h.hotel_id
             JOIN Address ha ON h.address_id = ha.address_id
-            JOIN RoomType rt ON r.room_type_id = rt.room_type_id
-            JOIN Facility f ON r.facility_id = f.facility_id
+            JOIN Room_Type rt ON r.type_id = rt.type_id
+            JOIN Room_Facilities rf ON r.room_id = rf.room_id
+            JOIN Facilities f ON rf.facility_id = f.facility_id
         """
         results = self.fetchall(sql)
         return [_create_booking(row) for row in results]
@@ -85,7 +86,7 @@ class BookingDataAccess(BaseDataAccess):
                    a.address_id, a.street, a.city, a.zip_code,
                    r.room_id, r.room_number, r.price_per_night,
                    h.hotel_id, h.name, ha.address_id, ha.street, ha.city, ha.zip_code, h.stars,
-                   rt.room_type_id, rt.description, rt.max_guests,
+                   rt.type_id, rt.description, rt.max_guests,
                    f.facility_id, f.facility_name
             FROM Booking b
             JOIN Guest g ON b.guest_id = g.guest_id
@@ -93,8 +94,9 @@ class BookingDataAccess(BaseDataAccess):
             JOIN Room r ON b.room_id = r.room_id
             JOIN Hotel h ON r.hotel_id = h.hotel_id
             JOIN Address ha ON h.address_id = ha.address_id
-            JOIN RoomType rt ON r.room_type_id = rt.room_type_id
-            JOIN Facility f ON r.facility_id = f.facility_id
+            JOIN Room_Type rt ON r.type_id = rt.type_id
+            JOIN Room_Facilities rf ON r.room_id = rf.room_id
+            JOIN Facilities f ON rf.facility_id = f.facility_id
             WHERE b.booking_id = ?
         """
         row = self.fetchone(sql, (booking_id,))
