@@ -1,7 +1,6 @@
 from datetime import datetime
 from model.guest import Guest
 from model.room import Room
-from model.invoice import Invoice
 
 class Booking:
     booking_counter = 1 #Zählt automatisch alle Buchungen (nur intern genutzt)
@@ -122,6 +121,7 @@ class Booking:
 
     def generate_invoice(self):
         if not self.invoice:
+            from model.invoice import Invoice # Lokale Import in der Methode
             self.invoice = Invoice(self.total_amount, self)
         return self.invoice
 
