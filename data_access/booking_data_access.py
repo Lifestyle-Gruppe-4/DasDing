@@ -7,56 +7,59 @@
 from data_access.base_data_access import BaseDataAccess
 from model.room import Room
 from model.guest import Guest
-from model.booking import Booking
 from model.address import Address
 from model.hotel import Hotel
 from model.room_type import RoomType
 from model.facility import Facility
 
 # Wandelt SQL-Zeile in Booking-Objekte um
-def _create_booking(row):
+def _create_booking(rows):
+    from model.booking import Booking  # Lokaler Import vermeidet circular import
+
+    base = rows[0]
+    facilities = [Facility(row[25], row[26]) for row in rows]
+
     return Booking(
-        check_in_date=row[1],
-        check_out_date=row[2],
+        check_in_date=base[1],
+        check_out_date=base[2],
         guest=Guest(
-            guest_id=row[4],
-            first_name=row[5],
-            last_name=row[6],
-            email=row[7],
+            guest_id=base[4],
+            first_name=base[5],
+            last_name=base[6],
+            email=base[7],
             address=Address(
-                address_id=row[8],
-                street=row[9],
-                city=row[10],
-                zip_code=row[11]
+                address_id=base[8],
+                street=base[9],
+                city=base[10],
+                zip_code=base[11]
             )
         ),
         room=Room(
-            room_id=row[12],
-            room_nr=row[13],
-            price_per_night=row[14],
+            room_id=base[12],
+            room_nr=base[13],
+            price_per_night=base[14],
             hotel=Hotel(
-                hotel_id=row[15],
-                name=row[16],
+                hotel_id=base[15],
+                name=base[16],
                 address=Address(
-                    address_id=row[17],
-                    street=row[18],
-                    city=row[19],
-                    zip_code=row[20]
+                    address_id=base[17],
+                    street=base[18],
+                    city=base[19],
+                    zip_code=base[20]
                 ),
-                stars=row[21]
+                stars=base[21]
             ),
-            room_type=RoomType(row[22], row[23], row[24]),
-            facility=[]
+            room_type=RoomType(base[22], base[23], base[24]),
+            facilities=facilities
         )
     )
-
 
 class BookingDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path) # Verbindung zur DB aufbauen
 
     # Holt alle Buchungen aus der DB
-    def read_all_bookings(self) -> list[Booking]:
+    def read_all_bookings(self) -> list["Booking"]:
         sql = """
             SELECT b.booking_id, b.check_in_date, b.check_out_date, b.total_amount,
                    g.guest_id, g.first_name, g.last_name, g.email,
@@ -79,7 +82,7 @@ class BookingDataAccess(BaseDataAccess):
         return [_create_booking(row) for row in results]
 
     # Holt 1 Buchung anhand der ID
-    def get_booking_by_id(self, booking_id: int) -> Booking | None:
+    def get_booking_by_id(self, booking_id: int) -> "Booking | None":
         sql = """
             SELECT b.booking_id, b.check_in_date, b.check_out_date, b.total_amount,
                    g.guest_id, g.first_name, g.last_name, g.email,
