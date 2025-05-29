@@ -7,8 +7,8 @@ from business_logic.facility_manager import FacilityManager
 from business_logic.guest_manager import GuestManager
 from business_logic.hotel_manager import HotelManager
 from business_logic.invoice_manager import InvoiceManager
-from business_logic.room_manager import RoomManager
-from business_logic.room_type_manager import RoomTypeManager
+#from business_logic.room_manager import RoomManager
+#from business_logic.room_type_manager import RoomTypeManager
 
 from data_access.address_data_access import AddressDataAccess
 from data_access.booking_data_access import BookingDataAccess
@@ -36,8 +36,20 @@ booking_manager = BookingManager(booking_dal)
 facility_manager = FacilityManager(facility_dal)
 guest_manager = GuestManager(guest_dal)
 invoice_manager = InvoiceManager(invoice_dal)
-room_manager = RoomManager(room_dal)
-room_type_manager = RoomTypeManager(room_type_dal)
+#room_manager = RoomManager(room_dal)
+#room_type_manager = RoomTypeManager(room_type_dal)
+
+# Platzhalter für weitere Funktionen gemäss Menue
+def hotel_suchen(): pass
+def zimmer_suchen(): pass
+def buchung_erstellen(): pass
+def buchung_verwalten(): pass
+def rechnungen_verwalten(): pass
+def hotel_verwalten(): pass
+def zeige_dynamische_preise(): pass
+def buchungen_anzeigen(): pass
+def zimmerausstattung_anzeigen(): pass
+def stammdaten_verwalten(): pass
 
 def main_menu():
     while True:
@@ -55,4 +67,36 @@ def main_menu():
         10. Stammdaten verwalten (Admin)
         11. Beenden
         """)
+
+        wahl = input("Wähle eine Option: ")
+        if wahl == "1":
+            hotel_suchen()
+        elif wahl == "2":
+            zimmer_suchen()
+        elif wahl == "3":
+            buchung_erstellen()
+        elif wahl == "4":
+            buchung_verwalten()
+        elif wahl == "5":
+            rechnungen_verwalten()
+        elif wahl == "6":
+            hotel_verwalten()
+        elif wahl == "7":
+            zeige_dynamische_preise()
+        elif wahl == "8":
+            buchungen_anzeigen()
+        elif wahl == "9":
+            zimmerausstattung_anzeigen()
+        elif wahl == "10":
+            stammdaten_verwalten()
+        elif wahl == "11":
+            print("Programm beendet!")
+            break
+        else:
+            print("Ungültige Eingabe!")
         pass
+
+if __name__ == "__main__":
+    main_menu()
+
+
