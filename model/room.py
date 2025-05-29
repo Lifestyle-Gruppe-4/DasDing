@@ -58,7 +58,7 @@ class Room:
     def __repr__(self):
         facility_names = ','.join(f.facility_name for f in self.__facilities)
         return (f"Room(ID: {self.room_id}, Nr: {self.room_number}, Price: {self.price_per_night:.2f} CHF, "
-                f"Type: {self.room_type.description}, Facilities: [{facility_names}], "
+                f"Type: {self.room_type.description}, Max Guests: {self.room_type.max_guests} Facilities: [{facility_names}], "
                 f"Hotel: {self.hotel_id.name})")
 
 

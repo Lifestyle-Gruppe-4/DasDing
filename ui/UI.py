@@ -1,11 +1,13 @@
 from business_logic.guest_manager import GuestManager
 from business_logic.address_manager import AddressManager
+from business_logic.room_manager import RoomManager
 from data_access.address_data_access import AddressDataAccess
 from data_access.guest_data_access import GuestDataAccess
 from data_access.hotel_data_access import HotelDataAccess
 from data_access.booking_data_access import BookingDataAccess
 from business_logic.hotel_manager import HotelManager
 from business_logic.booking_manager import BookingManager
+from data_access.room_data_access import RoomDataAccess
 from model.address import Address
 from model.guest import Guest
 from model.hotel import Hotel
@@ -16,31 +18,12 @@ db_path = "../database/hotel_sample.db"
 hotel_dal = HotelDataAccess(db_path)
 address_dal = AddressDataAccess(db_path)
 booking_dal     = BookingDataAccess(db_path)
-booking_manager = BookingManager(booking_dal)
+room_dal = RoomDataAccess(db_path)
 
+booking_manager = BookingManager(booking_dal)
 hotel_manager = HotelManager(hotel_dal)
 address_manager = AddressManager(address_dal)
-
-# hotel_name = input("Enter Hotel Name: ")
-# stars = input("Enter Hotel Stars: ")
-#
-# address = address_manager.find_address_by_id(1)
-#
-# if address is None:
-#     print("Address Not Found")
-# else:
-#     new_hotel = Hotel(hotel_id=None, name=hotel_name, stars=stars, address=address)
-#
-# hotel_id = hotel_manager.create_hotel(new_hotel)
-# print(f"Gast gespeichert mit ID: {hotel_id}")
-
-# delete_id = input("Enter ID to delete")
-#
-# delete_hotel = hotel_manager.delete_hotel(delete_id)
-#
-# for hotel in hotel_manager.get_all_hotels():
-#     print(hotel)
-
+room_manager = RoomManager(room_dal)
 
 
 def get_user_choice():
@@ -119,7 +102,7 @@ while is_continue:
 
     elif mode =="erweiterte_suche":
         city, stars = get_user_choice_plus()
-        result = hotel_manager.find_by_city_and_min_stars(city, stars)
+        result = hotel_manager.find_by_city_and_min_stars(city,stars)
         if result:
             for hotel in result:
                 print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sterne (Strasse: {hotel.address.street})")
