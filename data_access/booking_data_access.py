@@ -3,7 +3,8 @@
 # IMPORTANT! - If imports are maintained then class BookingDataAccess needs to be adjusted.
 
 
-from base_data_access import BaseDataAccess
+
+from data_access.base_data_access import BaseDataAccess
 from model.room import Room
 from model.guest import Guest
 from model.booking import Booking

@@ -3,12 +3,13 @@ from business_logic.address_manager import AddressManager
 from data_access.address_data_access import AddressDataAccess
 from data_access.guest_data_access import GuestDataAccess
 from data_access.hotel_data_access import HotelDataAccess
+from data_access.booking_data_access import BookingDataAccess
 from business_logic.hotel_manager import HotelManager
+from business_logic.booking_manager import BookingManager
 from model.address import Address
 from model.guest import Guest
 from model.hotel import Hotel
-from data_access.booking_data_access import BookingDataAccess
-from business_logic.booking_manager import BookingManager
+
 
 
 db_path = "../database/hotel_sample.db"
