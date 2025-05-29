@@ -1,4 +1,4 @@
-from base_data_access import BaseDataAccess
+from data_access.base_data_access import BaseDataAccess
 from model.invoice import Invoice
 from data_access.booking_data_access import BookingDataAccess
 from datetime import datetime
