@@ -2,18 +2,18 @@ from typing import List
 from datetime import datetime
 
 from data_access.booking_data_access import BookingDataAccess
-from model.booking import Booking
 
 class BookingManager:
     def __init__(self, booking_dal: BookingDataAccess):
         self.booking_dal = booking_dal # Zufriff auf DB-Schicht
 
     # Gibt alle Buchunge zurück
-    def get_all_bookings(self) -> List[Booking]:
+    def get_all_bookings(self) -> List["Booking"]:
+        from model.booking import Booking
         return self.booking_dal.read_all_bookings()
 
     # Neue Buchungen erstellen (Logik inkl. Preisberechnung)
-    def create_booking(self, check_in: datetime, check_out: datetime, guest_id: int, room_id: int, price_per_night: float) -> Booking:
+    def create_booking(self, check_in: datetime, check_out: datetime, guest_id: int, room_id: int, price_per_night: float) -> "Booking":
         if check_out <= check_in:
             raise ValueError("Check-out must be the same or after check-in date!")
 
