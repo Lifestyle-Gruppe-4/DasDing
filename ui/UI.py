@@ -7,10 +7,15 @@ from business_logic.hotel_manager import HotelManager
 from model.address import Address
 from model.guest import Guest
 from model.hotel import Hotel
+from data_access.booking_data_access import BookingDataAccess
+from business_logic.booking_manager import BookingManager
+
 
 db_path = "../database/hotel_sample.db"
 hotel_dal = HotelDataAccess(db_path)
 address_dal = AddressDataAccess(db_path)
+booking_dal     = BookingDataAccess(db_path)
+booking_manager = BookingManager(booking_dal)
 
 hotel_manager = HotelManager(hotel_dal)
 address_manager = AddressManager(address_dal)
@@ -52,7 +57,8 @@ def get_admin_choice():
     print("2. Delete existing hotel")
     print("3. Update existing hotel")
     print("4. Display all hotels")
-    print("5. Exit")
+    print("5. Display all bookings")
+    print("6. Exit")
     return int(input("Enter your choice: "))
 
 def get_user_choice_plus():
@@ -125,20 +131,38 @@ while is_continue:
 
 
 
-    # elif mode =="admin":
-    #     admin_choice = get_admin_choice()
-    #
-    #     if admin_choice == 1:
-    #         print("-> neues Hotel hinzufügen")
-    #     elif admin_choice == 2:
-    #         print("-> Hotel löschen")
-    #     elif admin_choice == 3:
-    #         print("-> Hotel aktualisieren")
-    #     elif admin_choice == 4:
-    #         for hotel in hotel_manager.get_all_hotels():
-    #             print(hotel)
-    #     elif admin_choice == 5:
-    #         print("Exit")
-    #         is_continue = False
-    #     else:
-    #         print("Invalid choice, try again")
+    elif mode == "admin":
+        admin_choice = get_admin_choice()
+
+        if admin_choice == 1:
+            print("-> Neues Hotel hinzufügen")
+
+        elif admin_choice == 2:
+            print("-> Hotel löschen")
+
+        elif admin_choice == 3:
+            print("-> Hotel aktualisieren")
+
+        elif admin_choice == 4:
+            for hotel in hotel_manager.get_all_hotels():
+                print(f"{hotel.hotel_id}: {hotel.name} ({hotel.stars} Sterne) in {hotel.address.city}")
+
+        elif admin_choice == 5:
+            all_bookings = booking_manager.get_all_bookings()
+            if not all_bookings:
+                print("Keine Buchungen vorhanden.")
+            else:
+                print("\nAlle Buchungen:")
+                for b in all_bookings:
+                    print(
+                        f"{b.booking_id}: Hotel „{b.hotel.name}“, "
+                        f"Gast {b.guest.first_name} {b.guest.last_name}, "
+                        f"Zimmer {b.room.room_number}, {b.check_in}–{b.check_out}"
+                    )
+
+        elif admin_choice == 6:
+            print("Verlasse Admin-Center")
+            mode = "guest"
+
+        else:
+            print("Ungültige Auswahl, bitte erneut versuchen")
