@@ -68,28 +68,28 @@ def main_menu():
         11. Beenden
         """)
 
-        wahl = input("Wähle eine Option: ")
-        if wahl == "1":
+        choice = input("Wähle eine Option: ")
+        if choice == "1":
             hotel_suchen()
-        elif wahl == "2":
+        elif choice == "2":
             zimmer_suchen()
-        elif wahl == "3":
+        elif choice == "3":
             buchung_erstellen()
-        elif wahl == "4":
+        elif choice == "4":
             buchung_verwalten()
-        elif wahl == "5":
+        elif choice == "5":
             rechnungen_verwalten()
-        elif wahl == "6":
+        elif choice == "6":
             hotel_verwalten()
-        elif wahl == "7":
+        elif choice == "7":
             zeige_dynamische_preise()
-        elif wahl == "8":
+        elif choice == "8":
             buchungen_anzeigen()
-        elif wahl == "9":
+        elif choice == "9":
             zimmerausstattung_anzeigen()
-        elif wahl == "10":
+        elif choice == "10":
             stammdaten_verwalten()
-        elif wahl == "11":
+        elif choice == "11":
             print("Programm beendet!")
             break
         else:
