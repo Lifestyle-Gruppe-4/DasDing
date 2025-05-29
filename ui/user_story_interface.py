@@ -18,6 +18,7 @@ from data_access.hotel_data_access import HotelDataAccess
 from data_access.invoice_data_access import InvoiceDataAccess
 from data_access.room_data_access import RoomDataAccess
 from data_access.room_type_data_access import RoomTypeDataAccess
+from ui.UI import is_continue, user_choice
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -32,6 +33,7 @@ room_type_dal = RoomTypeDataAccess(db_path)
 
 # Intialisierung der Manager
 address_manager = AddressManager(address_dal)
+hotel_manager = HotelManager(hotel_dal)
 booking_manager = BookingManager(booking_dal)
 facility_manager = FacilityManager(facility_dal)
 guest_manager = GuestManager(guest_dal)
@@ -40,7 +42,6 @@ room_manager = RoomManager(room_dal)
 room_type_manager = RoomTypeManager(room_type_dal)
 
 def main_menu():
-    while True:
         print("""
         ==== HOTELVERWALTUNGSSYSTEM ====
         1. Hotels nach Stadt/Sternen/Gästezahl anzeigen
@@ -55,4 +56,39 @@ def main_menu():
         10. Stammdaten verwalten (Admin)
         11. Beenden
         """)
-        pass
+        return int(input("Gib deine Wahl ein"))
+
+def search_by_city_stars_guests():
+    print("\nBitte gib hier deine Kriterien ein")
+    city = input("Stadt: ")
+    stars = int(input("Sterne: "))
+    guests = int(input("Anzahl Gäste: "))
+    return city, stars, guests
+
+mode = "main"
+is_continue = True
+
+while is_continue:
+    if mode =="main":
+        user_choice = main_menu()
+        if user_choice == 1:
+            city = input("Stadt: ")
+            stars = int(input("Sterne: "))
+            guests = int(input("Anzahl Gäste: "))
+            result = hotel_manager.find_hotels_with_matching_rooms(city, stars, guests)
+            if result:
+                for hotel, room in result:
+                    print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sterne "
+                          f"(Strasse: {hotel.address.street}) – Platz für {room.room_type.max_guests} Gäste")
+                    is_continue = False
+            else:
+                print("Kein passendes Hotel gefunden")
+
+
+
+
+
+
+        elif user_choice == 11:
+            print("Tschau")
+            is_continue = False

@@ -1,5 +1,7 @@
 from data_access.hotel_data_access import HotelDataAccess
 from model.hotel import Hotel
+from model.room import Room
+from model.room_type import RoomType
 
 class HotelManager:
     def __init__(self, hotel_dal: HotelDataAccess):
@@ -35,12 +37,20 @@ class HotelManager:
             if hotel.address.city.lower() == city
         ]
 
-    def find_by_city_and_min_stars(self, city:str, stars:int) -> list[Hotel]:
+
+    def find_hotels_with_matching_rooms(self, city: str, stars: int, guests: int) -> list[tuple[Hotel, Room]]:
         city = city.lower()
-        return [
-            hotel for hotel in self.hotel_dal.read_all_hotels()
-            if hotel.address.city.lower() == city and hotel.stars >= stars
-        ]
+        matches = []
+
+        for hotel in self.hotel_dal.read_all_hotels():
+            if hotel.address.city.lower() == city and hotel.stars >= stars:
+                for room in hotel.rooms:
+                    if room.room_type.max_guests >= guests:
+                        matches.append((hotel, room))
+                        break
+
+        return matches
+
 
 
 
