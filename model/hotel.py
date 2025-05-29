@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Hotel:
-    def __init__(self, hotel_id: int, name: str, stars: int, address: Address):
+    def __init__(self, hotel_id: int, name: str, stars: int, address: Address, rooms=None):
         if hotel_id is not None and hotel_id < 0:
             raise ValueError("Hotel ID must be positive if provided")
         if not name:
@@ -17,7 +17,7 @@ class Hotel:
         self.__name = name
         self.__stars = stars
         self.__address = address
-        self.__rooms: list = []
+        self.__rooms = rooms or []
 
     def __repr__(self):
         return f"Hotel ID: {self.hotel_id}, Name: {self.name}, Stars: {self.stars}, Address: {self.address} "

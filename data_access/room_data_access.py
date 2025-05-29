@@ -36,7 +36,7 @@ class RoomDataAccess(BaseDataAccess):
                     description=row[4],
                     max_guests=row[5]
                 ),
-                hotel_id=Hotel(
+                hotel=Hotel(
                     hotel_id=row[6],
                     name=row[7],
                     stars=row[8],
@@ -51,6 +51,28 @@ class RoomDataAccess(BaseDataAccess):
             )
 
             for row in rooms
+        ]
+
+    def read_rooms_for_hotel(self, hotel_id: int) -> list[Room]:
+        sql = """
+        SELECT 
+            r.room_id, r.room_number, r.price_per_night,
+            t.type_id, t.description, t.max_guests
+        FROM Room r
+        JOIN Room_Type t ON r.type_id = t.type_id
+        WHERE r.hotel_id = ?
+        """
+        rows = self.fetchall(sql, (hotel_id,))
+        return [
+            Room(
+                room_id=row[0],
+                room_number=row[1],
+                price_per_night=row[2],
+                hotel=None,  # wird vom aufrufenden Hotel gesetzt
+                room_type=RoomType(room_type_id=row[3], description=row[4], max_guests=row[5]),
+                facilities=self.read_facilities_for_room(row[0])
+            )
+            for row in rows
         ]
 
     def read_facilities_for_room(self, room_id: int) -> list[Facility]:

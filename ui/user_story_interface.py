@@ -25,10 +25,10 @@ address_dal = AddressDataAccess(db_path)
 booking_dal = BookingDataAccess(db_path)
 facility_dal = FacilityDataAccess(db_path)
 guest_dal = GuestDataAccess(db_path)
-hotel_dal = HotelDataAccess(db_path)
 invoice_dal = InvoiceDataAccess(db_path)
 room_dal = RoomDataAccess(db_path)
 room_type_dal = RoomTypeDataAccess(db_path)
+hotel_dal = HotelDataAccess(db_path,room_dal)
 
 # Intialisierung der Manager
 address_manager = AddressManager(address_dal)
@@ -38,6 +38,7 @@ guest_manager = GuestManager(guest_dal)
 invoice_manager = InvoiceManager(invoice_dal)
 #room_manager = RoomManager(room_dal)
 #room_type_manager = RoomTypeManager(room_type_dal)
+hotel_manager = HotelManager(hotel_dal)
 
 # Platzhalter für weitere Funktionen gemäss Menue
 def hotel_suchen(): pass
@@ -70,7 +71,29 @@ def main_menu():
 
         choice = input("Wähle eine Option: ")
         if choice == "1":
-            hotel_suchen()
+            city = input("Stadt: ").strip()
+            try:
+                stars = int(input("Minimale Sterneanzahl (1–5): "))
+                if not 1 <= stars <= 5:
+                    print("Bitte gib eine Zahl zwischen 1 und 5 für Sterne ein.")
+                    return
+                guests = int(input("Anzahl Gäste (mind. 1): "))
+                if guests < 1:
+                    print("Die Gästeanzahl muss mindestens 1 sein.")
+                    return
+            except ValueError:
+                print("Bitte gib gültige Zahlen für Sterne und Gästeanzahl ein.")
+                return
+            results = hotel_manager.find_hotels_with_matching_rooms(city, stars, guests)
+            if results:
+                for hotel, room in results:
+                    facility_names = ', '.join(fac.facility_name for fac in room.facilities)
+                    print(f"{hotel.name} in {hotel.address.city}, {hotel.stars} Sterne")
+                    print(f"Zimmer: {room.room_number}, max. Gäste: {room.room_type.max_guests}, Ausstattung: {facility_names}")
+            else:
+                print("Keine passenden Hotels/Zimmer gefunden.")
+
+
         elif choice == "2":
             zimmer_suchen()
         elif choice == "3":

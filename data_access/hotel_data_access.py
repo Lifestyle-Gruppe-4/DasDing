@@ -1,10 +1,14 @@
+from data_access.room_data_access import RoomDataAccess
 from model.hotel import Hotel
 from data_access.base_data_access import BaseDataAccess
 from model.address import Address
 
+
+
 class HotelDataAccess(BaseDataAccess):
-    def __init__(self, db_path:str=None):
+    def __init__(self, db_path:str=None, room_dal: RoomDataAccess = None):
         super().__init__(db_path)
+        self.room_dal = room_dal
 
     def read_all_hotels(self) -> list[Hotel]:
         sql = """
@@ -24,7 +28,8 @@ class HotelDataAccess(BaseDataAccess):
                     street=row[4],
                     city=row[5],
                     zip_code=row[6]
-                )
+                ),
+                rooms=self.room_dal.read_rooms_for_hotel(row[0])
             )
             for row in hotels
         ]
@@ -63,11 +68,12 @@ class HotelDataAccess(BaseDataAccess):
         return rows_affected > 0
 
 
-if __name__ == "__main__":
-   db_path = "../database/hotel_sample.db"
-   hotel_dal = HotelDataAccess(db_path)
-   hotels = hotel_dal.read_all_hotels()
-
-   for hotel in hotels:
-       print(hotel)
+# if __name__ == "__main__":
+#    db_path = "../database/hotel_sample.db"
+#    room_dal = RoomDataAccess(db_path)
+#    hotel_dal = HotelDataAccess(db_path, room_dal)
+#    hotels = hotel_dal.read_all_hotels()
+#
+#    for hotel in hotels:
+#        print(hotel)
 
