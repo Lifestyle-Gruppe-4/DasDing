@@ -115,7 +115,7 @@ while is_continue:
 
     elif mode =="erweiterte_suche":
         city, stars = get_user_choice_plus()
-        result = hotel_manager.find_by_city_and_min_stars(city,stars)
+        result = hotel_manager.find_hotel_by_city_and_min_stars(city,stars)
         if result:
             for hotel in result:
                 print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sterne (Strasse: {hotel.address.street})")

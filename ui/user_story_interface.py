@@ -71,27 +71,56 @@ def main_menu():
 
         choice = input("Wähle eine Option: ")
         if choice == "1":
-            city = input("Stadt: ").strip()
-            try:
-                stars = int(input("Minimale Sterneanzahl (1–5): "))
-                if not 1 <= stars <= 5:
-                    print("Bitte gib eine Zahl zwischen 1 und 5 für Sterne ein.")
+            print("""
+            === Hotelsuche ===
+            1. Nach Stadt
+            2. Nach Stadt und Mindeststerne
+            3. Nach Stadt, Mindeststerne und Gästezahl
+            """)
+            user_input = input("Wähle eine Suchoption: ")
+
+            if user_input == "1":
+                search_input = input("Gib die Stadt des Hotels ein: ")
+                results = hotel_manager.find_by_city(search_input)
+                if results:
+                    for hotel in results:
+                        print(
+                            f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sternen (Strasse: {hotel.address.street})")
+                else:
+                    print("Kein Hotel in dieser Stadt gefunden")
+
+            elif user_input == "2":
+                city = input("Gib die Stadt des Hotels ein: ")
+                stars = int(input("Gib die mindest Anzahl Sterne ein: "))
+                results = hotel_manager.find_hotel_by_city_and_min_stars(city,stars)
+                if results:
+                    for hotel in results:
+                        print(f"{hotel.name} ({hotel.stars} Sterne) in {hotel.address.city}")
+                else:
+                    print("Kein Hotel mit diesem Name gefunden")
+
+            elif user_input == "3":
+                city = input("Stadt: ").strip()
+                try:
+                    stars = int(input("Minimale Sterneanzahl (1–5): "))
+                    if not 1 <= stars <= 5:
+                        print("Bitte gib eine Zahl zwischen 1 und 5 für Sterne ein.")
+                        return
+                    guests = int(input("Anzahl Gäste (mind. 1): "))
+                    if guests < 1:
+                        print("Die Gästeanzahl muss mindestens 1 sein.")
+                        return
+                except ValueError:
+                    print("Bitte gib gültige Zahlen für Sterne und Gästeanzahl ein.")
                     return
-                guests = int(input("Anzahl Gäste (mind. 1): "))
-                if guests < 1:
-                    print("Die Gästeanzahl muss mindestens 1 sein.")
-                    return
-            except ValueError:
-                print("Bitte gib gültige Zahlen für Sterne und Gästeanzahl ein.")
-                return
-            results = hotel_manager.find_hotels_with_matching_rooms(city, stars, guests)
-            if results:
-                for hotel, room in results:
-                    facility_names = ', '.join(fac.facility_name for fac in room.facilities)
-                    print(f"{hotel.name} in {hotel.address.city}, {hotel.stars} Sterne")
-                    print(f"Zimmer: {room.room_number}, max. Gäste: {room.room_type.max_guests}, Ausstattung: {facility_names}")
-            else:
-                print("Keine passenden Hotels/Zimmer gefunden.")
+                results = hotel_manager.find_hotels_with_matching_rooms(city, stars, guests)
+                if results:
+                    for hotel, room in results:
+                        facility_names = ', '.join(fac.facility_name for fac in room.facilities)
+                        print(f"{hotel.name} in {hotel.address.city}, {hotel.stars} Sterne")
+                        print(f"Zimmer: {room.room_number}, max. Gäste: {room.room_type.max_guests}, Ausstattung: {facility_names}")
+                else:
+                    print("Keine passenden Hotels/Zimmer gefunden.")
 
 
         elif choice == "2":
