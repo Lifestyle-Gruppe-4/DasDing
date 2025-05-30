@@ -15,10 +15,10 @@ from model.hotel import Hotel
 
 
 db_path = "../database/hotel_sample.db"
-hotel_dal = HotelDataAccess(db_path)
 address_dal = AddressDataAccess(db_path)
 booking_dal     = BookingDataAccess(db_path)
 room_dal = RoomDataAccess(db_path)
+hotel_dal = HotelDataAccess(db_path, room_dal)
 
 booking_manager = BookingManager(booking_dal)
 hotel_manager = HotelManager(hotel_dal)
