@@ -42,8 +42,20 @@ def get_admin_choice():
     print("3. Update existing hotel")
     print("4. Display all hotels")
     print("5. Display all bookings")
-    print("6. Exit")
-    return int(input("Enter your choice: "))
+    print("6. Display rooms with amenities")
+    print("7. Stammdaten verwalten")
+    print("8. Exit")
+    choice = input ("Enter your choice: ")
+
+    try:
+        num = int(choice)
+    except ValueError:
+        print("Ungültige Eingabe: Bitte eine Zahl eingeben.")
+
+    if 1 <= num <= 8:
+        return num
+    else:
+        print("Ungültige Auswahl: Bitte eine Zahl zwischen 1 und 8 eingeben.")
 
 def get_user_choice_plus():
     print("\nBitte gib hier deine Kriterien ein")
@@ -65,6 +77,7 @@ def get_user_choice_plus():
 #start im Guest-Modus
 mode = "guest"
 is_continue = True
+
 
 while is_continue:
     if mode =="guest":
@@ -145,6 +158,17 @@ while is_continue:
                     )
 
         elif admin_choice == 6:
+            rooms = room_manager.get_all_rooms_with_facilities()
+            if not rooms:
+                print("Keine Zimmer gefunden.")
+            else:
+                print("\nZimmer mit Ausstattung:")
+                for room in rooms:
+                    # angenommen: room.facilities ist List[Facility]
+                    amenities = ", ".join(f.name for f in room.facilities)
+                    print(f"Zimmer {room.room_number} (ID {room.room_id}): {amenities}")
+
+        elif admin_choice == 8:
             print("Verlasse Admin-Center")
             mode = "guest"
 

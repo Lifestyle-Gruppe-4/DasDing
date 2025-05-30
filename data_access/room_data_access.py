@@ -95,6 +95,29 @@ class RoomDataAccess(BaseDataAccess):
         room_id, _ = self.fetchone(sql, params)
         return room_id
 
+    def read_all_rooms_with_facilities(self) -> list[Room]:
+        sql = """
+              SELECT r.room_id,
+                     r.room_number,
+                     f.facility_id,
+                     f.name
+              FROM Room r
+                       LEFT JOIN RoomFacility rf ON r.room_id = rf.room_id
+                       LEFT JOIN Facility f ON rf.facility_id = f.facility_id \
+              """
+        rows = self.fetchall(sql)
+        rooms: dict[int, Room] = {}
+        for room_id, room_number, fac_id, fac_name in rows:
+            if room_id not in rooms:
+                rooms[room_id] = Room(room_id=room_id,
+                                      room_number=room_number,
+                                      facilities=[])
+            if fac_id is not None:
+                rooms[room_id].facilities.append(
+                    Facility(facility_id=fac_id, name=fac_name)
+                )
+        return list(rooms.values())
+
 if __name__ == "__main__":
    db_path = "../database/hotel_sample.db"
    room_dal = RoomDataAccess(db_path)

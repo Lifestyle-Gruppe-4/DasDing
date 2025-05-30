@@ -21,4 +21,5 @@ class RoomManager:
         matching_rooms = [room for room in rooms if room.room_type.max_guests == max_guests]
         return matching_rooms
 
-
+    def get_all_rooms_with_facilities(self) -> list[Room]:
+        return self.room_dal.read_all_rooms_with_facilities()
