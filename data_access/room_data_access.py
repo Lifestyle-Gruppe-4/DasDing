@@ -1,4 +1,5 @@
 from model import room
+from model.booking import Booking
 from model.facility import Facility
 from model.room import Room
 from model.hotel import Hotel
@@ -6,6 +7,7 @@ from model.room_type import RoomType
 from data_access.base_data_access import BaseDataAccess
 from model.address import Address
 from model.facility import Facility
+from datetime import datetime
 
 class RoomDataAccess(BaseDataAccess):
     def __init__(self, db_path:str=None):
@@ -63,17 +65,21 @@ class RoomDataAccess(BaseDataAccess):
         WHERE r.hotel_id = ?
         """
         rows = self.fetchall(sql, (hotel_id,))
-        return [
-            Room(
-                room_id=row[0],
+        rooms = []
+        for row in rows:
+            room_id = row[0]
+            room = Room(
+                room_id=room_id,
                 room_number=row[1],
                 price_per_night=row[2],
-                hotel=None,  # wird vom aufrufenden Hotel gesetzt
-                room_type=RoomType(room_type_id=row[3], description=row[4], max_guests=row[5]),
-                facilities=self.read_facilities_for_room(row[0])
+                hotel=None, #wird später dem Hotel zugewiesen
+                room_type=RoomType(room_type_id=row[3],description=row[4],max_guests=row[5]),
+                facilities=self.read_facilities_for_room(room_id)
             )
-            for row in rows
-        ]
+            # Buchungen hinzufügen
+            room.bookings.extend(self.read_bookings_for_room(room_id))
+            rooms.append(room)
+        return rooms
 
     def read_facilities_for_room(self, room_id: int) -> list[Facility]:
         sql = """
@@ -118,11 +124,29 @@ class RoomDataAccess(BaseDataAccess):
                 )
         return list(rooms.values())
 
+    def read_bookings_for_room(self, room_id: int) -> list[Booking]:
+        sql = """
+        SELECT check_in_date, check_out_date, is_cancelled
+        FROM Booking
+        Where room_id = ?
+        """
+        rows = self.fetchall(sql, (room_id,))
+        return [
+            Booking(
+                check_in_date=row[0],
+                check_out_date=row[1],
+                guest=None,
+                room=None,
+                is_cancelled=bool(row[2])
+            )
+            for row in rows
+        ]
+
 if __name__ == "__main__":
    db_path = "../database/hotel_sample.db"
    room_dal = RoomDataAccess(db_path)
-   rooms = room_dal.read_all_rooms()
+   bookings = room_dal.read_bookings_for_room(1)
 
-   for room in rooms:
-       print(room)
+   for booking in bookings:
+       print(f"{booking.check_in_date} bis {booking.check_out_date}, storniert: {booking.is_cancelled}")
 
