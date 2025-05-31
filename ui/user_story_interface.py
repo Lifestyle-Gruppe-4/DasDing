@@ -136,7 +136,6 @@ def main_menu():
             else:
                 print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
 
-
         elif choice == "3":
             buchung_erstellen()
         elif choice == "4":
