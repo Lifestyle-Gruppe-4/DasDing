@@ -11,6 +11,7 @@ from model.address import Address
 from model.hotel import Hotel
 from model.room_type import RoomType
 from model.facility import Facility
+from model.booking import Booking
 
 # Wandelt SQL-Zeile in Booking-Objekte um
 def _create_booking(rows):
@@ -36,7 +37,7 @@ def _create_booking(rows):
         ),
         room=Room(
             room_id=base[12],
-            room_nr=base[13],
+            room_number=base[13],
             price_per_night=base[14],
             hotel=Hotel(
                 hotel_id=base[15],
