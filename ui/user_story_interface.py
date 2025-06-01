@@ -45,55 +45,9 @@ def hotel_suchen(): pass
 def hotel_verwalten(): pass
 def zimmer_suchen(): pass
 def buchung_erstellen(): pass
-
-# === USER STORY 5: Rechnung erhalten ===
-def rechnungen_verwalten():
-    try:
-        booking_id = int(input("Für welche Buchung (ID) soll eine Rechnung erstellt werden? "))
-        bookings = booking_manager.get_all_bookings()
-        selected = next((b for b in bookings if b.booking_id == booking_id), None)
-
-        if selected:
-            invoice = selected.generate_invoice()
-            print("Rechnung erfolgreich erstellt:")
-            print(invoice.get_invoice_details())
-        else:
-            print("Keine Buchung mit dieser ID gefunden.")
-    except ValueError:
-        print("Ungültige Eingabe für Buchungs-ID.")
-
-# === USER STORY 6: Buchung stornieren ===
-def buchung_verwalten():
-    try:
-        booking_id = int(input("Welche Buchung möchtest du stornieren? (ID eingeben): "))
-        bookings = booking_manager.get_all_bookings()
-        selected = next((b for b in bookings if b.booking_id == booking_id), None)
-
-        if selected:
-            selected.cancel_booking()
-            print("Buchung wurde erfolgreich storniert.")
-        else:
-            print("Keine Buchung mit dieser ID gefunden.")
-    except ValueError:
-        print("Ungültige Buchungs-ID.")
-
-# === USER STORY 7: Preis dynamisch berechnen ===
-def zeige_dynamische_preise():
-    try:
-        base_price = float(input("Basispreis pro Nacht (CHF): "))
-        check_in = datetime.strptime(input("Datum prüfen (YYYY-MM-DD): "), "%Y-%m-%d")
-
-        def apply_seasonal_price(base_price, date):
-            if date.month in [6, 7, 8]:
-                return base_price * 1.2  # Sommeraufschlag
-            elif date.month in [12, 1, 2]:
-                return base_price * 1.1  # Winteraufschlag
-            return base_price
-
-        final_price = apply_seasonal_price(base_price, check_in)
-        print(f"Preis für {check_in.date()}: {final_price:.2f} CHF")
-    except ValueError:
-        print("Ungültiges Datum oder Preisformat.")
+def rechnungen_verwalten():pass
+def buchung_verwalten(): pass
+def zeige_dynamische_preise(): pass
 def buchungen_anzeigen(): pass
 def zimmerausstattung_anzeigen(): pass
 def stammdaten_verwalten(): pass
@@ -184,14 +138,118 @@ def main_menu():
 
         elif choice == "3":
             buchung_erstellen()
+
+        # Buchung Verwalten
         elif choice == "4":
-            buchung_verwalten()
+            try:
+                booking_id = int(input("Gib die Buchungs-ID ein, die du verwalten möchtest: "))
+                bookings = booking_manager.get_all_bookings()
+                selected = next((b for b in bookings if b.booking_id == booking_id), None)
+
+                if not selected:
+                    print("Keine Buchung mit dieser ID gefunden.")
+                    return
+
+                print("\nBuchungsdetails:")
+                print(selected.get_booking_details())
+
+                print("\nOptionen:")
+                print("1. Buchung stornieren")
+                print("2. Check-in/Check-out ändern")
+                print("0. Zurück")
+
+                choice = input("Wähle eine Option: ")
+
+                if choice == "1":
+                    selected.cancel_booking()
+                elif choice == "2":
+                    new_check_in = datetime.strptime(input("Neues Check-in Datum (YYYY-MM-DD): "), "%Y-%m-%d")
+                    new_check_out = datetime.strptime(input("Neues Check-out Datum (YYYY-MM-DD): "), "%Y-%m-%d")
+                    selected.update_dates(new_check_in, new_check_out)
+                    print("Buchung erfolgreich aktualisiert.")
+                elif choice == "0":
+                    return
+                else:
+                    print("Ungültige Auswahl.")
+
+            except ValueError:
+                print("Ungültige Eingabe.")
+            except Exception as e:
+                print(f"Fehler: {e}")
+
+        # Rechnungen Verwalten
         elif choice == "5":
-            rechnungen_verwalten()
+            try:
+                booking_id = int(input("Gib die Buchungs-ID ein, für die du die Rechnung verwalten möchtest: "))
+                bookings = booking_manager.get_all_bookings()
+                selected = next((b for b in bookings if b.booking_id == booking_id), None)
+
+                if not selected:
+                    print("Kein Buchungs-ID gefunden.")
+                    return
+
+                invoice = selected.generate_invoice()
+                print("\n Rechnung erstellt")
+                print(invoice.get_invoice_details())
+
+                print("\nOptionen:")
+                print("1. Als bezahlt markieren")
+                print("2. Rabatt anwenden")
+                print("3. Rechnung abbrechen")
+                print("0. Zurück")
+
+                choice = input("Wähle eine Option: ")
+
+                if choice == "1":
+                    invoice.mark_as_paid()
+                    print("Rechnung wurde als bezahlt markiert.")
+
+                elif choice == "2":
+                    percent = float(input("Rabatt in %: "))
+                    invoice.apply_discount(percent)
+
+                elif choice == "3":
+                    invoice.cancel_invoice()
+
+                elif choice == "0":
+                    return
+                else:
+                    print("Kein Option gefunden.")
+
+            except ValueError:
+                print("Ungültige Eingabe!")
+            except Exception as e:
+                print(f"Fehler: {e}")
+
         elif choice == "6":
             hotel_verwalten()
+
+        #Dynamische Preisanzeige
         elif choice == "7":
-            zeige_dynamische_preise()
+            try:
+                city = input("Stadt: ").strip()
+                check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+                check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+                guests = int(input("Anzahl Gäste: "))
+
+                results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out, guests)
+
+                if not results:
+                    print("Keine verfügbaren Zimmer gefunden.")
+                    return
+
+                print("\nDynamische Preisberechnung:")
+                for hotel, room in results:
+                    duration = (check_out - check_in).days
+                    dynamic_price = room.price_per_night * duration
+                    print(f"{hotel.name}, Zimmer {room.room_number} → {dynamic_price:.2f} CHF für {duration} Nächte")
+
+            except ValueError:
+                print("Ungültiges Datum oder Eingabe.")
+            except Exception as e:
+                print(f"Fehler: {e}")
+
+
         elif choice == "8":
             buchungen_anzeigen()
         elif choice == "9":

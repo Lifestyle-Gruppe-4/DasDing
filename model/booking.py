@@ -83,6 +83,7 @@ class Booking:
 
     @invoice.setter
     def invoice(self, value):
+        from model.invoice import Invoice
         if not isinstance(value, Invoice) and value is not None:
             raise ValueError('invoice must be an instance of Invoice or None!')
         self.__invoice = value
