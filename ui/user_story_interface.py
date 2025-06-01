@@ -7,8 +7,8 @@ from business_logic.facility_manager import FacilityManager
 from business_logic.guest_manager import GuestManager
 from business_logic.hotel_manager import HotelManager
 from business_logic.invoice_manager import InvoiceManager
-#from business_logic.room_manager import RoomManager
-#from business_logic.room_type_manager import RoomTypeManager
+from business_logic.room_manager import RoomManager
+from business_logic.room_type_manager import RoomTypeManager
 
 from data_access.address_data_access import AddressDataAccess
 from data_access.booking_data_access import BookingDataAccess
@@ -36,18 +36,64 @@ booking_manager = BookingManager(booking_dal)
 facility_manager = FacilityManager(facility_dal)
 guest_manager = GuestManager(guest_dal)
 invoice_manager = InvoiceManager(invoice_dal)
-#room_manager = RoomManager(room_dal)
-#room_type_manager = RoomTypeManager(room_type_dal)
+room_manager = RoomManager(room_dal)
+room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
 # Platzhalter für weitere Funktionen gemäss Menue
 def hotel_suchen(): pass
+def hotel_verwalten(): pass
 def zimmer_suchen(): pass
 def buchung_erstellen(): pass
-def buchung_verwalten(): pass
-def rechnungen_verwalten(): pass
-def hotel_verwalten(): pass
-def zeige_dynamische_preise(): pass
+
+# === USER STORY 5: Rechnung erhalten ===
+def rechnungen_verwalten():
+    try:
+        booking_id = int(input("Für welche Buchung (ID) soll eine Rechnung erstellt werden? "))
+        bookings = booking_manager.get_all_bookings()
+        selected = next((b for b in bookings if b.booking_id == booking_id), None)
+
+        if selected:
+            invoice = selected.generate_invoice()
+            print("Rechnung erfolgreich erstellt:")
+            print(invoice.get_invoice_details())
+        else:
+            print("Keine Buchung mit dieser ID gefunden.")
+    except ValueError:
+        print("Ungültige Eingabe für Buchungs-ID.")
+
+# === USER STORY 6: Buchung stornieren ===
+def buchung_verwalten():
+    try:
+        booking_id = int(input("Welche Buchung möchtest du stornieren? (ID eingeben): "))
+        bookings = booking_manager.get_all_bookings()
+        selected = next((b for b in bookings if b.booking_id == booking_id), None)
+
+        if selected:
+            selected.cancel_booking()
+            print("Buchung wurde erfolgreich storniert.")
+        else:
+            print("Keine Buchung mit dieser ID gefunden.")
+    except ValueError:
+        print("Ungültige Buchungs-ID.")
+
+# === USER STORY 7: Preis dynamisch berechnen ===
+def zeige_dynamische_preise():
+    try:
+        base_price = float(input("Basispreis pro Nacht (CHF): "))
+        check_in = datetime.strptime(input("Datum prüfen (YYYY-MM-DD): "), "%Y-%m-%d")
+
+        def apply_seasonal_price(base_price, date):
+            if date.month in [6, 7, 8]:
+                return base_price * 1.2  # Sommeraufschlag
+            elif date.month in [12, 1, 2]:
+                return base_price * 1.1  # Winteraufschlag
+            return base_price
+
+        final_price = apply_seasonal_price(base_price, check_in)
+        print(f"Preis für {check_in.date()}: {final_price:.2f} CHF")
+    except ValueError:
+        print("Ungültiges Datum oder Preisformat.")
 def buchungen_anzeigen(): pass
 def zimmerausstattung_anzeigen(): pass
 def stammdaten_verwalten(): pass
