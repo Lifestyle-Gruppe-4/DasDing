@@ -127,9 +127,8 @@ def main_menu():
             city = input("Stadt: ").strip()
             check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
             check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
-            guests = int(input("Anzahl Gäste: "))
 
-            results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out, guests)
+            results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
             if results:
                 for hotel, room in results:
                     print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number}")
