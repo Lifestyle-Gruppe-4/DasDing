@@ -46,12 +46,12 @@ class HotelManager:
             if hotel.address.city.lower() == city and hotel.stars >= stars
         ]
 
-    def find_hotels_with_matching_rooms(self, city: str, stars: int, guests: int) -> list[tuple[Hotel, Room]]:
+    def find_hotels_with_matching_rooms(self, city: str, guests: int) -> list[tuple[Hotel, Room]]:
         city = city.lower()
         matches = []
 
         for hotel in self.hotel_dal.read_all_hotels():
-            if hotel.address.city.lower() == city and hotel.stars >= stars:
+            if hotel.address.city.lower() == city:
                 for room in hotel.rooms:
                     if room.room_type.max_guests >= guests:
                         matches.append((hotel, room))

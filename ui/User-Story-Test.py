@@ -40,7 +40,7 @@ room_manager = RoomManager(room_dal)
 room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
-
+# User Story 1.5
 def suche_zimmer_stadt_zeitraum_gaeste_sterne():
     city = input("Stadt: ").strip()
     check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
@@ -56,3 +56,5 @@ def suche_zimmer_stadt_zeitraum_gaeste_sterne():
         print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
 
 suche_zimmer_stadt_zeitraum_gaeste_sterne()
+
+# User Story 1.6
