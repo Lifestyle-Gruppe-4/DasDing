@@ -46,7 +46,7 @@ class BookingManager:
     def get_booking_details(booking: Booking) -> str:
         booking_status = "Cancelled" if booking.is_cancelled else "Active"
         return (f"Booking ID: {booking.booking_id},  Guest: {booking.guest.first_name} {booking.guest.last_name} "
-                f"Room: {booking.room.room_nr}, From: {booking.check_in_date}, to: {booking.check_out_date} "
+                f"Room: {booking.room.room_number}, From: {booking.check_in_date}, to: {booking.check_out_date} "
                 f"Total: {booking.total_amount:.2f} CHF, Status: {booking_status}")
 
     # Berechnet Preis: Anzahl Nächte x Zimmerpreis
@@ -92,7 +92,7 @@ class BookingManager:
         status = "Cancelled" if booking.is_cancelled else "Active"
         print("------Booking Confirmation------")
         print(f"Booking ID: {booking.booking_id},  Guest: {booking.guest.first_name} {booking.guest.last_name}")
-        print(f"Room: {booking.room.room_nr}, From: {booking.check_in_date}, To: {booking.check_out_date}")
+        print(f"Room: {booking.room.room_number}, From: {booking.check_in_date}, To: {booking.check_out_date}")
         print(f"Duration: {self.stay_duration(booking)} Nights")
         print(f"Total: {booking.total_amount:.2f} CHF")
         print(f"Status: {status}")

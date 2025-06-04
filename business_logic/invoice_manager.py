@@ -7,7 +7,7 @@ class InvoiceManager:
         self.invoice_dal = invoice_dal # Verbindung zur Datenbankschicht
 
     # Neue Rechnung mit heutigem Datum anlegen
-    def create_invoice(self, booking_id: int, total_amount: float) -> bool:
+    def create_invoice(self, booking_id: int, total_amount: float) -> int:
         issue_date = datetime.today()
         return self.invoice_dal.create_invoice(booking_id, total_amount, issue_date)
 
