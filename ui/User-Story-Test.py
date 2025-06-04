@@ -55,6 +55,48 @@ def suche_zimmer_stadt_zeitraum_gaeste_sterne():
     else:
         print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
 
-suche_zimmer_stadt_zeitraum_gaeste_sterne()
+# suche_zimmer_stadt_zeitraum_gaeste_sterne()
 
 # User Story 1.6
+def hotel_suche():
+    print("""
+        === Hotelsuche ===
+        1. Nach Stadt
+        2. Nach Stadt und Mindeststerne
+        3. Verfügbare Zimmer nach Stadt und Gästezahl
+                """)
+    user_input = input("Wähle eine Suchoption: ")
+
+    if user_input == "1":
+        search_input = input("Gib die Stadt des Hotels ein: ")
+        results = hotel_manager.find_by_city(search_input)
+        if results:
+            for hotel in results:
+                print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sternen (Strasse: {hotel.address.street})")
+        else:
+            print("Kein Hotel in dieser Stadt gefunden")
+
+    elif user_input == "2":
+        city = input("Gib die Stadt des Hotels ein: ")
+        stars = int(input("Gib die mindest Anzahl Sterne ein: "))
+        results = hotel_manager.find_hotel_by_city_and_min_stars(city,stars)
+        if results:
+            for hotel in results:
+                print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sternen (Strasse: {hotel.address.street})")
+        else:
+            print("Kein Hotel mit diesen Kriterien gefunden")
+
+    elif user_input == "3":
+        city = input("Stadt: ").strip()
+        guests = int(input("Anzahl Gäste (mind. 1): "))
+        if guests < 1:
+            print("Die Gästeanzahl muss mindestens 1 sein.")
+            return
+        results = hotel_manager.find_hotels_with_matching_rooms(city, guests)
+        if results:
+            for hotel, room in results:
+                print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sternen (Strasse: {hotel.address.street})")
+        else:
+            print("Keine passenden Hotels/Zimmer gefunden.")
+
+hotel_suche()
