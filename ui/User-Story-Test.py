@@ -112,6 +112,8 @@ def info_pro_zimmer():
             nights = (check_out - check_in).days
             total_price = nights * room.price_per_night
             facilities = ', '.join(f.facility_name for f in room.facilities)
-            print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number} ({room.room_type.description}) mit {facilities} für CHF {room.price_per_night} pro Nacht. Gesamtpreis {total_price}")
+            print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number} ({room.room_type.description}, max. Gäste: {room.room_type.max_guests}) "
+                  f"mit {facilities} für CHF {room.price_per_night:.2f} pro Nacht. "
+                  f"Gesamtpreis CHF {total_price:.2f}")
 
 info_pro_zimmer()
