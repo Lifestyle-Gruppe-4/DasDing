@@ -18,7 +18,7 @@ hotel_manager = HotelManager(hotel_dal)
 
 def user_story_menu():
     while True:
-        print("\n-- USER STROIES --")
+        print("\n-- USER STOrIES --")
         print("4. Zimmer buchen")
         print("5. Rechnung erhalten")
         print("6. Buchung stornieren")
@@ -46,9 +46,52 @@ def user_story_menu():
 
 def user_story_4():pass
 def user_story_5():pass
-def user_story_6():pass
-def user_story_7():pass
+def user_story_6():
+    """Buchung stornieren"""
+    try:
+        bid = int(input("Buschung ID: "))
+        booking = booking_dal.get_booking_by_id(bid)
+        if not booking:
+            print("Buchung nicht gefunden!")
+            return
+        # Markiere die Buchung als storniert
+        booking_manager.booking_dal.execute(
+            "Update Booking Set is_cancelled = 1 WHERE booking_id = ?", (bid,)
+        )
+        # Optionale Storno-Rechnungen erzeugen
+        invoice_manager.create_invoice(bid, 0.0)
+        print("Buchung storniert.")
+    except Exception as e:
+        print(f"Fehler: {e}")
+
+def user_story_7():
+    """Dynamische Preisberechnung anzeigen"""
+    try:
+        city = input("Stadt: ").strip()
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+
+        results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
+        if not results:
+            print("Keine verfügbaren Zimmer gefunden.")
+            return
+
+        nights = (check_out - check_in).days
+        for hotel, room in results:
+            base = room.price_per_night
+            if check_in.month in (6, 7, 8):
+                factor = 1.2
+            elif check_in.month in (11, 12, 1, 2):
+                factor = 0.8
+            else:
+                factor = 1.0
+            dyn_price = base * factor * nights
+            print(f"{hotel.name}, Zimmer {room.room_number}: {dyn_price:.2f} CHF für {nights} Nächte")
+    except Exception as e:
+        print(f"Fehler: {e}")
+
 def user_story_8():
+    """Alle Buchunge anzeigen (Admin)"""
     try:
         bookings = booking_manager.get_all_bookings()
         for b in bookings:
