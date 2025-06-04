@@ -25,7 +25,7 @@ class Guest:
                 f" Firstname: {self.first_name}\n"
                 f" Lastname: {self.last_name}\n"
                 f" Email: {self.email}\n"
-                f" Adsress: {self.address}")
+                f" Address: {self.address}")
 
     @property
     def guest_id(self)-> int:

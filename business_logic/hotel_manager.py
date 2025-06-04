@@ -75,7 +75,22 @@ class HotelManager:
                         break
         return available
 
-
-
+    def find_available_hotels_by_date_guest_stars(self, city: str, check_in:datetime, check_out:datetime, guests:int, stars:int) -> list[tuple[Hotel, Room]]:
+        available = []
+        for hotel in self.hotel_dal.read_all_hotels():
+            if hotel.address.city.lower() == city.lower():
+                if hotel.stars >= stars:
+                    for room in hotel.rooms:
+                        if room.room_type.max_guests >= guests:
+                            #Any prüft ob eine Buchung in diesem Zeitraum liegt
+                            overlaps = any(
+                                b.check_in_date < check_out.date() and b.check_out_date > check_in.date()
+                                for b in room.bookings
+                                if not b.is_cancelled
+                            )
+                            if not overlaps:
+                                available.append((hotel, room))
+                                break
+        return available
 
 

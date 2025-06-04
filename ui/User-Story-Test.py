@@ -1,42 +1,58 @@
-from business_logic.guest_manager import GuestManager
+from datetime import datetime
+
+# Importiere alle Manager und DataAccess-Klassen
 from business_logic.address_manager import AddressManager
+from business_logic.booking_manager import BookingManager
+from business_logic.facility_manager import FacilityManager
+from business_logic.guest_manager import GuestManager
+from business_logic.hotel_manager import HotelManager
+from business_logic.invoice_manager import InvoiceManager
 from business_logic.room_manager import RoomManager
+from business_logic.room_type_manager import RoomTypeManager
+
 from data_access.address_data_access import AddressDataAccess
+from data_access.booking_data_access import BookingDataAccess
+from data_access.facility_data_access import FacilityDataAccess
 from data_access.guest_data_access import GuestDataAccess
 from data_access.hotel_data_access import HotelDataAccess
-from business_logic.hotel_manager import HotelManager
+from data_access.invoice_data_access import InvoiceDataAccess
 from data_access.room_data_access import RoomDataAccess
-from model.address import Address
-from model.guest import Guest
-from model.hotel import Hotel
-from data_access.room_data_access import RoomDataAccess
+from data_access.room_type_data_access import RoomTypeDataAccess
 
-
+# Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
-hotel_dal = HotelDataAccess(db_path)
 address_dal = AddressDataAccess(db_path)
+booking_dal = BookingDataAccess(db_path)
+facility_dal = FacilityDataAccess(db_path)
+guest_dal = GuestDataAccess(db_path)
+invoice_dal = InvoiceDataAccess(db_path)
 room_dal = RoomDataAccess(db_path)
+room_type_dal = RoomTypeDataAccess(db_path)
+hotel_dal = HotelDataAccess(db_path,room_dal)
 
-hotel_manager = HotelManager(hotel_dal)
+# Intialisierung der Manager
 address_manager = AddressManager(address_dal)
+booking_manager = BookingManager(booking_dal)
+facility_manager = FacilityManager(facility_dal)
+guest_manager = GuestManager(guest_dal)
+invoice_manager = InvoiceManager(invoice_dal)
 room_manager = RoomManager(room_dal)
+room_type_manager = RoomTypeManager(room_type_dal)
+hotel_manager = HotelManager(hotel_dal)
 
-user_choice = int(input("Enter max guests: "))
-result = room_manager.get_room_by_max_guests(user_choice)
-for room in result:
-    print(room)
 
-# def get_user_choice_plus():
-#     print("\nBitte gib hier deine Kriterien ein")
-#     city = input("Enter your city: ")
-#     stars = int(input("Enter your minimum stars: "))
-#     return city, stars
-#
-# city, stars = get_user_choice_plus()
-# result = hotel_manager.find_by_city_and_min_stars(city, stars)
-# if result:
-#     for hotel in result:
-#         print(f"{hotel.name} in {hotel.address.city} mit {hotel.stars} Sterne (Strasse: {hotel.address.street})")
-# else:
-#     print("Kein passendes Hotel gefunden")
+def suche_zimmer_stadt_zeitraum_gaeste_sterne():
+    city = input("Stadt: ").strip()
+    check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+    check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+    guests = int(input("Gib die Anzahl der Gäste ein: "))
+    stars = int(input("Gib die Mindestanzahl Sterne ein: "))
 
+    results = hotel_manager.find_available_hotels_by_date_guest_stars(city, check_in, check_out, guests, stars)
+    if results:
+        for hotel, room in results:
+            print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number}")
+    else:
+        print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
+
+suche_zimmer_stadt_zeitraum_gaeste_sterne()
