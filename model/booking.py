@@ -16,6 +16,7 @@ class Booking:
         self.__guest = guest # Gast-Objekt
         self.__room = room # Zimmer-Objekt
         self.__is_cancelled = is_cancelled
+        self.__total_amount = 0
         self.__invoice = None # Rechnung (falls erstellt)
 
     # Getter/Setter für Datenfelder, mit Validierung
