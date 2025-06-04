@@ -150,7 +150,7 @@ def main_menu():
                     return
 
                 print("\nBuchungsdetails:")
-                print(selected.get_booking_details())
+                print(booking_manager.get_booking_details(selected))
 
                 print("\nOptionen:")
                 print("1. Buchung stornieren")
@@ -160,11 +160,11 @@ def main_menu():
                 choice = input("Wähle eine Option: ")
 
                 if choice == "1":
-                    selected.cancel_booking()
+                    booking_manager.cancel_booking(selected)
                 elif choice == "2":
                     new_check_in = datetime.strptime(input("Neues Check-in Datum (YYYY-MM-DD): "), "%Y-%m-%d")
                     new_check_out = datetime.strptime(input("Neues Check-out Datum (YYYY-MM-DD): "), "%Y-%m-%d")
-                    selected.update_dates(new_check_in, new_check_out)
+                    booking_manager.update_dates(selected, new_check_in, new_check_out)
                     print("Buchung erfolgreich aktualisiert.")
                 elif choice == "0":
                     return
@@ -187,7 +187,7 @@ def main_menu():
                     print("Kein Buchungs-ID gefunden.")
                     return
 
-                invoice = selected.generate_invoice()
+                invoice = booking_manager.generate_invoice(selected)
                 print("\n Rechnung erstellt")
                 print(invoice.get_invoice_details())
 
@@ -229,9 +229,8 @@ def main_menu():
                 city = input("Stadt: ").strip()
                 check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
                 check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
-                guests = int(input("Anzahl Gäste: "))
 
-                results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out, guests)
+                results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
 
                 if not results:
                     print("Keine verfügbaren Zimmer gefunden.")
