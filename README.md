@@ -58,6 +58,9 @@ Alle Tasks wurden im GitHub-Project Board geplant und verwaltet.
 - ....?? **Auslastung pro Zimmertyp** mittels Deepnote Charts  
   Beispiel: Balkendiagramm zur Darstellung gebuchter Zimmer je Typ
 
+#### Vorgehen 
+.... Erklärung der Layers etc.
+
 ---
 
 ##  3. Kommunikation und Informationen
