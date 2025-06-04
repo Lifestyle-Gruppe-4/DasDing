@@ -55,7 +55,7 @@ def suche_zimmer_stadt_zeitraum_gaeste_sterne():
     else:
         print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
 
-# suche_zimmer_stadt_zeitraum_gaeste_sterne()
+#suche_zimmer_stadt_zeitraum_gaeste_sterne()
 
 # User Story 1.6
 def hotel_suche():
@@ -99,4 +99,19 @@ def hotel_suche():
         else:
             print("Keine passenden Hotels/Zimmer gefunden.")
 
-hotel_suche()
+#hotel_suche()
+
+def info_pro_zimmer():
+    city = input("Stadt: ").strip()
+    check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+    check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+
+    results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
+    if results:
+        for hotel, room in results:
+            nights = (check_out - check_in).days
+            total_price = nights * room.price_per_night
+            facilities = ', '.join(f.facility_name for f in room.facilities)
+            print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number} ({room.room_type.description}) mit {facilities} für CHF {room.price_per_night} pro Nacht. Gesamtpreis {total_price}")
+
+info_pro_zimmer()
