@@ -55,7 +55,7 @@ class BookingDataAccess(BaseDataAccess):
         super().__init__(db_path) # Verbindung zur DB aufbauen
 
     # Holt alle Buchungen aus der DB
-    def read_all_bookings(self) -> list[Booking]:
+    def read_all_bookings(self) -> list[Booking] | None:
         sql = """
             SELECT b.booking_id, b.check_in_date, b.check_out_date, b.is_cancelled, b.total_amount,
                    g.guest_id, g.first_name, g.last_name, g.email,
