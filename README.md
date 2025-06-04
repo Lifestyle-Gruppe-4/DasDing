@@ -3,6 +3,7 @@
 **Studiengang:** BSc Business Artificial Intelligence  
 **Semester:** Frühling 2025  
 **Gruppe:** Gruppe 4 (DasDing)
+
 **Gruppenmitglieder:** Thomas Bartels, Silian Gyger, Michele Lepori, Simon Manger
 
 
