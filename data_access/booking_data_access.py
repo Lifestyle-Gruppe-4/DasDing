@@ -15,6 +15,7 @@ from model.booking import Booking
 # Wandelt SQL-Zeile in Booking-Objekte um
 def _create_booking(row):
     return Booking(
+        booking_id = row[0],
         check_in_date=row[1],
         check_out_date=row[2],
         guest=Guest(

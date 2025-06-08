@@ -5,10 +5,15 @@ from model.room import Room
 class Booking:
     booking_counter = 1 #Zählt automatisch alle Buchungen (nur intern genutzt)
 
-    def __init__(self, check_in_date: datetime, check_out_date: datetime, guest: Guest=None, room: Room=None, is_cancelled:bool=False):
-        # Automatisch vergebene Buchungs-ID
-        self.__booking_id = Booking.booking_counter
-        Booking.booking_counter += 1
+    def __init__(self, check_in_date: datetime, check_out_date: datetime, guest: Guest = None, room: Room = None, is_cancelled:bool = False, booking_id: int | None = None,):
+        if booking_id is None:
+            # Automatische vergebene Buchungs-ID
+            self.__booking_id = Booking.booking_counter
+            Booking.booking_counter += 1
+        else:
+            self.__booking_id = booking_id
+            if booking_id >= Booking.booking_counter:
+                Booking.booking_counter = booking_id + 1
 
         # Wichtige Buchungsdaten
         self.__check_in_date = check_in_date
