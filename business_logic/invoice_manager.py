@@ -1,6 +1,6 @@
 from data_access.invoice_data_access import InvoiceDataAccess
 from model.invoice import Invoice
-from datetime import datetime
+from datetime import date
 
 class InvoiceManager:
     def __init__(self, invoice_dal: InvoiceDataAccess):
@@ -8,7 +8,7 @@ class InvoiceManager:
 
     # Neue Rechnung mit heutigem Datum anlegen
     def create_invoice(self, booking_id: int, total_amount: float) -> int:
-        issue_date = datetime.today()
+        issue_date = date.today().strftime('%Y-%m-%d')
         return self.invoice_dal.create_invoice(booking_id, total_amount, issue_date)
 
     # Gibt alle Rechnungen zurück

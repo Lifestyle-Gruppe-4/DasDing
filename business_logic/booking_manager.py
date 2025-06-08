@@ -1,5 +1,5 @@
 from typing import List
-import datetime
+from datetime import datetime, date
 from model.booking import Booking
 from model.invoice import Invoice
 from data_access.booking_data_access import BookingDataAccess
@@ -13,7 +13,7 @@ class BookingManager:
         return self.booking_dal.read_all_bookings()
 
     # Neue Buchungen erstellen (Logik inkl. Preisberechnung)
-    def create_booking(self, check_in: datetime.datetime, check_out: datetime.datetime, guest_id: int, room_id: int, price_per_night: float) -> int:
+    def create_booking(self, check_in: datetime.date, check_out: datetime.date, guest_id: int, room_id: int, price_per_night: float) -> int:
         if check_out <= check_in:
             raise ValueError("Check-out must be the same or after check-in date!")
 
@@ -29,11 +29,11 @@ class BookingManager:
         )
 
     # Buchung aktualisieren (z.B. neue Daten)
-    def update_booking(self, booking_id: int, new_check_in: datetime, new_check_out: datetime, new_total: float) -> bool:
+    def update_booking(self, booking_id: int, new_check_in: date, new_check_out: date, new_total: float) -> bool:
         return self.booking_dal.update_booking(
             booking_id = booking_id,
-            check_in_date = new_check_in.date().isoformat(),
-            check_out_date = new_check_out.date().isoformat(),
+            check_in_date = new_check_in.isoformat(),
+            check_out_date = new_check_out.isoformat(),
             total_amount = new_total
         )
 
@@ -63,7 +63,7 @@ class BookingManager:
         booking.is_cancelled = True
         print(f"Booking ID: {booking.booking_id} has been cancelled.")
 
-    def update_dates(self, booking: Booking, new_check_in: datetime.datetime, new_check_out: datetime.datetime):
+    def update_dates(self, booking: Booking, new_check_in: datetime.date, new_check_out: datetime.date):
         if new_check_out < new_check_in:
             raise ValueError("Check-out must be the same or after check-in date!")
         booking.check_in_date = new_check_in
@@ -78,11 +78,11 @@ class BookingManager:
 
     @staticmethod
     def is_future_booking(booking: Booking) -> bool:
-        return booking.check_in_date > datetime.datetime.now()
+        return booking.check_in_date > date.today()
 
     @staticmethod
     def is_active_booking(booking: Booking) -> bool:
-        return booking.check_in_date <= datetime.datetime.now() <= booking.check_out_date and not booking.is_cancelled
+        return booking.check_in_date <= date.today() <= booking.check_out_date and not booking.is_cancelled
 
     @staticmethod
     def stay_duration(booking: Booking) -> int:
