@@ -52,87 +52,40 @@ def user_story_menu():
 
 
 def user_story_4():
-    # Zimmer in einem bestimmten Hotel buchen
     try:
-        hotel_name = input("Hotelname: "). strip()
-        hotels = hotel_manager.find_by_name(hotel_name)
-        if not hotels:
-            print("Kein Hotel mit diesem Namen gefunden!")
+        city = input("Stadt: ").strip()
+        check_in = datetime.strptime(input("Check_in (YYYY-MM-DD)"), "%Y-%m-%d")
+        check_out = datetime.strptime(input("check_out (YYYY-MM-DD"), "%Y-%m-%d")
+
+        results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
+        if not results:
+            print("Keine verfügbaren Zimmer gefunden.")
             return
-        for h in hotels:
-            print(f"{h.hotel_id}: {h.name} in {h.address.city}")
+
+        print("\nVerfügbare Hotels und Zimmer:")
+        for idx, (hotel, room) in enumerate(results, start=1):
+            print(f"{idx}. {hotel.name} -  Zimmer {room.room_number} (Preis/Nacht: {room.price_per_night:2f} CHF)")
 
         try:
-            hid = int(input("Hotel-ID: wählen: "))
+            selection = int(input("Wähle ein Hotel/Zimmer (0 zum Abbrechen): "))
         except ValueError:
-            print("Ungültige Hotel-ID.")
+            print("Ungültige Eingabe.")
+            return
+        if selection == 0 or selection > len(results):
+            print("Abgebrochen.")
             return
 
-        hotel = next((h for h in hotels if h.hotel_id == hid), None)
-        if not hotel:
-            print("Hotel-ID nicht gefunden.")
-            return
-
-        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
-        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
-
-        available_rooms = []
-        for room in hotel.rooms:
-            overlaps = any(
-                b.check_in_date < check_out.date() and b.check_out_date > check_in.date()
-                for b in room.bookings
-                if not b.is_cancelled
-            )
-            if not overlaps:
-                available_rooms.append(room)
-
-        if not available_rooms:
-            print("keine freie Zimmer für diesen Zeitraum.")
-            return
-
-        print("\nVerfügbare Zimmer:")
-        for room in available_rooms:
-            print(
-                f"ID: {room.room_id}: Nr. {room.room_number} - {room.room_type.description}"
-                f" für {room.price_per_night:.2f} CHF/Nacht"
-        )
-
-        try:
-            rid = int(input("Zimmer-ID wählen: "))
-        except ValueError:
-            print("Ungültige Zimmer ID.")
-            return
-
-        room = next((r for r in available_rooms if r.roomid == rid), None)
-        if not room:
-            print("Zimmer ID nicht gefunden.")
-            return
-
-        try:
-            guest_id = int(input("Guest ID: "))
-        except ValueError:
-            print("Ungültige Guest-ID")
-            return
-
-        booking_id, _ = booking_manager.create_booking(
-            check_in,
-            check_out,
-            guest_id,
-            room.room_id,
-            room.price_per_night,
-        )
-        booking = booking_dal.get_booking_by_id(booking_id)
-        if booking:
-            booking_manager.print_confirmation(booking)
-            invoice_manager.create_invoice(booking_id, booking.total_amount)
-
+        hotel, room = results[selection - 1]
+        guest_id = int(input("Gäste-ID: "))
+        booking_id = booking_manager.create_booking(check_in, check_out, guest_id, room.room_id, room.price_per_night)
+        print(f"Buchung abgeschlossen. Buchung-ID: {booking_id}")
     except Exception as e:
         print(f"Fehler: {e}")
 
+def user_story_5():
+    pass
 
 
-
-def user_story_5():pass
 def user_story_6():
     """Buchung stornieren"""
     try:
