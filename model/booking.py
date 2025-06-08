@@ -1,11 +1,11 @@
-from datetime import datetime
+from datetime import date
 from model.guest import Guest
 from model.room import Room
 
 class Booking:
     booking_counter = 1 #Zählt automatisch alle Buchungen (nur intern genutzt)
 
-    def __init__(self, check_in_date: datetime, check_out_date: datetime, guest: Guest = None, room: Room = None, is_cancelled:bool = False, total_amount: float = 0, booking_id: int | None = None,):
+    def __init__(self, check_in_date: date, check_out_date: date, guest: Guest = None, room: Room = None, is_cancelled:bool = False, total_amount: float = 0, booking_id: int | None = None,):
         if booking_id is None:
             # Automatische vergebene Buchungs-ID
             self.__booking_id = Booking.booking_counter
@@ -35,7 +35,7 @@ class Booking:
 
     @check_in_date.setter
     def check_in_date(self, value):
-        if not isinstance(value, datetime):
+        if not isinstance(value, date):
             raise ValueError('check_in_date must be a datetime')
         self.__check_in_date = value
 
@@ -45,7 +45,7 @@ class Booking:
 
     @check_out_date.setter
     def check_out_date(self, value):
-        if not isinstance(value, datetime):
+        if not isinstance(value, date):
             raise ValueError('check_out_date must be a datetime')
         self.__check_out_date = value
 
