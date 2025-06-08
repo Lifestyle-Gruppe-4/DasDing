@@ -83,7 +83,20 @@ def user_story_4():
         print(f"Fehler: {e}")
 
 def user_story_5():
-    pass
+
+    # Deletion for bookings will be changed later after testing creation of bookings
+    try:
+        user = int(input("Delete Booking ID: "))
+        deletion = booking_dal.delete_booking(user)
+        if not deletion:
+            print("ID nicht gefunden")
+        else:
+            print("ID wurde gelöscht")
+            return
+
+    except Exception as e:
+        print(f"Fehler: {e}")
+
 
 
 def user_story_6():
