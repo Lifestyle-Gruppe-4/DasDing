@@ -14,8 +14,11 @@ from model.booking import Booking
 
 # Wandelt SQL-Zeile in Booking-Objekte um
 def _create_booking(row):
+    facilities = []
+    if row[26] is not None:
+        facilities.append(Facility(row[26], row[27]))
     return Booking(
-        booking_id = row[0],
+        booking_id=row[0],
         check_in_date=row[1],
         check_out_date=row[2],
         guest=Guest(
@@ -46,7 +49,7 @@ def _create_booking(row):
                 stars=row[22]
             ),
             room_type=RoomType(row[23], row[24], row[25]),
-            facilities=[Facility(row[26], row[27])]
+            facilities=facilities
         ),
         is_cancelled=bool(row[3]),
         total_amount=int(row[4]),
@@ -73,8 +76,8 @@ class BookingDataAccess(BaseDataAccess):
             JOIN Hotel h ON r.hotel_id = h.hotel_id
             JOIN Address ha ON h.address_id = ha.address_id
             JOIN Room_Type rt ON r.type_id = rt.type_id
-            JOIN Room_Facilities rf ON r.room_id = rf.room_id
-            JOIN Facilities f ON rf.facility_id = f.facility_id
+            LEFT JOIN Room_Facilities rf ON r.room_id = rf.room_id
+            LEFT JOIN Facilities f ON rf.facility_id = f.facility_id
         """
         rows = self.fetchall(sql)
         bookings: dict[int, Booking] = {}
@@ -83,7 +86,8 @@ class BookingDataAccess(BaseDataAccess):
             if booking_id not in bookings:
                 bookings[booking_id] = _create_booking(row)
             else:
-                bookings[booking_id].room.facilities.append(
+                if row[26] is not None:
+                    bookings[booking_id].room.facilities.append(
                     Facility(row[26], row[27])
                 )
         return list(bookings.values())
@@ -105,8 +109,8 @@ class BookingDataAccess(BaseDataAccess):
             JOIN Hotel h ON r.hotel_id = h.hotel_id
             JOIN Address ha ON h.address_id = ha.address_id
             JOIN Room_Type rt ON r.type_id = rt.type_id
-            JOIN Room_Facilities rf ON r.room_id = rf.room_id
-            JOIN Facilities f ON rf.facility_id = f.facility_id
+            LEFT JOIN Room_Facilities rf ON r.room_id = rf.room_id
+            LEFT JOIN Facilities f ON rf.facility_id = f.facility_id
             WHERE b.booking_id = ?
         """
         rows = self.fetchall(sql, (booking_id,))
@@ -114,7 +118,8 @@ class BookingDataAccess(BaseDataAccess):
             return None
         booking = _create_booking(rows[0])
         for row in rows[1:]:
-            booking.room.facilities.append(Facility(row[26], row[27]))
+            if row[26] is not None:
+                booking.room.facilities.append(Facility(row[26], row[27]))
         return booking
 
 

@@ -21,7 +21,7 @@ hotel_manager = HotelManager(hotel_dal)
 
 def user_story_menu():
     while True:
-        print("\n-- USER STOrIES --")
+        print("\n-- USER STORIES --")
         print("4. Zimmer buchen")
         print("5. Rechnung erhalten")
         print("6. Buchung stornieren")
@@ -106,9 +106,6 @@ def user_story_8():
             print(booking_manager.get_booking_details(b))
     except Exception as e:
         print(f"Fehler: {e}")
-
-
-
 
 if __name__ == "__main__":
     user_story_menu()
