@@ -84,7 +84,7 @@ class BookingDataAccess(BaseDataAccess):
                 bookings[booking_id].room.facilities.append(
                     Facility(row[26], row[27])
                 )
-            return list(bookings.values())
+        return list(bookings.values())
 
     # Holt 1 Buchung anhand der ID
     def get_booking_by_id(self, booking_id: int) -> "Booking | None":
