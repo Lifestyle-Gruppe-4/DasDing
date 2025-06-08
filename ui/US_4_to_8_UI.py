@@ -54,8 +54,8 @@ def user_story_menu():
 def user_story_4():
     try:
         city = input("Stadt: ").strip()
-        check_in = datetime.strptime(input("Check_in (YYYY-MM-DD)"), "%Y-%m-%d")
-        check_out = datetime.strptime(input("check_out (YYYY-MM-DD"), "%Y-%m-%d")
+        check_in = datetime.strptime(input("Check_in (YYYY-MM-DD)"), "%Y-%m-%d").date()
+        check_out = datetime.strptime(input("check_out (YYYY-MM-DD"), "%Y-%m-%d").date()
 
         results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
         if not results:
@@ -125,8 +125,8 @@ def user_story_7():
     """Dynamische Preisberechnung anzeigen"""
     try:
         city = input("Stadt: ").strip()
-        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
-        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
 
         results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
         if not results:
@@ -139,7 +139,7 @@ def user_story_7():
             total = season_price * nights
 
             print(f"{hotel.name} - Zimmer {room.room_number}")
-            print(f" Zeitraum: {check_in.date()} bis {check_out.date()} ({nights} Nächte)")
+            print(f" Zeitraum: {check_in} bis {check_out} ({nights} Nächte)")
             print(f" Standardpreis pro Nacht: {room.price_per_night:.2f} CHF")
             print(f" Saisonpreis pro Nacht: (Faktor {factor:.2f}): {season_price:.2f} CHF")
             print(f" Gesamtpreis: {total:.2f} CHF\n")
