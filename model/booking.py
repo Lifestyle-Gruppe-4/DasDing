@@ -5,7 +5,7 @@ from model.room import Room
 class Booking:
     booking_counter = 1 #Zählt automatisch alle Buchungen (nur intern genutzt)
 
-    def __init__(self, check_in_date: datetime, check_out_date: datetime, guest: Guest = None, room: Room = None, is_cancelled:bool = False, booking_id: int | None = None,):
+    def __init__(self, check_in_date: datetime, check_out_date: datetime, guest: Guest = None, room: Room = None, is_cancelled:bool = False, total_amount: float = 0, booking_id: int | None = None,):
         if booking_id is None:
             # Automatische vergebene Buchungs-ID
             self.__booking_id = Booking.booking_counter
@@ -21,7 +21,7 @@ class Booking:
         self.__guest = guest # Gast-Objekt
         self.__room = room # Zimmer-Objekt
         self.__is_cancelled = is_cancelled
-        self.__total_amount = 0
+        self.__total_amount = total_amount
         self.__invoice = None # Rechnung (falls erstellt)
 
     # Getter/Setter für Datenfelder, mit Validierung
@@ -82,6 +82,12 @@ class Booking:
     @property
     def total_amount(self):
         return self.__total_amount
+
+    @total_amount.setter
+    def total_amount(self, value):
+        if not isinstance(value, (int, float)) or value < 0:
+            raise ValueError("total_amount must be a positive number!")
+        self.__total_amount = float(value)
 
     @property
     def invoice(self):

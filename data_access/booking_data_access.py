@@ -48,7 +48,8 @@ def _create_booking(row):
             room_type=RoomType(row[23], row[24], row[25]),
             facilities=[Facility(row[26], row[27])]
         ),
-        is_cancelled=bool(row[3])
+        is_cancelled=bool(row[3]),
+        total_amount=int(row[4]),
     )
 
 class BookingDataAccess(BaseDataAccess):
