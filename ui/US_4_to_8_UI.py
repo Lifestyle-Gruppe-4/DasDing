@@ -5,11 +5,13 @@ from business_logic.hotel_manager import HotelManager
 from data_access.booking_data_access import BookingDataAccess
 from data_access.hotel_data_access import HotelDataAccess
 from data_access.invoice_data_access import InvoiceDataAccess
+from data_access.room_data_access import RoomDataAccess
 
 db_path = "../database/hotel_sample.db"
 booking_dal = BookingDataAccess(db_path)
 invoice_dal = InvoiceDataAccess(db_path)
-hotel_dal = HotelDataAccess(db_path)
+room_dal = RoomDataAccess(db_path)
+hotel_dal = HotelDataAccess(db_path, room_dal)
 
 booking_manager = BookingManager(booking_dal)
 invoice_manager = InvoiceManager(invoice_dal)
@@ -85,8 +87,16 @@ def user_story_7():
                 factor = 0.8
             else:
                 factor = 1.0
-            dyn_price = base * factor * nights
-            print(f"{hotel.name}, Zimmer {room.room_number}: {dyn_price:.2f} CHF für {nights} Nächte")
+
+            season_price = base * factor
+            total = season_price * nights
+
+            print(f"{hotel.name} - Zimmer {room.room_number}")
+            print(f" Zeitraum: {check_in.date()} bis {check_out.date()} ({nights} Nächte)")
+            print(f" Standardpreis pro Nacht: {base:.2f} CHF")
+            print(f" Saisonpreis pro Nacht: (Faktor {factor:.2f}): {season_price:.2f} CHF")
+            print(f" Gesamtpreis: {total:.2f} CHF\n")
+
     except Exception as e:
         print(f"Fehler: {e}")
 
