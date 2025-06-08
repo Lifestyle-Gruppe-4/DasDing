@@ -23,3 +23,13 @@ class RoomManager:
 
     def get_all_rooms_with_facilities(self) -> list[Room]:
         return self.room_dal.read_all_rooms_with_facilities()
+
+    def calculate_seasonal_price(self, base_price, check_in_date):
+        if check_in_date.month in (6,7,8,):
+            factor = 1.2
+        elif check_in_date.month in (11,12,1,2):
+            factor = 0.8
+        else:
+            factor = 1.0
+        season_price = base_price * factor
+        return season_price, factor

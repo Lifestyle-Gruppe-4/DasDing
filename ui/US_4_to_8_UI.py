@@ -6,6 +6,7 @@ from data_access.booking_data_access import BookingDataAccess
 from data_access.hotel_data_access import HotelDataAccess
 from data_access.invoice_data_access import InvoiceDataAccess
 from data_access.room_data_access import RoomDataAccess
+from ui.UI import room_manager
 
 db_path = "../database/hotel_sample.db"
 booking_dal = BookingDataAccess(db_path)
@@ -26,6 +27,7 @@ def user_story_menu():
         print("6. Buchung stornieren")
         print("7. Dynamische Preisgestaltung")
         print("8. Alle Buchungen anzeigen")
+        print("9 Test von User Story 7")
         print("0. Zurück")
 
         choice = input("Wähle eine User Story: ")
@@ -42,6 +44,8 @@ def user_story_menu():
             user_story_7()
         elif choice == "8":
             user_story_8()
+        elif choice == "9":
+            user_story_71()
         else:
             print("Ungültige Auswahl!")
 
@@ -108,6 +112,33 @@ def user_story_8():
             print(booking_manager.get_booking_details(b))
     except Exception as e:
         print(f"Fehler: {e}")
+
+def user_story_71():
+    """Dynamische Preisberechnung anzeigen"""
+    try:
+        city = input("Stadt: ").strip()
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+
+        results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
+        if not results:
+            print("Keine verfügbaren Zimmer gefunden.")
+            return
+
+        nights = (check_out - check_in).days
+        for hotel, room in results:
+            season_price, factor = room_manager.calculate_seasonal_price(room.price_per_night, check_in)
+            total = season_price * nights
+
+            print(f"{hotel.name} - Zimmer {room.room_number}")
+            print(f" Zeitraum: {check_in.date()} bis {check_out.date()} ({nights} Nächte)")
+            print(f" Standardpreis pro Nacht: {room.price_per_night:.2f} CHF")
+            print(f" Saisonpreis pro Nacht: (Faktor {factor:.2f}): {season_price:.2f} CHF")
+            print(f" Gesamtpreis: {total:.2f} CHF\n")
+
+    except Exception as e:
+        print(f"Fehler: {e}")
+
 
 if __name__ == "__main__":
     user_story_menu()

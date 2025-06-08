@@ -64,6 +64,7 @@ def hotel_suche():
         1. Nach Stadt
         2. Nach Stadt und Mindeststerne
         3. Verfügbare Zimmer nach Stadt und Gästezahl
+        4. Alle Hotels anzeigen
                 """)
     user_input = input("Wähle eine Suchoption: ")
 
@@ -78,7 +79,15 @@ def hotel_suche():
 
     elif user_input == "2":
         city = input("Gib die Stadt des Hotels ein: ")
-        stars = int(input("Gib die mindest Anzahl Sterne ein: "))
+        try:
+            stars = int(input("Gib die mindest Anzahl Sterne ein: "))
+            if not 1 <= stars <= 5:
+                print("Bitte gib eine Zahl zwischen 1 und 5 ein.")
+                return
+        except ValueError:
+            print("Ungültige Eingabe. Bitte gib eine Zahl ein.")
+            return
+
         results = hotel_manager.find_hotel_by_city_and_min_stars(city,stars)
         if results:
             for hotel in results:
@@ -99,12 +108,25 @@ def hotel_suche():
         else:
             print("Keine passenden Hotels/Zimmer gefunden.")
 
-#hotel_suche()
+    elif user_input == "4":
+        results = hotel_manager.get_all_hotels()
+        if results:
+            for hotel in results:
+                print(f"{hotel.name} ({hotel.stars} Sterne) in {hotel.address.city}")
+
+    else:
+        print("Ungültige Eingabe. Bitte geben Sie eine Zahl von 1 bis 4 ein.")
+
+
 
 def info_pro_zimmer():
     city = input("Stadt: ").strip()
-    check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
-    check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+    try:
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+    except ValueError:
+        print("Ungültiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
+        return
 
     results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
     if results:
@@ -117,3 +139,23 @@ def info_pro_zimmer():
                   f"Gesamtpreis CHF {total_price:.2f}")
 
 info_pro_zimmer()
+
+def hotel_suche_nach_zeitraum():
+    city = input("Stadt: ").strip()
+    check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+    check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+
+    results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
+    if results:
+        for hotel, room in results:
+            print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number}")
+    else:
+        print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
+
+def zeige_alle_hotels():
+    results = hotel_manager.get_all_hotels()
+    if results:
+        for hotel in results:
+            print(f"{hotel.name} in {hotel.address.city}")
+
+#zeige_alle_hotels()
