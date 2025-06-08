@@ -43,10 +43,31 @@ hotel_manager = HotelManager(hotel_dal)
 # User Story 1.5
 def suche_zimmer_stadt_zeitraum_gaeste_sterne():
     city = input("Stadt: ").strip()
-    check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
-    check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
-    guests = int(input("Gib die Anzahl der Gäste ein: "))
-    stars = int(input("Gib die Mindestanzahl Sterne ein: "))
+    try:
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+        if check_in < datetime.today():
+            print("Das Check-in Datum darf nicht in der Vergangenheit liegen")
+            return
+        if check_out <= check_in:
+            print("Das Check-out Datum muss nach dem Check-in Datum liegen")
+            return
+    except ValueError:
+        print("Ungpltiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
+        return
+
+    try:
+        guests = int(input("Gib die Anzahl der Gäste ein: "))
+        stars = int(input("Gib die Mindestanzahl Sterne ein: "))
+        if guests < 1:
+            print("Bitte gib eine gültige Gästeanzahl ein")
+            return
+        if not (1 <= stars >= 5):
+            print("Bitte gib eine Zahl zwischen 1 und 5 ein")
+            return
+    except ValueError:
+        print("Ungülte Eingabe. Bitte gib eine gültige Zahl ein.")
+        return
 
     results = hotel_manager.find_available_hotels_by_date_guest_stars(city, check_in, check_out, guests, stars)
     if results:
@@ -124,6 +145,13 @@ def info_pro_zimmer():
     try:
         check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
         check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+
+        if check_in < datetime.today():
+            print("Das Check-in Datum darf nicht in der Vergangenheit liegen")
+            return
+        if check_out <= check_in:
+            print("Das Check-out Datum muss nach dem Check-in Datum liegen")
+            return
     except ValueError:
         print("Ungültiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
         return
@@ -132,18 +160,29 @@ def info_pro_zimmer():
     if results:
         for hotel, room in results:
             nights = (check_out - check_in).days
-            total_price = nights * room.price_per_night
+            season_price, factor = room_manager.calculate_seasonal_price(room.price_per_night,check_in)
+            total_price = season_price * nights
             facilities = ', '.join(f.facility_name for f in room.facilities)
             print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number} ({room.room_type.description}, max. Gäste: {room.room_type.max_guests}) "
                   f"mit {facilities} für CHF {room.price_per_night:.2f} pro Nacht. "
-                  f"Gesamtpreis CHF {total_price:.2f}")
+                  f"Gesamtpreis für {nights} Nächte CHF {total_price:.2f}")
 
-info_pro_zimmer()
+#info_pro_zimmer()
 
 def hotel_suche_nach_zeitraum():
     city = input("Stadt: ").strip()
-    check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
-    check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+    try:
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d")
+        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d")
+        if check_in < datetime.today():
+            print("Das Check-in Datum darf nicht in der Vergangenheit liegen")
+            return
+        if check_out <= check_in:
+            print("Das Check-out Datum muss nach dem Check-in Datum liegen")
+            return
+    except ValueError:
+        print("Ungültiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
+        return
 
     results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
     if results:
@@ -151,6 +190,8 @@ def hotel_suche_nach_zeitraum():
             print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number}")
     else:
         print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
+
+hotel_suche_nach_zeitraum()
 
 def zeige_alle_hotels():
     results = hotel_manager.get_all_hotels()
