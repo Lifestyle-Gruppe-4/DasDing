@@ -20,7 +20,7 @@ from data_access.room_data_access import RoomDataAccess
 from data_access.room_type_data_access import RoomTypeDataAccess
 
 # Datenbankpfad und Initialisierung der DALs
-db_path = "../database/hotel_sample.db"
+db_path = "../database/hotel_sample_old.db"
 address_dal = AddressDataAccess(db_path)
 booking_dal = BookingDataAccess(db_path)
 facility_dal = FacilityDataAccess(db_path)

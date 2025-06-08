@@ -11,7 +11,7 @@ from data_access.invoice_data_access import InvoiceDataAccess
 from data_access.room_data_access import RoomDataAccess
 #from ui.UI import room_manager
 
-db_path = "../database/hotel_sample.db"
+db_path = "../database/hotel_sample_old.db"
 booking_dal = BookingDataAccess(db_path)
 invoice_dal = InvoiceDataAccess(db_path)
 room_dal = RoomDataAccess(db_path)

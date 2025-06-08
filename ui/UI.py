@@ -14,7 +14,7 @@ from model.hotel import Hotel
 
 
 
-db_path = "../database/hotel_sample.db"
+db_path = "../database/hotel_sample_old.db"
 address_dal = AddressDataAccess(db_path)
 booking_dal     = BookingDataAccess(db_path)
 room_dal = RoomDataAccess(db_path)

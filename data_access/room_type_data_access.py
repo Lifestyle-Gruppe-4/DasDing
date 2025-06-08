@@ -52,7 +52,7 @@ class RoomTypeDataAccess(BaseDataAccess):
 
 if __name__ == "__main__":
     # Beispiel für einen Schnelltest
-    db_path = "../database/hotel_sample.db"
+    db_path = "../database/hotel_sample_old.db"
     dal = RoomTypeDataAccess(db_path)
 
     print("=== Alle RoomTypes ===")
