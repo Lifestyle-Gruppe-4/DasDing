@@ -1,8 +1,7 @@
 from data_access.hotel_data_access import HotelDataAccess
 from model.hotel import Hotel
 from model.room import Room
-from model.room_type import RoomType
-from datetime import datetime
+from datetime import date
 
 class HotelManager:
     def __init__(self, hotel_dal: HotelDataAccess):
@@ -59,14 +58,14 @@ class HotelManager:
 
         return matches
 
-    def find_available_hotels_by_date(self, city: str, check_in:datetime, check_out:datetime) -> list[tuple[Hotel, Room]]:
+    def find_available_hotels_by_date(self, city: str, check_in:date, check_out:date) -> list[tuple[Hotel, Room]]:
         available = []
         for hotel in self.hotel_dal.read_all_hotels():
             if hotel.address.city.lower() ==city.lower():
                 for room in hotel.rooms:
                     #Any prüft ob eine Buchung in diesem Zeitraum liegt
                     overlaps = any(
-                        b.check_in_date < check_out.date() and b.check_out_date > check_in.date()
+                        b.check_in_date < check_out and b.check_out_date > check_in
                         for b in room.bookings
                         if not b.is_cancelled
                     )
@@ -75,7 +74,7 @@ class HotelManager:
                         break
         return available
 
-    def find_available_hotels_by_date_guest_stars(self, city: str, check_in:datetime, check_out:datetime, guests:int, stars:int) -> list[tuple[Hotel, Room]]:
+    def find_available_hotels_by_date_guest_stars(self, city: str, check_in:date, check_out:date, guests:int, stars:int) -> list[tuple[Hotel, Room]]:
         available = []
         for hotel in self.hotel_dal.read_all_hotels():
             if hotel.address.city.lower() == city.lower():
@@ -84,7 +83,7 @@ class HotelManager:
                         if room.room_type.max_guests >= guests:
                             #Any prüft ob eine Buchung in diesem Zeitraum liegt
                             overlaps = any(
-                                b.check_in_date < check_out.date() and b.check_out_date > check_in.date()
+                                b.check_in_date < check_out and b.check_out_date > check_in
                                 for b in room.bookings
                                 if not b.is_cancelled
                             )
