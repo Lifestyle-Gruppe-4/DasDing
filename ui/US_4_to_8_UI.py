@@ -56,6 +56,10 @@ def user_story_6():
         if not booking:
             print("Buchung nicht gefunden!")
             return
+        #Prüfen, ob die Rechnung bereits storniert wurde
+        if booking.is_cancelled:
+            print("Buchung wurde bereits storniert.")
+            return
         # Markiere die Buchung als storniert
         booking_manager.booking_dal.execute(
             "Update Booking Set is_cancelled = 1 WHERE booking_id = ?", (bid,)
