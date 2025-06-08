@@ -191,7 +191,7 @@ def hotel_suche_nach_zeitraum():
     else:
         print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
 
-hotel_suche_nach_zeitraum()
+#hotel_suche_nach_zeitraum()
 
 def zeige_alle_hotels():
     results = hotel_manager.get_all_hotels()
