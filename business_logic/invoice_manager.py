@@ -38,3 +38,7 @@ class InvoiceManager:
             return False
         invoice.apply_discount(percent)
         return self.invoice_dal.update_invoice(invoice_id, invoice.total_amount, invoice.issue_date, invoice.is_paid)
+
+    def has_invoice_for_booking(self, booking_id:int) -> bool:
+        invoices = self.get_all_invoices()
+        return any(inv.booking.booking_id == booking_id for inv in invoices)

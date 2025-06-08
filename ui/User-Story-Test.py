@@ -224,6 +224,10 @@ def rechnung_erstellen_nach_aufenthalt():
 
         booking = past_bookings[user_choice - 1]
 
+        if invoice_manager.has_invoice_for_booking(booking.booking_id):
+            print("Für diese Buchung existiert bereits eine Rechnung")
+            return
+
         # Rechnung erstellen
         invoice_id = invoice_manager.create_invoice(
             booking_id=booking.booking_id,
@@ -232,14 +236,16 @@ def rechnung_erstellen_nach_aufenthalt():
         print(f"Rechnung erstellt! (Rechnungs-ID: {invoice_id})")
 
         invoice = invoice_manager.get_invoice_by_id(invoice_id)
-        print(invoice)
+        print(f" Es wurde folgende Rechnung erstellt:\n"
+              f"{invoice}")
+
 
     except ValueError:
         print("Ungültige Eingabe.")
     except Exception as e:
         print(f"Fehler: {e}")
 
-#rechnung_erstellen_nach_aufenthalt()
+rechnung_erstellen_nach_aufenthalt()
 
 
 
@@ -247,10 +253,10 @@ def alle_rechnungen():
     invoices = invoice_manager.get_all_invoices()
     for invoice in invoices:
         print(invoice)
-alle_rechnungen()
+#alle_rechnungen()
 
 def rechnungen_löschen():
     invoices_id = int(input("ID: "))
     invoice_manager.delete_invoice(invoices_id)
-rechnungen_löschen()
+#rechnungen_löschen()
 
