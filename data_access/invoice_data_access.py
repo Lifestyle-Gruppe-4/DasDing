@@ -42,7 +42,9 @@ class InvoiceDataAccess(BaseDataAccess):
     # Neue Rechnung speichern
     def create_invoice(self, booking_id: int, total_amount: float, issue_date: datetime = None, is_paid: bool = False):
         if issue_date is None:
-            issue_date = datetime.today().isoformat()
+            issue_date = datetime.today().strftime('%Y-%m-%d')
+        elif isinstance(issue_date, datetime):
+            issue_date = issue_date.strftime('%Y-%m-%d')
         sql = """
             INSERT INTO invoice (booking_id, total_amount, issue_date, is_paid)
             VALUES (?, ?, ?, ?)
