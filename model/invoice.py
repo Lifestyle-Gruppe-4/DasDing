@@ -50,8 +50,17 @@ class Invoice:
     def booking(self):
         return self.__booking
 
+    def __repr__(self):
+        status = "Paid" if self.is_paid else "Unpaid"
+        return (f"<Invoice #{self.invoice_id} | "
+                f"Booking ID: {self.booking.booking_id} | "
+                f"Amount: {self.total_amount:.2f} CHF | "
+                f"Date: {self.issue_date.date()} | "
+                f"Status: {status}>")
 
-# Methode to use for testing
+
+
+    # Methode to use for testing
 
     # Setzt Rechnung als bezahlt
     def mark_as_paid(self):

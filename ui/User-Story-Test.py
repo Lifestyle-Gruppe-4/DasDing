@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 # Importiere alle Manager und DataAccess-Klassen
 from business_logic.address_manager import AddressManager
@@ -20,7 +20,7 @@ from data_access.room_data_access import RoomDataAccess
 from data_access.room_type_data_access import RoomTypeDataAccess
 
 # Datenbankpfad und Initialisierung der DALs
-db_path = "../database/hotel_sample_old.db"
+db_path = "../database/hotel_sample.db"
 address_dal = AddressDataAccess(db_path)
 booking_dal = BookingDataAccess(db_path)
 facility_dal = FacilityDataAccess(db_path)
@@ -200,3 +200,57 @@ def zeige_alle_hotels():
             print(f"{hotel.name} in {hotel.address.city}")
 
 #zeige_alle_hotels()
+
+
+def rechnung_erstellen_nach_aufenthalt():
+    try:
+        # Alle Buchungen holen aus BookingManager
+        bookings = booking_manager.get_all_bookings()
+        # Filtert Buchungen die bereits vorbei sind
+        past_bookings = [b for b in bookings if b.check_out_date < datetime.today().date() and not b.is_cancelled]
+
+        if not past_bookings:
+            print("Es wurden keine abgeschlossenen Buchungen gefunden.")
+            return
+        # Alle gültigen Buchungen werden mit fortlaufender Nummer angezeigt
+        print("Abgeschlossene Buchungen:")
+        for i, b in enumerate(past_bookings):
+            print(f"{i + 1}. {BookingManager.get_booking_details(b)}")
+
+        user_choice = int(input("Für welche Buchung soll eine Rechnung erstellt werden? (Nummer eingeben): "))
+        if not (1 <= user_choice <= len(past_bookings)):
+            print("Ungültige Auswahl.")
+            return
+
+        booking = past_bookings[user_choice - 1]
+
+        # Rechnung erstellen
+        invoice_id = invoice_manager.create_invoice(
+            booking_id=booking.booking_id,
+            total_amount=booking.total_amount
+        )
+        print(f"Rechnung erstellt! (Rechnungs-ID: {invoice_id})")
+
+        invoice = invoice_manager.get_invoice_by_id(invoice_id)
+        print(invoice)
+
+    except ValueError:
+        print("Ungültige Eingabe.")
+    except Exception as e:
+        print(f"Fehler: {e}")
+
+#rechnung_erstellen_nach_aufenthalt()
+
+
+
+def alle_rechnungen():
+    invoices = invoice_manager.get_all_invoices()
+    for invoice in invoices:
+        print(invoice)
+alle_rechnungen()
+
+def rechnungen_löschen():
+    invoices_id = int(input("ID: "))
+    invoice_manager.delete_invoice(invoices_id)
+rechnungen_löschen()
+

@@ -50,7 +50,11 @@ class InvoiceDataAccess(BaseDataAccess):
             VALUES (?, ?, ?, ?)
         """
 
-        return self.execute(sql, (booking_id, total_amount, issue_date, int(is_paid)))
+        with self._connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute(sql, (booking_id, total_amount, issue_date, int(is_paid)))
+            conn.commit()
+            return cursor.lastrowid
 
     # Bestehende Rechnung aktualisieren
     def update_invoice(self, invoice_id: int, total_amount: float, issue_date: datetime, is_paid: bool = False):
