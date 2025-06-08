@@ -2,11 +2,12 @@ from datetime import datetime
 from business_logic.booking_manager import BookingManager
 from business_logic.invoice_manager import InvoiceManager
 from business_logic.hotel_manager import HotelManager
+from business_logic.room_manager import RoomManager
 from data_access.booking_data_access import BookingDataAccess
 from data_access.hotel_data_access import HotelDataAccess
 from data_access.invoice_data_access import InvoiceDataAccess
 from data_access.room_data_access import RoomDataAccess
-from ui.UI import room_manager
+#from ui.UI import room_manager
 
 db_path = "../database/hotel_sample.db"
 booking_dal = BookingDataAccess(db_path)
@@ -17,6 +18,7 @@ hotel_dal = HotelDataAccess(db_path, room_dal)
 booking_manager = BookingManager(booking_dal)
 invoice_manager = InvoiceManager(invoice_dal)
 hotel_manager = HotelManager(hotel_dal)
+room_manager = RoomManager(room_dal)
 
 
 def user_story_menu():
@@ -27,7 +29,6 @@ def user_story_menu():
         print("6. Buchung stornieren")
         print("7. Dynamische Preisgestaltung")
         print("8. Alle Buchungen anzeigen")
-        print("9 Test von User Story 7")
         print("0. Zurück")
 
         choice = input("Wähle eine User Story: ")
