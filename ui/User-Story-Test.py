@@ -245,7 +245,7 @@ def rechnung_erstellen_nach_aufenthalt():
     except Exception as e:
         print(f"Fehler: {e}")
 
-rechnung_erstellen_nach_aufenthalt()
+#rechnung_erstellen_nach_aufenthalt()
 
 
 
@@ -253,7 +253,7 @@ def alle_rechnungen():
     invoices = invoice_manager.get_all_invoices()
     for invoice in invoices:
         print(invoice)
-#alle_rechnungen()
+alle_rechnungen()
 
 def rechnungen_löschen():
     invoices_id = int(input("ID: "))
