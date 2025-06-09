@@ -63,12 +63,17 @@ def user_story_3():
             name = input("Hotelname: ").strip()
             stars = int(input("Anzahl Sterne (1–5): ").strip())
 
-            street = input("Strasse: ").strip()
+            street_name = input("Strassenname: ").strip()
+            house_number = input("Hausnummer: ").strip()
+            street = f"{street_name} {house_number}"
+
             city = input("Stadt: ").strip()
             zip_code = input("PLZ: ").strip()
 
-            # Address-Instanz direkt erstellen (ID = None, wird automatisch durch DB vergeben)
-            new_address = Address(address_id=None, street=street, city=city, zip_code=zip_code)
+            new_address = Address(address_id=None,
+                                  street=street,
+                                  city=city,
+                                  zip_code=zip_code)
             address = address_manager.create_address(new_address)
 
             hotel = Hotel(
@@ -77,34 +82,59 @@ def user_story_3():
                 stars=stars,
                 address=address
             )
-
             hotel_id = hotel_manager.create_hotel(hotel)
             print(f"\nHotel '{name}' wurde erfolgreich erstellt (ID: {hotel_id})")
 
+
         # 3.2 Hotel entfernen
         elif choice == "2":
-            hid     = int(input("Hotel-ID zum Entfernen: ").strip())
+            # Alle Hotels abrufen und anzeigen
+            hotels = hotel_manager.get_all_hotels()
+            if not hotels:
+                print("Keine Hotels vorhanden.")
+                continue
+
+            print("\nVerfügbare Hotels:")
+            for h in hotels:
+                print(f"  {h.hotel_id}: {h.name} ({h.stars} Sterne)")
+
+            # Jetzt die ID abfragen
+            hid = int(input("Hotel-ID zum Entfernen: ").strip())
             success = hotel_manager.delete_hotel(hid)
             print("Hotel entfernt." if success else "Hotel nicht gefunden.")
 
         # 3.3 Hotel aktualisieren
         elif choice == "3":
-            hid    = int(input("Hotel-ID zum Aktualisieren: ").strip())
+            # Alle Hotels abrufen und anzeigen
             hotels = hotel_manager.get_all_hotels()
-            hotel  = next((h for h in hotels if h.hotel_id == hid), None)
+            if not hotels:
+                print("Keine Hotels vorhanden.")
+                continue
+
+            print("\nVerfügbare Hotels:")
+            for h in hotels:
+                print(f"  {h.hotel_id}: {h.name} ({h.stars} Sterne)")
+
+            # ID des zu aktualisierenden Hotels abfragen
+            hid = int(input("Hotel-ID zum Aktualisieren: ").strip())
+            hotel = next((h for h in hotels if h.hotel_id == hid), None)
             if not hotel:
                 print("Hotel nicht gefunden.")
                 continue
 
-            name_input  = input(f"Neuer Name ({hotel.name}): ").strip()
+            # Neue Werte abfragen (Enter = unverändert)
+            name_input = input(f"Neuer Name ({hotel.name}): ").strip()
             stars_input = input(f"Neue Sterne ({hotel.stars}): ").strip()
 
+            # Aktualisiertes Hotel-Objekt erstellen
             updated = Hotel(
                 hotel_id=hid,
-                name   = name_input or hotel.name,
-                stars  = int(stars_input) if stars_input else hotel.stars,
+                name=name_input or hotel.name,
+                stars=int(stars_input) if stars_input else hotel.stars,
                 address=hotel.address
             )
+
+            # Update ausführen
             hotel_manager.update_hotel(updated)
             print("Hotelinformationen aktualisiert.")
 
@@ -112,7 +142,3 @@ def user_story_3():
             print("Ungültige Auswahl.")
 
 user_story_3()
-
-# if __name__ == "__main__":
-#     DB_PATH = "../database/hotel_sample.db"
-#     user_story_3(DB_PATH)
