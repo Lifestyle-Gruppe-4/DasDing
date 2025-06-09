@@ -125,6 +125,17 @@ Im Verlauf des Projekts haben wir:
 
 Das Projekt war ein wertvoller Schritt in Richtung praxisnaher Softwareentwicklung mit Python und hat uns gezeigt, wie wichtig Struktur, Planung und saubere Zusammenarbeit sind.
 
+---
+## Einsatz von unterstützenden Tools
+
+Während der Entwicklung haben wir ChatGPT punktuell zur Unterstützung verwendet, für:
+
+- Zur Klärung von spezifischen Syntax-Fragen in Python (z. B. zu datetime, Fehlerbehandlung, Importproblemen)
+- Beim Debugging und zur Überprüfung von typischen Fehlerquellen in DAL- oder Manager-Klassen
+- Für Anregungen zur Kürzung oder Strukturierung von Funktionen
+
+ Chatgpt wurde nicht als Ersatz für eigene Arbeit, sondern als Ergänzung genutzt 
+
 ## Projektlinks
 Deepnote-Projekt
 Github Repository
