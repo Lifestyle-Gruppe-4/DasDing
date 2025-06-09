@@ -36,8 +36,8 @@ def user_story_3(db_path: str):
         if choice == "0":
             break
 
+        # 3.1 Hotel hinzufügen
         elif choice == "1":
-            # 3.1 Hotel hinzufügen
             name  = input("Name des Hotels: ").strip()
             stars = int(input("Anzahl Sterne (1–5): ").strip())
 
@@ -50,60 +50,65 @@ def user_story_3(db_path: str):
                 street   = input("Strasse: ").strip()
                 city     = input("Stadt: ").strip()
                 zip_code = input("ZIP: ").strip()
-                new_addr = Address(address_id=None,
-                                    street=street,
-                                   city=city,
-                                   zip_code=zip_code)
-                address  = address_manager.create_address(new_addr)
+
+                new_address = Address(
+                    address_id=None,
+                    street=street,
+                    city=city,
+                    zip_code=zip_code
+                )
+                address = address_manager.create_address(new_address)
                 print(f"Neue Adresse angelegt (ID: {address.address_id})")
+
             else:
-                # bestehende Adresse wählen
+                # bestehende Adresse auswählen
                 addresses = address_manager.get_all_addresses()
                 if not addresses:
                     print("Keine Adressen vorhanden. Bitte zuerst eine neue Adresse anlegen.")
                     continue
                 print("\nVerfügbare Adressen:")
                 for a in addresses:
-                    print(f"  {a.address_id}: {a.street}, {a.city} {a.zip}")
-                sel_id  = int(input("Adresse-ID auswählen: ").strip())
+                    print(f"  {a.address_id}: {a.street}, {a.city} {a.zip_code}")
+                sel_id = int(input("Adresse-ID auswählen: ").strip())
                 address = address_manager.find_address_by_id(sel_id)
                 if not address:
                     print("Ungültige Adresse-ID.")
                     continue
 
             # Hotel anlegen
-            new_hotel = Hotel(hotel_id=None,
-                              name=name,
-                              stars=stars,
-                              address=address)
+            new_hotel = Hotel(
+                hotel_id=None,
+                name=name,
+                stars=stars,
+                address=address
+            )
             hid = hotel_manager.create_hotel(new_hotel)
-            print(f"Hotel erstellt (ID: {hid})")
+            print(f"Hotel erstellt. ID: {hid}")
 
+        # 3.2 Hotel entfernen
         elif choice == "2":
-            # 3.2 Hotel entfernen
-            hid = int(input("Hotel-ID zum Entfernen: ").strip())
+            hid     = int(input("Hotel-ID zum Entfernen: ").strip())
             success = hotel_manager.delete_hotel(hid)
             print("Hotel entfernt." if success else "Hotel nicht gefunden.")
 
+        # 3.3 Hotel aktualisieren
         elif choice == "3":
-            # 3.3 Hotel aktualisieren
             hid    = int(input("Hotel-ID zum Aktualisieren: ").strip())
-            hotels = hotel_dal.read_all_hotels()
+            hotels = hotel_manager.get_all_hotels()
             hotel  = next((h for h in hotels if h.hotel_id == hid), None)
             if not hotel:
                 print("Hotel nicht gefunden.")
                 continue
 
-            name_inp  = input(f"Neuer Name ({hotel.name}): ").strip()
-            stars_inp = input(f"Neue Sterne ({hotel.stars}): ").strip()
+            name_input  = input(f"Neuer Name ({hotel.name}): ").strip()
+            stars_input = input(f"Neue Sterne ({hotel.stars}): ").strip()
 
             updated = Hotel(
                 hotel_id=hid,
-                name = name_inp  or hotel.name,
-                stars= int(stars_inp) if stars_inp else hotel.stars,
+                name   = name_input or hotel.name,
+                stars  = int(stars_input) if stars_input else hotel.stars,
                 address=hotel.address
             )
-            # HotelManager stellt update_hotel() bereit
             hotel_manager.update_hotel(updated)
             print("Hotelinformationen aktualisiert.")
 
