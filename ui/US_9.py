@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from data_access.room_data_access import RoomDataAccess
 
 def user_story_9(db_path: str):
