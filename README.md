@@ -74,13 +74,13 @@ Zum Abschluss haben wir Visualisierungen mit dem "Charts"-Block in Deepnote erst
 ##  3. Kommunikation und Informationen
 
 -  **GitHub Project Board** zur Organisation, für Task-Zuweisung, Issues und Reviews genutzt 
--  **MS Teams** zur Abstimmung, Diskussion, und Video-Aufnahme 
+-  **MS Teams** Chatfunktion für kurze Absprachen, Neuigkeiten und Infos zum individuellen Fortschritt, und Video-Aufnahme. 
 -  **Deepnote Notebooks** hilfreich für Analysen, Demos, Abbidung der verschiedenen Layers, Datenabfragen und Abbildung der User Storys.
 -  **Visual Paradigm** für die Erstellung der Klassen
 -  **README.md** für Dokumentation
--  **Whatsapp** diente zur Kordination untereinander und zur Info wer wann Änderungen gepushed hat.
+-  **Whatsapp** diente zur Koordination untereinander und zur Info wer wann Änderungen gepushed hat.
   
-- Alle Gruppenmitglieder waren durchgängig aktiv beteiligt, present bei den Coachings. 
+- Alle Gruppenmitglieder waren durchgängig aktiv beteiligt und present bei den Coachings. 
 - Wöchentliche Sprint Reviews und Coachings wurden durchgeführt
 
 
