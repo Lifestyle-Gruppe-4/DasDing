@@ -248,8 +248,10 @@ def main_menu():
                 print(f"Fehler: {e}")
 
 
-        elif choice == "8":
-            buchungen_anzeigen()
+
+
+
+
         elif choice == "9":
             zimmerausstattung_anzeigen()
         elif choice == "10":
