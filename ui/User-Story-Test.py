@@ -1,5 +1,8 @@
 from datetime import datetime, date
 
+from model.address import Address
+from model.hotel import Hotel
+
 # Importiere alle Manager und DataAccess-Klassen
 from business_logic.address_manager import AddressManager
 from business_logic.booking_manager import BookingManager
@@ -201,16 +204,17 @@ def zeige_alle_hotels():
 
 #zeige_alle_hotels()
 
-
+### User Story 5
 def rechnung_erstellen_nach_aufenthalt():
     try:
         # Alle Buchungen holen aus BookingManager
         bookings = booking_manager.get_all_bookings()
         # Filtert Buchungen die bereits vorbei sind
-        past_bookings = [b for b in bookings if b.check_out_date < datetime.today().date() and not b.is_cancelled]
-
+        past_bookings = [b for b in bookings if b.check_out_date < datetime.today().date() and not b.is_cancelled
+                         and not invoice_manager.has_invoice_for_booking(b.booking_id)
+                         ]
         if not past_bookings:
-            print("Es wurden keine abgeschlossenen Buchungen gefunden.")
+            print("Alle abgeschlossenen Buchungen wurden bereits abgerechnet.")
             return
         # Alle gültigen Buchungen werden mit fortlaufender Nummer angezeigt
         print("Abgeschlossene Buchungen:")
@@ -223,10 +227,6 @@ def rechnung_erstellen_nach_aufenthalt():
             return
 
         booking = past_bookings[user_choice - 1]
-
-        if invoice_manager.has_invoice_for_booking(booking.booking_id):
-            print("Für diese Buchung existiert bereits eine Rechnung")
-            return
 
         # Rechnung erstellen
         invoice_id = invoice_manager.create_invoice(
@@ -253,10 +253,36 @@ def alle_rechnungen():
     invoices = invoice_manager.get_all_invoices()
     for invoice in invoices:
         print(invoice)
-alle_rechnungen()
+#alle_rechnungen()
 
 def rechnungen_löschen():
     invoices_id = int(input("ID: "))
     invoice_manager.delete_invoice(invoices_id)
 #rechnungen_löschen()
 
+
+def create_simple_hotel():
+    print("\n--- Neues Hotel mit Adresse erstellen ---")
+
+    name = input("Hotelname: ").strip()
+    stars = int(input("Anzahl Sterne (1–5): ").strip())
+
+    street = input("Strasse: ").strip()
+    city = input("Stadt: ").strip()
+    zip_code = input("PLZ: ").strip()
+
+    # Address-Instanz direkt erstellen (ID = None, wird automatisch durch DB vergeben)
+    new_address = Address(address_id=None, street=street, city=city, zip_code=zip_code)
+    address = address_manager.create_address(new_address)
+
+    hotel = Hotel(
+        hotel_id=None,
+        name=name,
+        stars=stars,
+        address=address
+    )
+
+    hotel_id = hotel_manager.create_hotel(hotel)
+    print(f"\nHotel '{name}' wurde erfolgreich erstellt (ID: {hotel_id})")
+
+create_simple_hotel()

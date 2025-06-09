@@ -44,8 +44,9 @@ class AddressDataAccess(BaseDataAccess):
         INSERT INTO Address (street, city, zip_code)
         VALUES (?, ?, ?)
         """
-        cursor = self.execute(sql, (address.street, address.city, address.zip_code))
-        return cursor.lastrowid
+        params = (address.street, address.city,address.zip_code)
+        lastrowid, _ = self.execute(sql, params)
+        return lastrowid
 
     def update_address(self, address: Address) -> None:
         sql = """
