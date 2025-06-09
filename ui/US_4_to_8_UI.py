@@ -57,6 +57,10 @@ def user_story_4():
         check_in = datetime.strptime(input("Check_in (YYYY-MM-DD)"), "%Y-%m-%d").date()
         check_out = datetime.strptime(input("check_out (YYYY-MM-DD"), "%Y-%m-%d").date()
 
+        if check_out <= check_in:
+            print("Check-out muss nach Check-in liegen.")
+            return
+
         results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
         if not results:
             print("Keine verfügbaren Zimmer gefunden.")
