@@ -200,7 +200,7 @@ def zeige_alle_hotels():
     results = hotel_manager.get_all_hotels()
     if results:
         for hotel in results:
-            print(f"{hotel.name} in {hotel.address.city}")
+            print(f"{hotel.name} ({hotel.stars} Sterne) in {hotel.address.city}")
 
 #zeige_alle_hotels()
 
@@ -285,4 +285,4 @@ def create_simple_hotel():
     hotel_id = hotel_manager.create_hotel(hotel)
     print(f"\nHotel '{name}' wurde erfolgreich erstellt (ID: {hotel_id})")
 
-create_simple_hotel()
+#create_simple_hotel()
