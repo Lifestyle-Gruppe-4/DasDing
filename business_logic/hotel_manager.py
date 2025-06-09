@@ -16,6 +16,9 @@ class HotelManager:
     def delete_hotel(self, hotel_id:int) -> bool:
         return self.hotel_dal.delete_hotel(hotel_id)
 
+    def update_hotel(self):
+        pass
+
     def find_by_id(self, hotel_id:int) -> Hotel:
         hotels = self.hotel_dal.read_all_hotels()
         for hotel in hotels:
