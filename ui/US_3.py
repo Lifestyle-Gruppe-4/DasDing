@@ -1,27 +1,29 @@
 #!/usr/bin/env python3
-from types import SimpleNamespace
-
 from data_access.address_data_access import AddressDataAccess
 from data_access.room_data_access import RoomDataAccess
 from data_access.hotel_data_access import HotelDataAccess
 
+from model.address import Address
 from model.hotel import Hotel
 
-from business_logic.hotel_manager import HotelManager
 from business_logic.address_manager import AddressManager
+from business_logic.hotel_manager import HotelManager
 
 def user_story_3(db_path: str):
-    """3. Hotels verwalten (Admin):
+    """
+    3. Hotels verwalten (Admin):
        3.1 Hotel hinzufügen (mit neuer oder bestehender Adresse)
        3.2 Hotel entfernen
-       3.3 Hotelinformationen aktualisieren"""
+       3.3 Hotelinformationen aktualisieren
+    """
     # Data Access Layer
     room_dal    = RoomDataAccess(db_path)
     address_dal = AddressDataAccess(db_path)
     hotel_dal   = HotelDataAccess(db_path, room_dal)
-    # Business Logic
-    hotel_manager   = HotelManager(hotel_dal)
+
+    # Business Logic Layer
     address_manager = AddressManager(address_dal)
+    hotel_manager   = HotelManager(hotel_dal)
 
     while True:
         print("\n-- Hotelverwaltung (Admin) --")
@@ -34,66 +36,65 @@ def user_story_3(db_path: str):
         if choice == "0":
             break
 
+        # 3.1 Hotel hinzufügen
         elif choice == "1":
-            # --- Hotel anlegen ---
             name  = input("Name des Hotels: ").strip()
             stars = int(input("Anzahl Sterne (1–5): ").strip())
 
-            # Adresse auswählen oder neu anlegen
             print("\n1. Neue Adresse erstellen")
-            print("2. Vorhandene Adresse auswählen")
+            print("2. Bestehende Adresse auswählen")
             addr_choice = input("Wähle: ").strip()
 
             if addr_choice == "1":
-                # Neue Adresse anlegen: wir bauen ein einfaches Objekt mit street, city, zip_code
+                # neue Adresse anlegen
                 street   = input("Strasse: ").strip()
                 city     = input("Stadt: ").strip()
                 zip_code = input("ZIP: ").strip()
 
-                temp_addr = SimpleNamespace(
+                new_address = Address(
+                    address_id=None,
                     street=street,
                     city=city,
                     zip_code=zip_code
                 )
-                # AddressManager.create_address erwartet genau ein Objekt mit street, city, zip_code
-                addr_id = address_manager.create_address(temp_addr)
-                # echte Address-Instanz holen
-                address = address_dal.read_address_by_id(addr_id)
-                print(f"Neue Adresse angelegt (ID: {addr_id}).")
+                address = address_manager.create_address(new_address)
+                print(f"Neue Adresse angelegt (ID: {address.address_id})")
 
             else:
-                # Bestehende Adresse auswählen
+                # bestehende Adresse auswählen
+                addresses = address_manager.get_all_addresses()
+                if not addresses:
+                    print("Keine Adressen vorhanden. Bitte zuerst eine neue Adresse anlegen.")
+                    continue
                 print("\nVerfügbare Adressen:")
-                addresses = address_dal.read_all_addresses()
-                for addr in addresses:
-                    # Address-Model hat property .zip
-                    print(f"  {addr.address_id}: {addr.street}, {addr.city} {addr.zip}")
-                addr_id = int(input("Adresse-ID auswählen: ").strip())
-                address = next((a for a in addresses if a.address_id == addr_id), None)
+                for a in addresses:
+                    print(f"  {a.address_id}: {a.street}, {a.city} {a.zip_code}")
+                sel_id = int(input("Adresse-ID auswählen: ").strip())
+                address = address_manager.find_address_by_id(sel_id)
                 if not address:
-                    print("Ungültige Adresse-ID. Abbruch.")
+                    print("Ungültige Adresse-ID.")
                     continue
 
-            # Hotel-Domain-Objekt erzeugen und speichern
+            # Hotel anlegen
             new_hotel = Hotel(
                 hotel_id=None,
                 name=name,
                 stars=stars,
                 address=address
             )
-            hotel_id = hotel_manager.create_hotel(new_hotel)
-            print(f"Hotel erstellt. Hotel-ID: {hotel_id}")
+            hid = hotel_manager.create_hotel(new_hotel)
+            print(f"Hotel erstellt. ID: {hid}")
 
+        # 3.2 Hotel entfernen
         elif choice == "2":
-            # --- Hotel löschen ---
             hid     = int(input("Hotel-ID zum Entfernen: ").strip())
             success = hotel_manager.delete_hotel(hid)
             print("Hotel entfernt." if success else "Hotel nicht gefunden.")
 
+        # 3.3 Hotel aktualisieren
         elif choice == "3":
-            # --- Hotel aktualisieren ---
             hid    = int(input("Hotel-ID zum Aktualisieren: ").strip())
-            hotels = hotel_dal.read_all_hotels()
+            hotels = hotel_manager.get_all_hotels()
             hotel  = next((h for h in hotels if h.hotel_id == hid), None)
             if not hotel:
                 print("Hotel nicht gefunden.")
@@ -102,16 +103,13 @@ def user_story_3(db_path: str):
             name_input  = input(f"Neuer Name ({hotel.name}): ").strip()
             stars_input = input(f"Neue Sterne ({hotel.stars}): ").strip()
 
-            name  = name_input or hotel.name
-            stars = int(stars_input) if stars_input else hotel.stars
-
             updated = Hotel(
                 hotel_id=hid,
-                name=name,
-                stars=stars,
+                name   = name_input or hotel.name,
+                stars  = int(stars_input) if stars_input else hotel.stars,
                 address=hotel.address
             )
-            hotel_manager.hotel_dal.update_hotel(updated)
+            hotel_manager.update_hotel(updated)
             print("Hotelinformationen aktualisiert.")
 
         else:
