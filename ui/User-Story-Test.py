@@ -1,5 +1,5 @@
 from datetime import datetime, date
-
+#Importieren der Models
 from model.address import Address
 from model.hotel import Hotel
 

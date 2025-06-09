@@ -1,30 +1,50 @@
-#!/usr/bin/env python3
-from data_access.address_data_access import AddressDataAccess
-from data_access.room_data_access import RoomDataAccess
-from data_access.hotel_data_access import HotelDataAccess
+from datetime import datetime, date
 
+#Importieren der Models
 from model.address import Address
 from model.hotel import Hotel
 
+# Importiere alle Manager und DataAccess-Klassen
 from business_logic.address_manager import AddressManager
+from business_logic.booking_manager import BookingManager
+from business_logic.facility_manager import FacilityManager
+from business_logic.guest_manager import GuestManager
 from business_logic.hotel_manager import HotelManager
+from business_logic.invoice_manager import InvoiceManager
+from business_logic.room_manager import RoomManager
+from business_logic.room_type_manager import RoomTypeManager
 
-def user_story_3(db_path: str):
-    """
-    3. Hotels verwalten (Admin):
-       3.1 Hotel hinzufügen (mit neuer oder bestehender Adresse)
-       3.2 Hotel entfernen
-       3.3 Hotelinformationen aktualisieren
-    """
-    # Data Access Layer
-    room_dal    = RoomDataAccess(db_path)
-    address_dal = AddressDataAccess(db_path)
-    hotel_dal   = HotelDataAccess(db_path, room_dal)
+from data_access.address_data_access import AddressDataAccess
+from data_access.booking_data_access import BookingDataAccess
+from data_access.facility_data_access import FacilityDataAccess
+from data_access.guest_data_access import GuestDataAccess
+from data_access.hotel_data_access import HotelDataAccess
+from data_access.invoice_data_access import InvoiceDataAccess
+from data_access.room_data_access import RoomDataAccess
+from data_access.room_type_data_access import RoomTypeDataAccess
 
-    # Business Logic Layer
-    address_manager = AddressManager(address_dal)
-    hotel_manager   = HotelManager(hotel_dal)
+# Datenbankpfad und Initialisierung der DALs
+db_path = "../database/hotel_sample.db"
+address_dal = AddressDataAccess(db_path)
+booking_dal = BookingDataAccess(db_path)
+facility_dal = FacilityDataAccess(db_path)
+guest_dal = GuestDataAccess(db_path)
+invoice_dal = InvoiceDataAccess(db_path)
+room_dal = RoomDataAccess(db_path)
+room_type_dal = RoomTypeDataAccess(db_path)
+hotel_dal = HotelDataAccess(db_path,room_dal)
 
+# Intialisierung der Manager
+address_manager = AddressManager(address_dal)
+booking_manager = BookingManager(booking_dal)
+facility_manager = FacilityManager(facility_dal)
+guest_manager = GuestManager(guest_dal)
+invoice_manager = InvoiceManager(invoice_dal)
+room_manager = RoomManager(room_dal)
+room_type_manager = RoomTypeManager(room_type_dal)
+hotel_manager = HotelManager(hotel_dal)
+
+def user_story_3():
     while True:
         print("\n-- Hotelverwaltung (Admin) --")
         print("1. Hotel hinzufügen")
@@ -38,52 +58,28 @@ def user_story_3(db_path: str):
 
         # 3.1 Hotel hinzufügen
         elif choice == "1":
-            name  = input("Name des Hotels: ").strip()
+            print("\n--- Neues Hotel mit Adresse erstellen ---")
+
+            name = input("Hotelname: ").strip()
             stars = int(input("Anzahl Sterne (1–5): ").strip())
 
-            print("\n1. Neue Adresse erstellen")
-            print("2. Bestehende Adresse auswählen")
-            addr_choice = input("Wähle: ").strip()
+            street = input("Strasse: ").strip()
+            city = input("Stadt: ").strip()
+            zip_code = input("PLZ: ").strip()
 
-            if addr_choice == "1":
-                # neue Adresse anlegen
-                street   = input("Strasse: ").strip()
-                city     = input("Stadt: ").strip()
-                zip_code = input("ZIP: ").strip()
+            # Address-Instanz direkt erstellen (ID = None, wird automatisch durch DB vergeben)
+            new_address = Address(address_id=None, street=street, city=city, zip_code=zip_code)
+            address = address_manager.create_address(new_address)
 
-                new_address = Address(
-                    address_id=None,
-                    street=street,
-                    city=city,
-                    zip_code=zip_code
-                )
-                address = address_manager.create_address(new_address)
-                print(f"Neue Adresse angelegt (ID: {address.address_id})")
-
-            else:
-                # bestehende Adresse auswählen
-                addresses = address_manager.get_all_addresses()
-                if not addresses:
-                    print("Keine Adressen vorhanden. Bitte zuerst eine neue Adresse anlegen.")
-                    continue
-                print("\nVerfügbare Adressen:")
-                for a in addresses:
-                    print(f"  {a.address_id}: {a.street}, {a.city} {a.zip_code}")
-                sel_id = int(input("Adresse-ID auswählen: ").strip())
-                address = address_manager.find_address_by_id(sel_id)
-                if not address:
-                    print("Ungültige Adresse-ID.")
-                    continue
-
-            # Hotel anlegen
-            new_hotel = Hotel(
+            hotel = Hotel(
                 hotel_id=None,
                 name=name,
                 stars=stars,
                 address=address
             )
-            hid = hotel_manager.create_hotel(new_hotel)
-            print(f"Hotel erstellt. ID: {hid}")
+
+            hotel_id = hotel_manager.create_hotel(hotel)
+            print(f"\nHotel '{name}' wurde erfolgreich erstellt (ID: {hotel_id})")
 
         # 3.2 Hotel entfernen
         elif choice == "2":
@@ -115,6 +111,8 @@ def user_story_3(db_path: str):
         else:
             print("Ungültige Auswahl.")
 
-if __name__ == "__main__":
-    DB_PATH = "../database/hotel_sample.db"
-    user_story_3(DB_PATH)
+user_story_3()
+
+# if __name__ == "__main__":
+#     DB_PATH = "../database/hotel_sample.db"
+#     user_story_3(DB_PATH)
