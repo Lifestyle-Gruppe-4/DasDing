@@ -54,8 +54,8 @@ def user_story_menu():
 def user_story_4():
     try:
         city = input("Stadt: ").strip()
-        check_in = datetime.strptime(input("Check_in (YYYY-MM-DD)"), "%Y-%m-%d").date()
-        check_out = datetime.strptime(input("check_out (YYYY-MM-DD"), "%Y-%m-%d").date()
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
 
         if check_out <= check_in:
             print("Check-out muss nach dem Check-in liegen.")
