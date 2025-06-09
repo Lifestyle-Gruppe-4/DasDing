@@ -11,7 +11,7 @@ def list_hotels(db_path: str):
         return
     for h in hotels:
         addr = h.address  # Address-Objekt
-        print(f"{h.hotel_id}: {h.name} ({h.stars} Sterne) – {addr.street}, {addr.city} {addr.zip}")
+        print(f"{h.hotel_id}: {h.name} ({h.stars} Sterne) – {addr.street}, {addr.city} {addr.zip_code}")
 
 if __name__ == "__main__":
     DB_PATH = "../database/hotel_sample.db"
@@ -36,7 +36,7 @@ def list_addresses(db_path: str):
     print("Alle Adressen:")
     for addr in addresses:
         # Model.Address hat property .zip für die Postleitzahl
-        print(f"{addr.address_id}: {addr.street}, {addr.city} {addr.zip}")
+        print(f"{addr.address_id}: {addr.street}, {addr.city} {addr.zip_code}")
 
 if __name__ == "__main__":
     DB_PATH = "../database/hotel_sample.db"

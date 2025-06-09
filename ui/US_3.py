@@ -115,6 +115,6 @@ def user_story_3(db_path: str):
         else:
             print("Ungültige Auswahl.")
 
-# if __name__ == "__main__":
-#     DB_PATH = "../database/hotel_sample.db"
-#     user_story_3(DB_PATH)
+if __name__ == "__main__":
+    DB_PATH = "../database/hotel_sample.db"
+    user_story_3(DB_PATH)
