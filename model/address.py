@@ -29,7 +29,7 @@ class Address:
         return self.__zip_code
 
     def __repr__(self):
-        return f"Address ID: {self.address_id}, Street: {self.street}, City: {self.city}, ZIP: {self.zip}"
+        return f"Address ID: {self.address_id}, Street: {self.street}, City: {self.city}, ZIP: {self.zip_code}"
 
 
 # addr1 = Address(address_id=1,street="Hauptstrasse 5",city="Basel", zip_code="4051")

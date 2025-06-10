@@ -33,7 +33,7 @@ def get_user_choice():
     print("3. Search for hotels by city")
     print("4. Erweiterte Suche")
     print("5. Admin center")
-    print("6. Exit")
+    print("6. Exit 0")
     return int(input("Enter your choice: "))
 def get_admin_choice():
     print("\n -----------Welcome to our Admin Center!-----------\n")

@@ -4,7 +4,7 @@ from datetime import datetime, date
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
 from model import address,booking,facility,guest,hotel,invoice,room,room_type
-from ui.UI import user_choice
+
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -26,7 +26,6 @@ invoice_manager = InvoiceManager(invoice_dal)
 room_manager = RoomManager(room_dal)
 room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
-
 
 ### User-Story 1.1,1.2,1.3 und 1.6
 def hotel_suche():
@@ -149,40 +148,3 @@ def suche_zimmer_stadt_zeitraum_gaeste_sterne():
     else:
         print("Keine passenden Hotels/Zimmer in diesem Zeitraum gefunden.")
 #suche_zimmer_stadt_zeitraum_gaeste_sterne()
-
-### User Story 2
-def info_pro_zimmer():
-    city = input("Geben Sie die Stadt ein, in welcher Sie ein Zimmer buchen möchten: ").strip()
-    results = hotel_manager.find_by_city(city)
-    if results:
-        for hotel in results:
-            print(f"Hier sind alle Hotels in der gwünschten Stadt \n"
-                  f"{hotel.name} in {hotel.address.city}")
-    user_choice = int(input("möchten Sie ein Datum für ihren Aufenthalt angeben? Ja/Nein"))
-    if user_choice == "ja":
-        try:
-            check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
-            check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
-
-            if check_in < date.today():
-                print("Das Check-in Datum darf nicht in der Vergangenheit liegen")
-                return
-            if check_out <= check_in:
-                print("Das Check-out Datum muss nach dem Check-in Datum liegen")
-                return
-        except ValueError:
-            print("Ungültiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
-            return
-
-        results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
-        if results:
-            for hotel, room in results:
-                nights = (check_out - check_in).days
-                season_price, factor = room_manager.calculate_seasonal_price(room.price_per_night,check_in)
-                total_price = season_price * nights
-                facilities = ', '.join(f.facility_name for f in room.facilities)
-                print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number} ({room.room_type.description}, max. Gäste: {room.room_type.max_guests}) "
-                      f"mit {facilities} für CHF {room.price_per_night:.2f} pro Nacht. "
-                      f"Gesamtpreis für {nights} Nächte CHF {total_price:.2f}")
-
-info_pro_zimmer()

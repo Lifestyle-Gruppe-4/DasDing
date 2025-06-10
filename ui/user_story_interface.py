@@ -263,7 +263,7 @@ def main_menu():
             print("Ungültige Eingabe!")
         pass
 
-if __name__ == "__main__":
-    main_menu()
+# if __name__ == "__main__":
+#     main_menu()
 
 
