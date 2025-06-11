@@ -34,20 +34,29 @@ def bewertung_abgeben():
     last_name = input("Geben Sie Ihren Nachnamen ein: ").lower().strip()
 
     #Buchungen für diesen Gast holen
-    bookings = booking_manager.get_bookings_by_guest(first_name,last_name)
-    if not bookings:
+    all_bookings = booking_manager.get_bookings_by_guest(first_name,last_name)
+    if not all_bookings:
         print(f"Keine Buchungen unter diesem Namen gefunden: {first_name} {last_name}")
         return
+
+    # Prüfen ob Aufenthalt abgeschlossen
+    past_bookings = [
+        b for b in all_bookings if b.check_out_date < date.today()
+    ]
+    if not past_bookings:
+        print(f"Sie haben aktuell keine abgeschlossenen Aufenthalt, die Sie bewerten könnten.")
+        return
+
     # Liste Anzeigen
     print("\nIhre Buchungen:")
-    for i,b in enumerate(bookings,1):
+    for i,b in enumerate(past_bookings,1):
         hotel_name = b.room.hotel.name
         print(f"{i}, Buchungs ID {b.booking_id} - {hotel_name}: {b.check_in_date} bis {b.check_out_date}")
 
     # Auswahl treffen
     try:
         sel = int(input("Zu welcher Buchung möchten Sie eine Bewertung abgeben? (Nummer): "))
-        booking = bookings[sel-1]
+        booking = past_bookings[sel-1]
     except ValueError:
         print("Ungültige Auswahl")
         return
@@ -75,7 +84,7 @@ def bewertung_abgeben():
     except Exception as e:
         print(f"Fehler beim Speichern der Bewertung: {e}")
 
-#bewertung_abgeben()
+bewertung_abgeben()
 
 def bewertungen_lesen():
     # Liste aller Hotels anzeigen
@@ -115,4 +124,4 @@ def bewertungen_lesen():
             print(f"Kommentar: {r.comment}")
         print(f"Erfasst am: {r.created_at}")
 
-bewertungen_lesen()
+# bewertungen_lesen()
