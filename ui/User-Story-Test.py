@@ -202,7 +202,7 @@ def zeige_alle_hotels():
         for hotel in results:
             print(f"{hotel.name} ({hotel.stars} Sterne) in {hotel.address.city}")
 
-#zeige_alle_hotels()
+#zeige_alle_hotels()#
 
 ### User Story 5
 def rechnung_erstellen_nach_aufenthalt():
