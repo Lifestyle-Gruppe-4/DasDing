@@ -1,27 +1,9 @@
 from datetime import datetime, date
 
-#Importieren der Models
-from model.address import Address
-from model.hotel import Hotel
-
-# Importiere alle Manager und DataAccess-Klassen
-from business_logic.address_manager import AddressManager
-from business_logic.booking_manager import BookingManager
-from business_logic.facility_manager import FacilityManager
-from business_logic.guest_manager import GuestManager
-from business_logic.hotel_manager import HotelManager
-from business_logic.invoice_manager import InvoiceManager
-from business_logic.room_manager import RoomManager
-from business_logic.room_type_manager import RoomTypeManager
-
-from data_access.address_data_access import AddressDataAccess
-from data_access.booking_data_access import BookingDataAccess
-from data_access.facility_data_access import FacilityDataAccess
-from data_access.guest_data_access import GuestDataAccess
-from data_access.hotel_data_access import HotelDataAccess
-from data_access.invoice_data_access import InvoiceDataAccess
-from data_access.room_data_access import RoomDataAccess
-from data_access.room_type_data_access import RoomTypeDataAccess
+# Importiere alle Manager,DataAccess-Klassen und Models
+from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
+from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
+from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -50,6 +32,7 @@ def user_story_3():
         print("1. Hotel hinzufügen")
         print("2. Hotel entfernen")
         print("3. Hotel aktualisieren")
+        print("4. Alle Hotels anzeigen")
         print("0. Zurück")
         choice = input("Wähle eine Option: ").strip()
 
@@ -63,10 +46,7 @@ def user_story_3():
             name = input("Hotelname: ").strip()
             stars = int(input("Anzahl Sterne (1–5): ").strip())
 
-            street_name = input("Strassenname: ").strip()
-            house_number = input("Hausnummer: ").strip()
-            street = f"{street_name} {house_number}"
-
+            street = input("Strassenname inkl. Nr: ").strip()
             city = input("Stadt: ").strip()
             zip_code = input("PLZ: ").strip()
 
@@ -74,13 +54,14 @@ def user_story_3():
                                   street=street,
                                   city=city,
                                   zip_code=zip_code)
-            address = address_manager.create_address(new_address)
+
+            created_address = address_manager.create_address(new_address)
 
             hotel = Hotel(
                 hotel_id=None,
                 name=name,
                 stars=stars,
-                address=address
+                address=created_address
             )
             hotel_id = hotel_manager.create_hotel(hotel)
             print(f"\nHotel '{name}' wurde erfolgreich erstellt (ID: {hotel_id})")
@@ -126,17 +107,43 @@ def user_story_3():
             name_input = input(f"Neuer Name ({hotel.name}): ").strip()
             stars_input = input(f"Neue Sterne ({hotel.stars}): ").strip()
 
+
+            # Adresse des bestehenden Hotels
+            addr = hotel.address
+            new_street = input(f"Neuer Strassenname inkl. Nr ({addr.street}): ").strip()
+            new_city = input(f"Neue Stadt ({addr.city}): ").strip()
+            new_zip = int(input(f"Neue PLZ ({addr.zip_code}): ").strip())
+
+            # Aktualisieren des Address-Objekts
+            updated_address = Address(
+                address_id=addr.address_id,
+                street=new_street,
+                city=new_city,
+                zip_code=new_zip
+            )
+            # Adresse in der DB updaten
+            address_manager.update_address(updated_address)
+
             # Aktualisiertes Hotel-Objekt erstellen
             updated = Hotel(
                 hotel_id=hid,
                 name=name_input or hotel.name,
                 stars=int(stars_input) if stars_input else hotel.stars,
-                address=hotel.address
+                address=updated_address
             )
 
             # Update ausführen
             hotel_manager.update_hotel(updated)
             print("Hotelinformationen aktualisiert.")
+
+        elif choice == "4":
+            hotels = hotel_manager.get_all_hotels()
+            if not hotels:
+                print("Keine Hotels vorhanden.")
+                continue
+            print("\nVerfügbare Hotels:")
+            for h in hotels:
+                print(f"  {h.hotel_id}: {h.name} ({h.stars} Sterne) in {h.address.street} {h.address.zip_code} {h.address.city}")
 
         else:
             print("Ungültige Auswahl.")

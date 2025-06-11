@@ -44,18 +44,26 @@ class AddressDataAccess(BaseDataAccess):
         INSERT INTO Address (street, city, zip_code)
         VALUES (?, ?, ?)
         """
-        cursor = self.execute(sql, (address.street, address.city, address.zip_code))
-        return cursor.lastrowid
+        params = (address.street, address.city,address.zip_code)
+        lastrowid, _ = self.execute(sql, params)
+        return lastrowid
 
-    def update_address(self, address: Address) -> None:
+    def update_address(self, address: Address) -> bool:
         sql = """
         UPDATE Address
-        SET street   = ?
-            city     = ?
+        SET street   = ?,
+            city     = ?,
             zip_code = ?
         WHERE address_id = ?
         """
-        self.execute(sql, (address.street, address.city, address.zip_code, address.address_id))
+        params = (
+            address.street,
+            address.city,
+            address.zip_code,
+            address.address_id
+        )
+        _, rowcount = self.execute(sql, params)
+        return rowcount > 0
 
     def delete_address(self, address_id: int) -> None:
         sql = """

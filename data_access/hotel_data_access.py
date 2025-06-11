@@ -41,8 +41,8 @@ class HotelDataAccess(BaseDataAccess):
         """
 
         params = (hotel.name, hotel.stars, hotel.address.address_id,)
-        hotel_id, _ = self.execute(sql, params)
-        return hotel_id
+        lastrowid, _ = self.execute(sql, params)
+        return lastrowid
 
     def delete_hotel(self, hotel_id: int) -> bool:
         sql = """

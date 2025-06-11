@@ -160,5 +160,5 @@ def user_story_8():
     except Exception as e:
         print(f"Fehler: {e}")
 
-if __name__ == "__main__":
-    user_story_menu()
+# if __name__ == "__main__":
+#     user_story_menu()

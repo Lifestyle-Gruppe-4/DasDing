@@ -16,6 +16,9 @@ class HotelManager:
     def delete_hotel(self, hotel_id:int) -> bool:
         return self.hotel_dal.delete_hotel(hotel_id)
 
+    def update_hotel(self, hotel: Hotel) -> bool:
+        return self.hotel_dal.update_hotel(hotel)
+
     def find_by_id(self, hotel_id:int) -> Hotel:
         hotels = self.hotel_dal.read_all_hotels()
         for hotel in hotels:
@@ -36,6 +39,9 @@ class HotelManager:
             hotel for hotel in self.hotel_dal.read_all_hotels()
             if hotel.address.city.lower() == city
         ]
+
+    def find_all_rooms_by_hotel(self,hotel:Hotel) -> list[Room]:
+        return hotel.rooms
 
     def find_hotel_by_city_and_min_stars(self, city: str, stars: int) -> list[Hotel]:
         city = city.lower()
@@ -90,6 +96,14 @@ class HotelManager:
                             if not overlaps:
                                 available.append((hotel, room))
                                 break
+        return available
+
+    def find_available_rooms_by_hotel_and_date(self,hotel:Hotel,check_in:date,check_out:date) -> list[Room]:
+        available = []
+        for room in hotel.rooms:
+            overlaps = any(b.check_in_date < check_out and b.check_out_date > check_in and not b.is_cancelled for b in room.bookings)
+            if not overlaps:
+                available.append(room)
         return available
 
 

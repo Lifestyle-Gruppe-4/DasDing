@@ -59,20 +59,28 @@ Alle Tasks wurden im GitHub-Project Board geplant und verwaltet.
   Beispiel: Balkendiagramm zur Darstellung gebuchter Zimmer je Typ
 
 #### Vorgehen 
-.... Erklärung der Layers etc.
+Zu Beginn des Projekts haben wir uns intensiv mit den Grundlagen der Python-Programmierung beschäftigt sowie die verwendeten Tools wie Deepnote, GitHub und PyCharm eingerichtet. Danach wurde gemeinsam ein Klassendiagramm in Visual Paradigm erstellt, um die Datenbankstruktur und die logischen Entitäten festzulegen.
+
+Basierend auf diesem Klassendiagramm wurden die Model-Klassen zuerst in Deepnote erstellt. Anschliessend haben wir in der gleichen Umgebung auch den Data Access Layer (DAL) sowie den Business Logic Manager implementiert. Erste einfache User Stories wie „Hotel hinzufügen“ oder „Zimmer anzeigen“ wurden direkt in Deepnote getestet, um die Interaktion zwischen den Schichten zu verifizieren.
+
+Als nächster Schritt wurde die gesamte Struktur in PyCharm nachgebildet, um komplexere Imports und Dateiabhängigkeiten korrekt abzubilden. In PyCharm testeten wir nacheinander alle User Stories und passten die Business-Logik sowie Datenbankabfragen entsprechend an. Sobald diese erfolgreich funktionierten, wurden sie wieder zurück in Deepnote-Notebooks übertragen und dort mit erklärendem Text dokumentiert.
+
+Im Verlauf des Projekts mussten einzelne User Stories sowie Klassen und Layers nochmals angepasst werden, da sich durch Anforderungen oder neue Erkenntnisse Änderungen am Datenbankschema ergaben. Diese Änderungen wurden iterativ vorgenommen.
+
+Zum Abschluss haben wir Visualisierungen mit dem "Charts"-Block in Deepnote erstellt, z. B. um die durchschnittliche Auslastung von Hotels oder Preistrends pro Saison darzustellen. Die entsprechenden Daten wurden zuvor mit SQL-Abfragen ausgelesen, in einem Pandas DataFrame gespeichert und dann grafisch aufbereitet.
 
 ---
 
 ##  3. Kommunikation und Informationen
 
 -  **GitHub Project Board** zur Organisation, für Task-Zuweisung, Issues und Reviews genutzt 
--  **MS Teams** zur Abstimmung, Diskussion, und Video-Aufnahme 
+-  **MS Teams** Chatfunktion für kurze Absprachen, Neuigkeiten und Infos zum individuellen Fortschritt, und Video-Aufnahme. 
 -  **Deepnote Notebooks** hilfreich für Analysen, Demos, Abbidung der verschiedenen Layers, Datenabfragen und Abbildung der User Storys.
 -  **Visual Paradigm** für die Erstellung der Klassen
 -  **README.md** für Dokumentation
--  **Whatsapp** diente zur Kordination untereinander und zur Info wer wann Änderungen gepushed hat.
+-  **Whatsapp** diente zur Koordination untereinander und zur Info wer wann Änderungen gepushed hat.
   
-- Alle Gruppenmitglieder waren durchgängig aktiv beteiligt, present bei den Coachings. 
+- Alle Gruppenmitglieder waren durchgängig aktiv beteiligt und present bei den Coachings. 
 - Wöchentliche Sprint Reviews und Coachings wurden durchgeführt
 
 
@@ -103,7 +111,35 @@ Was wir erreicht haben
 -  Frühe Strukturierung des Codes und der User Stories vermeidet unnötige Refactorings
 -  Iteratives Arbeiten mit Feedback-Schleifen steigert die Qualität und Teamproduktivität
 -  Klare Kommunikation im Team über MS Teams und das Project Board war hilfreich
-- Es hat geholfen die Aufgaben zusammen zu besprechen, in den Coaching Sessions zusammen weiterzuarbeiten und danach die restlichen Aufgaben aufzuteilen. Ausserdem war es gut, dass wir stets vor Ort waren. Das hat die Koordination und Zusammenarbeit vereinfacht. 
+- Es hat geholfen die Aufgaben zusammen zu besprechen, in den Coaching Sessions zusammen weiterzuarbeiten und danach die restlichen Aufgaben aufzuteilen. Ausserdem war es gut, dass wir stets vor Ort waren. Das hat die Koordination und Zusammenarbeit vereinfacht.
+
+  
+## Reflexion
+
+Im Verlauf des Projekts haben wir:
+- Unsere Kenntnisse in objektorientierter Programmierung (OOP) in Python vertieft
+- Eine saubere Layered Architecture mit klarer Trennung von Datenzugriff, Logik und UI umgesetzt
+- Den Umgang mit SQLite, komplexeren SQL-Abfragen und deren Einbindung in eigene Python-Klassen geübt
+- Die Arbeit im Team mithilfe von GitHub-Projekten, Pull Requests und Deepnote effektiv koordiniert
+- Konzepte wie dynamische Preisberechnung, Validierung von Eingaben und Zustandsverwaltung praktisch angewendet
+
+Das Projekt war ein wertvoller Schritt in Richtung praxisnaher Softwareentwicklung mit Python und hat uns gezeigt, wie wichtig Struktur, Planung und saubere Zusammenarbeit sind.
+
+---
+## Einsatz von unterstützenden Tools
+
+Während der Entwicklung haben wir ChatGPT punktuell zur Unterstützung verwendet, für:
+
+- Zur Klärung von spezifischen Syntax-Fragen in Python (z. B. zu datetime, Fehlerbehandlung, Importproblemen)
+- Beim Debugging und zur Überprüfung von typischen Fehlerquellen in DAL- oder Manager-Klassen
+- Für Anregungen zur Kürzung oder Strukturierung von Funktionen
+
+ Chatgpt wurde nicht als Ersatz für eigene Arbeit, sondern als Ergänzung genutzt 
+
+## Projektlinks
+Deepnote-Projekt
+Github Repository
+Github Project Board
 
 
 

@@ -1,15 +1,18 @@
-from typing import List
+
 from datetime import datetime, date
 from model.booking import Booking
 from model.invoice import Invoice
 from data_access.booking_data_access import BookingDataAccess
+from business_logic.room_manager import RoomManager
+from business_logic.hotel_manager import HotelManager
+
 
 class BookingManager:
     def __init__(self, booking_dal: BookingDataAccess):
         self.booking_dal = booking_dal # Zufriff auf DB-Schicht
 
     # Gibt alle Buchunge zurück
-    def get_all_bookings(self) -> List[Booking]:
+    def get_all_bookings(self) -> list[Booking]:
         return self.booking_dal.read_all_bookings()
 
     # Neue Buchungen erstellen (Logik inkl. Preisberechnung)
@@ -97,3 +100,12 @@ class BookingManager:
         print(f"Total: {booking.total_amount:.2f} CHF")
         print(f"Status: {status}")
         print("--------------------------------")
+
+
+    def get_bookings_by_guest(self,first_name:str,last_name:str) -> list[Booking]:
+        all_bookings = self.booking_dal.read_all_bookings()
+        return [
+            b for b in all_bookings
+            if b.guest.first_name.lower() == first_name.lower()
+            and b.guest.last_name.lower() == last_name.lower()
+        ]
