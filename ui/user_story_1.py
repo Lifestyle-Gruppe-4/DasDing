@@ -3,7 +3,7 @@ from datetime import datetime, date
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import address,booking,facility,guest,hotel,invoice,room,room_type
+from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
 
 
 # Datenbankpfad und Initialisierung der DALs
@@ -36,10 +36,10 @@ def hotel_suche():
         3. Verfügbare Zimmer nach Stadt und Gästezahl
         4. Alle Hotels anzeigen
                 """)
-    user_input = input("Wähle eine Suchoption: ")
+    user_input = input("Wählen Sie eine Suchoption: ")
 
     if user_input == "1":
-        search_input = input("Gib die Stadt des Hotels ein: ")
+        search_input = input("Geben sie die gewünschte Stadt ein: ")
         results = hotel_manager.find_by_city(search_input)
         if results:
             for hotel in results:
@@ -48,14 +48,14 @@ def hotel_suche():
             print("Kein Hotel in dieser Stadt gefunden")
 
     elif user_input == "2":
-        city = input("Gib die Stadt des Hotels ein: ")
+        city = input("Geben Sie die Stadt des Hotels ein: ")
         try:
-            stars = int(input("Gib die mindest Anzahl Sterne ein: "))
+            stars = int(input("Geben Sie die mindest Anzahl Sterne ein: "))
             if not 1 <= stars <= 5:
-                print("Bitte gib eine Zahl zwischen 1 und 5 ein.")
+                print("Bitte geben Sie eine Zahl zwischen 1 und 5 ein.")
                 return
         except ValueError:
-            print("Ungültige Eingabe. Bitte gib eine Zahl ein.")
+            print("Ungültige Eingabe. Bitte geben Sie eine Zahl ein.")
             return
 
         results = hotel_manager.find_hotel_by_city_and_min_stars(city,stars)
@@ -129,13 +129,13 @@ def suche_zimmer_stadt_zeitraum_gaeste_sterne():
         return
 
     try:
-        guests = int(input("Gib die Anzahl der Gäste ein: "))
-        stars = int(input("Gib die Mindestanzahl Sterne ein: "))
+        guests = int(input("Geben Sie die Anzahl Ihrer Gäste ein: "))
+        stars = int(input("Geben Sie die Mindestanzahl der gewünschten Sterne ein: "))
         if guests < 1:
-            print("Bitte gib eine gültige Gästeanzahl ein")
+            print("Bitte geben Sie eine gültige Gästeanzahl ein")
             return
         if not (1 <= stars <= 5):
-            print("Bitte gib eine Zahl zwischen 1 und 5 ein")
+            print("Bitte geben Sie eine Zahl zwischen 1 und 5 ein")
             return
     except ValueError:
         print("Ungülte Eingabe. Bitte gib eine gültige Zahl ein.")

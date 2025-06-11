@@ -28,6 +28,11 @@ class Address:
     def zip_code(self) -> str:
         return self.__zip_code
 
+    @address_id.setter
+    def address_id(self, address_id: int):
+        self.__address_id = address_id
+
+
     def __repr__(self):
         return f"Address ID: {self.address_id}, Street: {self.street}, City: {self.city}, ZIP: {self.zip_code}"
 

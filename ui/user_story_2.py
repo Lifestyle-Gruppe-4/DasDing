@@ -3,7 +3,7 @@ from datetime import datetime, date
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import address,booking,facility,guest,hotel,invoice,room,room_type
+from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -28,34 +28,6 @@ hotel_manager = HotelManager(hotel_dal)
 
 ### User Story 2
 def info_pro_zimmer():
-    city = input("Stadt: ").strip()
-    try:
-        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
-        check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
-
-        if check_in < date.today():
-            print("Das Check-in Datum darf nicht in der Vergangenheit liegen")
-            return
-        if check_out <= check_in:
-            print("Das Check-out Datum muss nach dem Check-in Datum liegen")
-            return
-    except ValueError:
-        print("Ungültiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
-        return
-
-    results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
-    if results:
-        for hotel, room in results:
-            nights = (check_out - check_in).days
-            season_price, factor = room_manager.calculate_seasonal_price(room.price_per_night,check_in)
-            total_price = season_price * nights
-            facilities = ', '.join(f.facility_name for f in room.facilities)
-            print(f"{hotel.name} in {hotel.address.city}, Zimmer {room.room_number} ({room.room_type.description}, max. Gäste: {room.room_type.max_guests}) "
-                  f"mit {facilities} für CHF {room.price_per_night:.2f} pro Nacht. "
-                  f"Gesamtpreis für {nights} Nächte CHF {total_price:.2f}")
-
-
-def info_pro_zimmer_2():
     # Stadt abfragen und Hotels auflisten
     city = input("In welcher Stadt möchten Sie ein Zimmer Buchen? ").strip()
     hotels = hotel_manager.find_by_city(city)
@@ -69,7 +41,7 @@ def info_pro_zimmer_2():
 
     # Hotel auswählen
     try:
-        idx = int(input("\nWähle ein Hotel (Nummer): "))
+        idx = int(input("\nWählen Sie ein Hotel (Nummer): "))
         hotel = hotels[idx-1]
     except ValueError:
         print("Ungültige Auswahl.")
@@ -123,5 +95,4 @@ def info_pro_zimmer_2():
         else:
             # ohne Datumsangabe: nur Basispreis
             print(f"  Preis/Nacht: CHF {base_price:.2f}")
-
-info_pro_zimmer_2()
+#info_pro_zimmer()
