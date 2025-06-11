@@ -64,7 +64,7 @@ def user_story_10():
         if choice == "1":
             types = room_type_manager.get_all_room_types()
             for t in types:
-                print(f"{t.room_type_id}: {t.name}, max Gäste: {t.max_guests}, Preis/Nacht: {t.price_per_night:.2f} CHF")
+                print(f"{t.room_type_id}: {t.description}, max Gäste: {t.max_guests}")
 
         elif choice == "2":
             name = input("Name des neuen Zimmertyps: ").strip()
