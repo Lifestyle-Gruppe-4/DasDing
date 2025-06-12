@@ -32,6 +32,9 @@ def user_story_7():
         #city = input("Stadt: ").strip()
         #check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
         #check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        hochsaison_monat = ["Juli", "August", "Dezember", "Februar"]
+        nebensaison_monat = ["März", "April", "Mai", "Oktober", "November"]
+        normalsaison_monat = ["Januar", "Juni", "September"]
         hochsaison_date = date(date.today().year, 7, 1)
         nebensaison_date = date(date.today().year, 3, 1)
         normalsaison_date = date(date.today().year, 6, 1)
@@ -65,9 +68,9 @@ def user_story_7():
 
                 print(f" Zimmer {room.room_number}")
                 print(f"   Basispreis: {base_price:.2f} CHF")
-                print(f"   Hochsaison ({hochsaison_date} | Faktor {hoch_factor:.2f}): {hoch_price:.2f} CHF")
-                print(f"   Nebensaison ({nebensaison_date} | Faktor {neben_factor:.2f}): {neben_price:.2f} CHF")
-                print(f"   Normalsaison ({normalsaison_date} | Faktor {normal_factor:.2f}): {normal_price:.2f} CHF\n")
+                print(f"   Hochsaison ({hochsaison_monat} | Faktor {hoch_factor:.2f}): {hoch_price:.2f} CHF")
+                print(f"   Nebensaison ({nebensaison_monat} | Faktor {neben_factor:.2f}): {neben_price:.2f} CHF")
+                print(f"   Normalsaison ({normalsaison_monat} | Faktor {normal_factor:.2f}): {normal_price:.2f} CHF\n")
 
     except Exception as e:
         print(f"Fehler: {e}")
