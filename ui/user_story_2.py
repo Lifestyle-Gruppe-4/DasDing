@@ -36,21 +36,29 @@ def info_pro_zimmer():
         return
 
     print("\nGefundene Hotels:")
+    # Nummeriert alle gefundenen Hotels ab 1 und gibt deren Name, Sterne und Strasse aus
     for i,h in enumerate(hotels,1):
         print(f"{i}. {h.name} ({h.stars} Sterne) - {h.address.street}")
 
     # Hotel auswählen
     try:
+        # Eingabe des Nutzers wird in idx gespeichert
         idx = int(input("\nWählen Sie ein Hotel (Nummer): "))
+        # Listen beginnen mit 0. [idx-1] sorgt für richtigen Eintrag
         hotel = hotels[idx-1]
     except ValueError:
-        print("Ungültige Auswahl.")
+        print("Bitte geben Sie eine gültige Zahl ein.")
+        return
+    except IndexError:
+        print("Die Nummer liegt ausserhalb des gültigen Bereichs")
         return
 
     # Nach Datum fragen
     use_dates = input("Möchten Sie einen Zeitraum für Ihren Aufenthalt angeben? (J/N): ").strip().lower()
-    # Setzt CheckIn und CheckOut zuerst auf None
+    # Setzt CheckIn und CheckOut zuerst auf None, falls Nutzer kein Datum angeben möchte
     check_in = check_out = None
+    results = []
+    # Wenn Benutzer einen Zeitraum angeben möchte
     if use_dates == "j":
         try:
             check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
@@ -61,21 +69,19 @@ def info_pro_zimmer():
             if check_out <= check_in:
                 print("Das Check-out Datum muss nach dem Check-in Datum liegen")
                 return
+            else:
+                # Sucht alle Zimmer im angegebenen Zeitraum
+                results = hotel_manager.find_available_rooms_by_hotel_and_date(hotel,check_in,check_out)
         except ValueError:
             print("Ungültiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
             return
 
-    # Zimmer finden
-    if check_in and check_out:
-        # nur Zimmer in diesm Zeitraum
-        results = hotel_manager.find_available_rooms_by_hotel_and_date(hotel,check_in,check_out)
-    else:
-        # alle Zimmer im Hotel
+    # alle Zimmer im Hotel
+    elif use_dates == "n":
         results = hotel_manager.find_all_rooms_by_hotel(hotel)
-
-    if not results:
-        print("Keine Zimmer gefunden.")
-        return
+    # Ungültige Eingabe
+    else:
+        print("Bitte Antworten Sie mit 'J' oder 'N'.")
 
     # Ausgabe
     for room in results:
@@ -83,16 +89,18 @@ def info_pro_zimmer():
         max_guests = room.room_type.max_guests
         facilities = ', '.join(f.facility_name for f in room.facilities)
         base_price = room.price_per_night
+        # Allgemeine Zimmerinfo
         print(f"\n{hotel.name}, Zimmer {room.room_number} ({desc}, max. {max_guests} Gäste)")
         print(f"  Ausstattung: {facilities}")
 
+        # Berrechne den Gesamtpreis mit Saisozuschalg
         if check_in and check_out:
             nights = (check_out - check_in).days
             season_price , factor = room_manager.calculate_seasonal_price(base_price,check_in)
             total = season_price * nights
-            print(f"  Preis/Nacht: CHF {season_price:.2f} (Basis {base_price:.2f} × Faktor {factor:.2f})")
+            print(f"  Preis/Nacht: CHF {season_price:.2f} (Basis {base_price:.2f} × Saison-Faktor {factor:.2f})")
             print(f"  Gesamtpreis für {nights} Nächte: CHF {total:.2f}")
         else:
             # ohne Datumsangabe: nur Basispreis
             print(f"  Preis/Nacht: CHF {base_price:.2f}")
-#info_pro_zimmer()
+info_pro_zimmer()

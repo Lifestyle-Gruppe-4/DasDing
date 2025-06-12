@@ -28,12 +28,16 @@ hotel_manager = HotelManager(hotel_dal)
 
 def user_story_4():
     try:
-        city = input("Stadt: ").strip()
-        check_in = datetime.strptime(input("Check_in (YYYY-MM-DD)"), "%Y-%m-%d").date()
-        check_out = datetime.strptime(input("check_out (YYYY-MM-DD"), "%Y-%m-%d").date()
+        city = input("In welcher Stadt möchten Sie Ihren Aufenthalt buchen? ").strip()
+        check_in = datetime.strptime(input("Check_in (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        check_out = datetime.strptime(input("check_out (YYYY-MM-DD: "), "%Y-%m-%d").date()
 
-        if check_out <= check_in:
-            print("Check-out muss nach dem Check-in liegen.")
+        if check_in < date.today():
+            print("Das Check-in Datum darf nicht in der Vergangenheit liegen!")
+            return
+
+        if check_out <= date.today():
+            print("Das Check-out Datum muss nach dem Check-in Datum liegen!")
             return
 
         results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
