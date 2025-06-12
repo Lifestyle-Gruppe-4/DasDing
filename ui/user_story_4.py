@@ -29,9 +29,15 @@ hotel_manager = HotelManager(hotel_dal)
 def user_story_4():
     try:
         city = input("In welcher Stadt möchten Sie Ihren Aufenthalt buchen? ").strip()
+        # Prüft ob in dieser Stadt ein Hotel existiert
+        result_city = hotel_manager.find_by_city(city)
+        if not result_city:
+            print("Keine Hotel in dieser Stadt gefunden")
+            return
+
         check_in = datetime.strptime(input("Check_in (YYYY-MM-DD): "), "%Y-%m-%d").date()
         check_out = datetime.strptime(input("Check_out (YYYY-MM-DD: "), "%Y-%m-%d").date()
-
+        # Prüft das check_in Datum nicht in der Vergangenheit lieget
         if check_in < date.today():
             print("Das Check-in Datum darf nicht in der Vergangenheit liegen!")
             return
@@ -47,7 +53,7 @@ def user_story_4():
 
         print("\nVerfügbare Hotels und Zimmer:")
         for idx, (hotel, room) in enumerate(results, start=1):
-            print(f"{idx}. {hotel.name} -  Zimmer {room.room_number} (Preis/Nacht: {room.price_per_night:2f} CHF)")
+            print(f"{idx}. {hotel.name} -  Zimmer {room.room_number} (Preis/Nacht: {room.price_per_night} CHF)")
 
         try:
             selection = int(input("Wähle ein Hotel/Zimmer (0 zum Abbrechen): "))
