@@ -95,4 +95,4 @@ def info_pro_zimmer():
         else:
             # ohne Datumsangabe: nur Basispreis
             print(f"  Preis/Nacht: CHF {base_price:.2f}")
-#info_pro_zimmer()
+info_pro_zimmer()
