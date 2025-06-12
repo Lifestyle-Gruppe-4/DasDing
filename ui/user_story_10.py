@@ -36,95 +36,87 @@ room_type_dal  = RoomTypeDataAccess(db_path)
 facility_manager   = FacilityManager(facility_dal)
 room_type_manager  = RoomTypeManager(room_type_dal)
 
+from business_logic.room_type_manager import RoomTypeManager
+from data_access.room_type_data_access import RoomTypeDataAccess
+
+# Initialisierung DAL & Manager
+db_path = "../database/hotel_sample.db"
+room_type_dal = RoomTypeDataAccess(db_path)
+room_type_manager = RoomTypeManager(room_type_dal)
+
 def user_story_10():
-    """
-    User Story 10 (Admin Stammdaten-Verwaltung):
-    Verwaltung von Zimmertypen und Einrichtungen (CRUD).
-    """
+    """User Story 10: Admin verwaltet Zimmertypen (Room Types)"""
     while True:
         print("""
-        === STAMMDATEN VERWALTEN (Admin) ===
-        1. Zimmertypen anzeigen
-        2. Zimmertyp anlegen
-        3. Zimmertyp aktualisieren
+        === STAMMDATEN: ZIMMERTYPEN VERWALTEN ===
+        1. Alle Zimmertypen anzeigen
+        2. Neuen Zimmertyp anlegen
+        3. Bestehenden Zimmertyp bearbeiten
         4. Zimmertyp löschen
-        -----------------------------------
-        5. Einrichtungen anzeigen
-        6. Einrichtung anlegen
-        7. Einrichtung aktualisieren
-        8. Einrichtung löschen
-        -----------------------------------
         0. Zurück
         """)
         choice = input("Wähle eine Option: ").strip()
+
         if choice == "0":
+            print("Zurück zum Hauptmenü...")
             break
 
-        # --- Zimmertypen ---
-        if choice == "1":
-            types = room_type_manager.get_all_room_types()
-            for t in types:
-                print(f"{t.room_type_id}: {t.description}, max Gäste: {t.max_guests}")
+        elif choice == "1":
+            room_types = room_type_manager.get_all_room_types()
+            if not room_types:
+                print("Keine Zimmertypen gefunden.")
+            else:
+                for rt in room_types:
+                    print(f"ID: {rt.room_type_id}, Beschreibung: {rt.description}, Max. Gäste: {rt.max_guests}")
 
         elif choice == "2":
-            name = input("Name des neuen Zimmertyps: ").strip()
-            max_guests = int(input("Maximale Gästezahl: "))
-            price = float(input("Preis pro Nacht: "))
-            rt_id = room_type_manager.create_room_type(name, max_guests, price)
-            print(f"Neuer Zimmertyp angelegt mit ID {rt_id}")
+            try:
+                description = input("Beschreibung des neuen Zimmertyps: ").strip()
+                max_guests = int(input("Maximale Gästeanzahl: "))
+                new_id = room_type_manager.create_room_type(description, max_guests)
+                print(f"Zimmertyp wurde erfolgreich angelegt. Neue ID: {new_id}")
+            except Exception as e:
+                print(f"Fehler beim Anlegen: {e}")
 
         elif choice == "3":
-            rt_id = int(input("ID des Zimmertyps, der geändert werden soll: "))
-            # Holen des aktuellen Objekts
-            rt = room_type_manager.get_room_type_by_id(rt_id)
-            if not rt:
-                print("Zimmertyp nicht gefunden.")
-                continue
-            # Neue Werte (Leereingabe = unverändert)
-            new_name = input(f"Neuer Name [{rt.name}]: ").strip() or rt.name
-            new_max = input(f"Neue max. Gäste [{rt.max_guests}]: ").strip()
-            new_price = input(f"Neuer Preis/Nacht [{rt.price_per_night:.2f}]: ").strip()
-            room_type_manager.update_room_type(
-                rt_id,
-                name=new_name,
-                max_guests=int(new_max) if new_max else rt.max_guests,
-                price_per_night=float(new_price) if new_price else rt.price_per_night
-            )
-            print("Zimmertyp erfolgreich aktualisiert.")
+            try:
+                rt_id = int(input("ID des Zimmertyps, der bearbeitet werden soll: "))
+                existing = room_type_manager.get_room_type_by_id(rt_id)
+                if not existing:
+                    print("Zimmertyp mit dieser ID wurde nicht gefunden.")
+                    continue
+                print(f"Aktuelle Beschreibung: {existing.description}, Max Gäste: {existing.max_guests}")
+                new_description = input("Neue Beschreibung (Enter = unverändert): ").strip()
+                new_max_guests = input("Neue max. Gästeanzahl (Enter = unverändert): ").strip()
+
+                final_description = new_description if new_description else existing.description
+                final_max_guests = int(new_max_guests) if new_max_guests else existing.max_guests
+
+                success = room_type_manager.update_room_type(rt_id, final_description, final_max_guests)
+                if success:
+                    print("Zimmertyp wurde erfolgreich aktualisiert.")
+                else:
+                    print("Aktualisierung fehlgeschlagen.")
+            except Exception as e:
+                print(f"Fehler beim Aktualisieren: {e}")
 
         elif choice == "4":
-            rt_id = int(input("ID des Zimmertyps, der gelöscht werden soll: "))
-            room_type_manager.delete_room_type(rt_id)
-            print("Zimmertyp gelöscht.")
-
-        # --- Einrichtungen ---
-        elif choice == "5":
-            facs = facility_manager.get_all_facilities()
-            for f in facs:
-                print(f"{f.facility_id}: {f.facility_name}")
-
-        elif choice == "6":
-            name = input("Name der neuen Einrichtung: ").strip()
-            f_id = facility_manager.create_facility(name)
-            print(f"Neue Einrichtung angelegt mit ID {f_id}")
-
-        elif choice == "7":
-            f_id = int(input("ID der Einrichtung, die geändert werden soll: "))
-            fac = facility_manager.get_facility_by_id(f_id)
-            if not fac:
-                print("Einrichtung nicht gefunden.")
-                continue
-            new_name = input(f"Neuer Name [{fac.facility_name}]: ").strip() or fac.facility_name
-            facility_manager.update_facility(f_id, facility_name=new_name)
-            print("Einrichtung erfolgreich aktualisiert.")
-
-        elif choice == "8":
-            f_id = int(input("ID der Einrichtung, die gelöscht werden soll: "))
-            facility_manager.delete_facility(f_id)
-            print("Einrichtung gelöscht.")
+            try:
+                rt_id = int(input("ID des Zimmertyps, der gelöscht werden soll: "))
+                confirmed = input("Bist du sicher? (j/n): ").lower()
+                if confirmed != 'j':
+                    print("Löschen abgebrochen.")
+                    continue
+                success = room_type_manager.delete_room_type(rt_id)
+                if success:
+                    print("Zimmertyp erfolgreich gelöscht.")
+                else:
+                    print("Löschen fehlgeschlagen.")
+            except Exception as e:
+                print(f"Fehler beim Löschen: {e}")
 
         else:
-            print("Ungültige Auswahl. Bitte erneut versuchen.")
+            print("Ungültige Eingabe. Bitte erneut versuchen.")
 
 if __name__ == "__main__":
     user_story_10()
