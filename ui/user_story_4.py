@@ -92,7 +92,7 @@ def user_story_4():
                 first_name = input("Vorname: ").strip()
                 last_name = input("Nachname: ").strip()
                 email = input("Email: ").strip()
-                street = input("Street: ").strip()
+                street = input("Street inkl Nr: ").strip()
                 guest_city = input("City: ").strip()
                 guest_zip = input("Zip: ").strip()
 

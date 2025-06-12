@@ -1,6 +1,3 @@
-# Added all model import to visualize all information for booking
-# Depending on the use cases for the manager, the imports will be adjusted
-# IMPORTANT! - If imports are maintained then class BookingDataAccess needs to be adjusted.
 
 
 from data_access.base_data_access import BaseDataAccess
@@ -129,7 +126,8 @@ class BookingDataAccess(BaseDataAccess):
             INSERT INTO Booking (check_in_date, check_out_date, guest_id, room_id, total_amount)
             VALUES (?, ?, ?, ?, ?)
         """
-        return self.execute(sql, (check_in_date, check_out_date, guest_id, room_id, total_amount))
+        lastrowid, _ = self.execute(sql, (check_in_date, check_out_date, guest_id, room_id, total_amount))
+        return lastrowid
 
     # Vorhandene Buchungen aktualisieren
     def update_booking(self, booking_id: int, check_in_date: str, check_out_date: str, total_amount: float):
@@ -138,7 +136,9 @@ class BookingDataAccess(BaseDataAccess):
             SET check_in_date = ?, check_out_date = ?, total_amount = ?
             WHERE booking_id = ?
         """
-        return self.execute(sql, (check_in_date, check_out_date, total_amount, booking_id))
+
+        lastrowid, _ = self.execute(sql, (check_in_date, check_out_date, total_amount, booking_id))
+        return lastrowid
 
     # Buchung löschen
     def delete_booking(self, booking_id: int):
