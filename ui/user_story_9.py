@@ -42,7 +42,7 @@ def user_story_9():
             hotel_name    = room.hotel.name
             room_number   = room.room_number
             amenity_names = [f.facility_name for f in room.facilities] or []
-            amenities_str = ", ".join(amenity_names) if amenity_names else "Keine Ausstattung"
+            amenities_str = ", ".join(amenity_names) if amenity_names else "Keine Ausstattung vorhanden"
             print(f"{hotel_name} – Zimmer {room_number}: {amenities_str}")
 
     except Exception as e:
