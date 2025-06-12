@@ -29,48 +29,30 @@ hotel_manager = HotelManager(hotel_dal)
 def user_story_7():
     """Dynamische Preisberechnung anzeigen"""
     try:
-        #city = input("Stadt: ").strip()
-        #check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
-        #check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
-        hochsaison_monat = ["Juli", "August", "Dezember", "Februar"]
-        nebensaison_monat = ["März", "April", "Mai", "Oktober", "November"]
-        normalsaison_monat = ["Januar", "Juni", "September"]
+
         hochsaison_date = date(date.today().year, 7, 1)
         nebensaison_date = date(date.today().year, 3, 1)
         normalsaison_date = date(date.today().year, 6, 1)
 
-        #results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
-        #if not results:
-         #   print("Keine verfügbaren Zimmer gefunden.")
-          #  return
         hotels = hotel_manager.get_all_hotels()
         if not hotels:
             print("Keine Hotels gefunden.")
             return
 
-        #nights = (check_out - check_in).days
-        #for hotel, room in results:
-          #  season_price, factor = room_manager.calculate_seasonal_price(room.price_per_night, check_in)
-          #  total = season_price * nights
         for hotel in hotels:
             print(f"Hotel: {hotel.name}")
             for room in hotel.rooms:
                 base_price = room.price_per_night
 
-          #  print(f"{hotel.name} - Zimmer {room.room_number}")
-          #  print(f" Zeitraum: {check_in} bis {check_out} ({nights} Nächte)")
-          #  print(f" Standardpreis pro Nacht: {room.price_per_night:.2f} CHF")
-          #  print(f" Saisonpreis pro Nacht: (Faktor {factor:.2f}): {season_price:.2f} CHF")
-          #  print(f" Gesamtpreis: {total:.2f} CHF\n")
                 hoch_price, hoch_factor = room_manager.calculate_seasonal_price(base_price, hochsaison_date)
                 neben_price, neben_factor = room_manager.calculate_seasonal_price(base_price, nebensaison_date)
                 normal_price, normal_factor = room_manager.calculate_seasonal_price(base_price, normalsaison_date)
 
                 print(f" Zimmer {room.room_number}")
                 print(f"   Basispreis: {base_price:.2f} CHF")
-                print(f"   Hochsaison ({hochsaison_monat} | Faktor {hoch_factor:.2f}): {hoch_price:.2f} CHF")
-                print(f"   Nebensaison ({nebensaison_monat} | Faktor {neben_factor:.2f}): {neben_price:.2f} CHF")
-                print(f"   Normalsaison ({normalsaison_monat} | Faktor {normal_factor:.2f}): {normal_price:.2f} CHF\n")
+                print(f"   Hochsaison (Faktor {hoch_factor:.2f}): Preis {hoch_price:.2f} CHF")
+                print(f"   Nebensaison (Faktor {neben_factor:.2f}): Preis {neben_price:.2f} CHF")
+                print(f"   Normalsaison (Faktor {normal_factor:.2f}): Preis {normal_price:.2f} CHF\n")
 
     except Exception as e:
         print(f"Fehler: {e}")
