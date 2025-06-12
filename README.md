@@ -52,7 +52,7 @@ Alle Tasks wurden im GitHub-Project Board geplant und verwaltet.
 
 ####  Erweiterte User Stories (mit DB-Schemaänderung)
 - .... ?? Hotelbewertungen abgeben & lesen (`Reviews`-Tabelle)
-- Buchungshistorie für Gäste
+- ...?? Irgendwas mit Invoice
 
 ####  User Story mit Datenvisualisierung
 - ....?? **Auslastung pro Zimmertyp** mittels Deepnote Charts  
@@ -63,11 +63,11 @@ Zu Beginn des Projekts haben wir uns intensiv mit den Grundlagen der Python-Prog
 
 Basierend auf diesem Klassendiagramm wurden die Model-Klassen zuerst in Deepnote erstellt. Anschliessend haben wir in der gleichen Umgebung auch den Data Access Layer (DAL) sowie den Business Logic Manager implementiert. Erste einfache User Stories wie „Hotel hinzufügen“ oder „Zimmer anzeigen“ wurden direkt in Deepnote getestet, um die Interaktion zwischen den Schichten zu verifizieren.
 
-Als nächster Schritt wurde die gesamte Struktur in PyCharm nachgebildet, um komplexere Imports und Dateiabhängigkeiten korrekt abzubilden. In PyCharm testeten wir nacheinander alle User Stories und passten die Business-Logik sowie Datenbankabfragen entsprechend an. Sobald diese erfolgreich funktionierten, wurden sie wieder zurück in Deepnote-Notebooks übertragen und dort mit erklärendem Text dokumentiert.
+Als nächster Schritt wurde die gesamte Struktur in PyCharm nachgebildet, um komplexere Imports und Dateiabhängigkeiten korrekt abzubilden. In PyCharm testeten wir nacheinander alle User Stories und passten die Business-Logik sowie Datenbankabfragen entsprechend an. Sobald diese erfolgreich funktionierten, wurden sie wieder zurück in Deepnote-Notebooks übertragen und dort mit erklärendem Text dokumentiert. Nachdem wir die minimalen User Storys abgebildet haben, haben wir zwei zusätzliche User Storys gewählt (???), die eine Datenbank Schemaänderung erfordern. Dabei haben wir für die Hotelbewertungen die Review Tabelle in @Silian ??? hinzugefügt und bei Invoice ???
 
 Im Verlauf des Projekts mussten einzelne User Stories sowie Klassen und Layers nochmals angepasst werden, da sich durch Anforderungen oder neue Erkenntnisse Änderungen am Datenbankschema ergaben. Diese Änderungen wurden iterativ vorgenommen.
 
-Zum Abschluss haben wir Visualisierungen mit dem "Charts"-Block in Deepnote erstellt, z. B. um die durchschnittliche Auslastung von Hotels oder Preistrends pro Saison darzustellen. Die entsprechenden Daten wurden zuvor mit SQL-Abfragen ausgelesen, in einem Pandas DataFrame gespeichert und dann grafisch aufbereitet.
+Zum Abschluss haben wir ??? @michele Visualisierungen mit dem "Charts"-Block in Deepnote erstellt, z. B. um die durchschnittliche Auslastung von Hotels oder Preistrends pro Saison darzustellen. Die entsprechenden Daten wurden zuvor mit SQL-Abfragen ausgelesen, in einem Pandas DataFrame gespeichert und dann grafisch aufbereitet.
 
 ---
 
@@ -89,9 +89,11 @@ Zum Abschluss haben wir Visualisierungen mit dem "Charts"-Block in Deepnote erst
 ##  4. Projektmanagement mit GitHub Board
 
 Das Project Board enthielt:
-- **User Story-Tickets** mit Beschreibung und Subtasks
+- **User Story-Tickets** mit den geplanten Aufträgen
 - Zuweisung an Gruppenmitglieder
 - Statusspalten: `To Do → In Progress → Done`
+
+Jewils am anfang der individuellen Coaching-Session nach der Vorlesung, haben wir unseren individuellen Fortschritt besprochen und zusammen an den Themen weitergearbeitet. Jeweils am Schluss haben wir die restlichen Aufträge für die nächste Woche definiert und aufgeteilt. Das Projektboard war eine hilfreiche Ergänzung für unsere Struktur, um die Aufträge und Fortschritt im Blick zu behalten. 
 
 ---
 
@@ -112,6 +114,7 @@ Was wir erreicht haben
 -  Iteratives Arbeiten mit Feedback-Schleifen steigert die Qualität und Teamproduktivität
 -  Klare Kommunikation im Team über MS Teams und das Project Board war hilfreich
 - Es hat geholfen die Aufgaben zusammen zu besprechen, in den Coaching Sessions zusammen weiterzuarbeiten und danach die restlichen Aufgaben aufzuteilen. Ausserdem war es gut, dass wir stets vor Ort waren. Das hat die Koordination und Zusammenarbeit vereinfacht.
+- Als letztes haben wir gelernt, dass die Fehlersuche und Behebung viel Zeit in Anspruch nimmt aber dazugehört. Fehler gehören beim Programmieren zum Alltag, wichtig ist es Geduld zu haben und Lösungen zu finden. 
 
   
 ## Reflexion
@@ -126,6 +129,8 @@ Im Verlauf des Projekts haben wir:
 Das Projekt war ein wertvoller Schritt in Richtung praxisnaher Softwareentwicklung mit Python und hat uns gezeigt, wie wichtig Struktur, Planung und saubere Zusammenarbeit sind.
 
 ---
+## 5. Anmerkungen
+
 ## Einsatz von unterstützenden Tools
 
 Während der Entwicklung haben wir ChatGPT punktuell zur Unterstützung verwendet, für:
@@ -134,7 +139,7 @@ Während der Entwicklung haben wir ChatGPT punktuell zur Unterstützung verwende
 - Beim Debugging und zur Überprüfung von typischen Fehlerquellen in DAL- oder Manager-Klassen
 - Für Anregungen zur Kürzung oder Strukturierung von Funktionen
 
- Chatgpt wurde nicht als Ersatz für eigene Arbeit, sondern als Ergänzung genutzt 
+ Chatgpt wurde nicht als Ersatz für die eigene Arbeit, sondern als Ergänzung genutzt 
 
 ## Projektlinks
 Deepnote-Projekt
