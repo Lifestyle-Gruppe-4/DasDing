@@ -36,7 +36,7 @@ def user_story_4():
             print("Das Check-in Datum darf nicht in der Vergangenheit liegen!")
             return
 
-        if check_out > date.today():
+        if check_out <= date.today():
             print("Das Check-out Datum muss nach dem Check-in Datum liegen!")
             return
 
