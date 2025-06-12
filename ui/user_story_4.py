@@ -28,7 +28,7 @@ hotel_manager = HotelManager(hotel_dal)
 
 def user_story_4():
     try:
-        city = input("Stadt: ").strip()
+        city = input("In welcher Stadt möchten Sie Ihren Aufenthalt buchen? ").strip()
         check_in = datetime.strptime(input("Check_in (YYYY-MM-DD)"), "%Y-%m-%d").date()
         check_out = datetime.strptime(input("check_out (YYYY-MM-DD"), "%Y-%m-%d").date()
 
