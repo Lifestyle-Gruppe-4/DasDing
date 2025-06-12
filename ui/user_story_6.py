@@ -29,7 +29,7 @@ hotel_manager = HotelManager(hotel_dal)
 def user_story_6():
     """Buchung stornieren"""
     try:
-        bid = int(input("Buschung ID: "))
+        bid = int(input("Buchung ID: "))
         booking = booking_dal.get_booking_by_id(bid)
         if not booking:
             print("Buchung nicht gefunden!")
