@@ -26,7 +26,7 @@ class RoomTypeManager:
             raise ValueError("Description is required")
 
         new_room_type = RoomType(
-            room_type_id=0,  # ID wird von der DB generiert
+            room_type_id=None,  # ID wird von der DB generiert
             description=description,
             max_guests=max_guests
         )

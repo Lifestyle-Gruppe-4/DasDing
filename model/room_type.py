@@ -1,7 +1,7 @@
 class RoomType:
     def __init__(self, room_type_id: int, description: str, max_guests: int):
-        if not room_type_id:
-            raise ValueError("RoomType ID is required")
+        if room_type_id is not None and room_type_id <= 0:
+            raise ValueError("RoomType ID must be positive or None")
         if not description:
             raise ValueError("Description is required")
         if max_guests <= 0:
