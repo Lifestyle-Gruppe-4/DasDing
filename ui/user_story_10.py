@@ -32,91 +32,115 @@ db_path = "../database/hotel_sample.db"
 facility_dal   = FacilityDataAccess(db_path)
 room_type_dal  = RoomTypeDataAccess(db_path)
 
-# --- Initialisierung der Manager ---
+# --- Initialisierung der DAL & Manager ---
 facility_manager   = FacilityManager(facility_dal)
 room_type_manager  = RoomTypeManager(room_type_dal)
 
 from business_logic.room_type_manager import RoomTypeManager
 from data_access.room_type_data_access import RoomTypeDataAccess
+from business_logic.room_type_manager import RoomTypeManager
+from business_logic.room_manager import RoomManager
+from data_access.room_type_data_access import RoomTypeDataAccess
+from data_access.room_data_access import RoomDataAccess
 
-# Initialisierung DAL & Manager
 db_path = "../database/hotel_sample.db"
-room_type_dal = RoomTypeDataAccess(db_path)
-room_type_manager = RoomTypeManager(room_type_dal)
+room_type_manager = RoomTypeManager(RoomTypeDataAccess(db_path))
+room_manager = RoomManager(RoomDataAccess(db_path))
 
 def user_story_10():
-    """User Story 10: Admin verwaltet Zimmertypen (Room Types)"""
+    """User Story 10: Stammdaten verwalten (Zimmertypen & Preise)"""
     while True:
         print("""
-        === STAMMDATEN: ZIMMERTYPEN VERWALTEN ===
-        1. Alle Zimmertypen anzeigen
+        === STAMMDATEN VERWALTEN (Admin) ===
+        1. Zimmertypen anzeigen
         2. Neuen Zimmertyp anlegen
-        3. Bestehenden Zimmertyp bearbeiten
+        3. Zimmertyp bearbeiten
         4. Zimmertyp löschen
+        -------------------------------------
+        5. Zimmerpreise anzeigen
+        6. Zimmerpreis bearbeiten
+        -------------------------------------
         0. Zurück
         """)
         choice = input("Wähle eine Option: ").strip()
 
         if choice == "0":
-            print("Zurück zum Hauptmenü...")
+            print("Zurück zum Hauptmenü.")
             break
 
         elif choice == "1":
-            room_types = room_type_manager.get_all_room_types()
-            if not room_types:
+            types = room_type_manager.get_all_room_types()
+            if not types:
                 print("Keine Zimmertypen gefunden.")
-            else:
-                for rt in room_types:
-                    print(f"ID: {rt.room_type_id}, Beschreibung: {rt.description}, Max. Gäste: {rt.max_guests}")
+            for rt in types:
+                print(f"ID: {rt.room_type_id} | Beschreibung: {rt.description} | Max Gäste: {rt.max_guests}")
 
         elif choice == "2":
             try:
-                description = input("Beschreibung des neuen Zimmertyps: ").strip()
-                max_guests = int(input("Maximale Gästeanzahl: "))
-                new_id = room_type_manager.create_room_type(description, max_guests)
-                print(f"Zimmertyp wurde erfolgreich angelegt. Neue ID: {new_id}")
+                desc = input("Beschreibung des Zimmertyps: ").strip()
+                max_guests = int(input("Max. Gästeanzahl: "))
+                new_id = room_type_manager.create_room_type(desc, max_guests)
+                print(f"Zimmertyp erstellt mit ID: {new_id}")
             except Exception as e:
-                print(f"Fehler beim Anlegen: {e}")
+                print(f"Fehler: {e}")
 
         elif choice == "3":
             try:
-                rt_id = int(input("ID des Zimmertyps, der bearbeitet werden soll: "))
+                rt_id = int(input("ID des zu bearbeitenden Zimmertyps: "))
                 existing = room_type_manager.get_room_type_by_id(rt_id)
                 if not existing:
-                    print("Zimmertyp mit dieser ID wurde nicht gefunden.")
+                    print("Zimmertyp nicht gefunden.")
                     continue
-                print(f"Aktuelle Beschreibung: {existing.description}, Max Gäste: {existing.max_guests}")
-                new_description = input("Neue Beschreibung (Enter = unverändert): ").strip()
-                new_max_guests = input("Neue max. Gästeanzahl (Enter = unverändert): ").strip()
+                new_desc = input(f"Neue Beschreibung [{existing.description}]: ").strip()
+                new_guests = input(f"Neue max. Gäste [{existing.max_guests}]: ").strip()
 
-                final_description = new_description if new_description else existing.description
-                final_max_guests = int(new_max_guests) if new_max_guests else existing.max_guests
+                updated_desc = new_desc if new_desc else existing.description
+                updated_guests = int(new_guests) if new_guests else existing.max_guests
 
-                success = room_type_manager.update_room_type(rt_id, final_description, final_max_guests)
-                if success:
-                    print("Zimmertyp wurde erfolgreich aktualisiert.")
+                if room_type_manager.update_room_type(rt_id, updated_desc, updated_guests):
+                    print("Zimmertyp erfolgreich aktualisiert.")
                 else:
                     print("Aktualisierung fehlgeschlagen.")
             except Exception as e:
-                print(f"Fehler beim Aktualisieren: {e}")
+                print(f"Fehler: {e}")
 
         elif choice == "4":
             try:
-                rt_id = int(input("ID des Zimmertyps, der gelöscht werden soll: "))
-                confirmed = input("Bist du sicher? (j/n): ").lower()
-                if confirmed != 'j':
-                    print("Löschen abgebrochen.")
+                rt_id = int(input("ID zum Löschen: "))
+                confirm = input("Sicher? (j/n): ").lower()
+                if confirm != 'j':
                     continue
-                success = room_type_manager.delete_room_type(rt_id)
-                if success:
-                    print("Zimmertyp erfolgreich gelöscht.")
+                if room_type_manager.delete_room_type(rt_id):
+                    print("Zimmertyp gelöscht.")
                 else:
                     print("Löschen fehlgeschlagen.")
             except Exception as e:
-                print(f"Fehler beim Löschen: {e}")
+                print(f"Fehler: {e}")
+
+        elif choice == "5":
+            rooms = room_manager.get_all_rooms()
+            if not rooms:
+                print("Keine Zimmer gefunden.")
+            for r in rooms:
+                print(f"Zimmer-ID: {r.room_id} | Nummer: {r.room_number} | Preis: {r.price_per_night:.2f} CHF | Hotel: {r.hotel.name}")
+
+        elif choice == "6":
+            try:
+                room_id = int(input("Zimmer-ID für Preisänderung: "))
+                room = room_manager.get_room_by_id(room_id)
+                if not room:
+                    print("Zimmer nicht gefunden.")
+                    continue
+                print(f"Aktueller Preis: {room.price_per_night:.2f} CHF")
+                new_price = float(input("Neuer Preis pro Nacht: "))
+                room._Room__price_per_night = new_price  # Direktzugriff wegen fehlendem Setter
+                print(f"Neuer Preis gesetzt: {new_price:.2f} CHF (⚠️ Achtung: Änderung ist nur im Objekt, nicht in DB!)")
+                # TODO: Speichern in DB → update_room() in RoomDataAccess nötig
+            except Exception as e:
+                print(f"Fehler: {e}")
 
         else:
-            print("Ungültige Eingabe. Bitte erneut versuchen.")
+            print("Ungültige Auswahl.")
 
 if __name__ == "__main__":
     user_story_10()
