@@ -59,15 +59,15 @@ def user_story_7():
           #  print(f" Standardpreis pro Nacht: {room.price_per_night:.2f} CHF")
           #  print(f" Saisonpreis pro Nacht: (Faktor {factor:.2f}): {season_price:.2f} CHF")
           #  print(f" Gesamtpreis: {total:.2f} CHF\n")
-            hoch_price, hoch_factor = room_manager.calculate_seasonal_price(base_price, hochsaison_date)
-            neben_price, neben_factor = room_manager.calculate_seasonal_price(base_price, nebensaison_date)
-            normal_price, normal_factor = room_manager.calculate_seasonal_price(base_price, normalsaison_date)
+                hoch_price, hoch_factor = room_manager.calculate_seasonal_price(base_price, hochsaison_date)
+                neben_price, neben_factor = room_manager.calculate_seasonal_price(base_price, nebensaison_date)
+                normal_price, normal_factor = room_manager.calculate_seasonal_price(base_price, normalsaison_date)
 
-            print(f" Zimmer {room.room_number}")
-            print(f"   Basispreis: {base_price:.2f} CHF")
-            print(f"   Hochsaison ({hochsaison_date} | Faktor {hoch_factor:.2f}): {hoch_price:.2f} CHF")
-            print(f"   Nebensaison ({nebensaison_date} | Faktor {neben_factor:.2f}): {neben_price:.2f} CHF")
-            print(f"   Normalsaison ({normalsaison_date} | Faktor {normal_factor:.2f}): {normal_price:.2f} CHF\n")
+                print(f" Zimmer {room.room_number}")
+                print(f"   Basispreis: {base_price:.2f} CHF")
+                print(f"   Hochsaison ({hochsaison_date} | Faktor {hoch_factor:.2f}): {hoch_price:.2f} CHF")
+                print(f"   Nebensaison ({nebensaison_date} | Faktor {neben_factor:.2f}): {neben_price:.2f} CHF")
+                print(f"   Normalsaison ({normalsaison_date} | Faktor {normal_factor:.2f}): {normal_price:.2f} CHF\n")
 
     except Exception as e:
         print(f"Fehler: {e}")
