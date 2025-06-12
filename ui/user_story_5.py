@@ -1,9 +1,9 @@
-from datetime import datetime, date
+from datetime import datetime
 
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
+from model import booking
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -27,6 +27,29 @@ room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
 ### User Story 5
+
+def user_stroy_menu():
+    while True:
+        print("\n --User Stories--")
+        print("1. Alle Rechnungen Anzeigen")
+        print("2. Rechnung Auslösen")
+        print("3. Rechnung löschen")
+        print("0. Exit")
+
+        choice = input("Wählen Sie eine Option: ")
+
+        if choice == "0":
+            print("Auf Wiedersehen")
+            break
+        elif choice == "1":
+            alle_rechnungen()
+        elif choice == "2":
+            rechnung_erstellen_nach_aufenthalt()
+        elif choice == "3":
+            rechnungen_entfernen()
+        else:
+            print("Ungültige Eingabe. Bitte geben Sie eine Zahl von 1 bis 4 ein.")
+
 def rechnung_erstellen_nach_aufenthalt():
     try:
         # Alle Buchungen holen aus BookingManager
@@ -43,7 +66,15 @@ def rechnung_erstellen_nach_aufenthalt():
         for i, b in enumerate(past_bookings):
             print(f"{i + 1}. {BookingManager.get_booking_details(b)}")
 
-        user_choice = int(input("Für welche Buchung soll eine Rechnung erstellt werden? (Nummer eingeben): "))
+        try:
+            user_choice = int(input("Für welche Buchung soll eine Rechnung erstellt werden? (Nummer eingeben) - Abbrechen -> 0: "))
+        except ValueError:
+            print("Ungültige Eingabe")
+            return
+        if user_choice == 0:
+            print("Abbruch...")
+            return
+        # Prüfung ob es im Gültigen Bereich liegt
         if not (1 <= user_choice <= len(past_bookings)):
             print("Ungültige Auswahl.")
             return
@@ -60,22 +91,53 @@ def rechnung_erstellen_nach_aufenthalt():
         invoice = invoice_manager.get_invoice_by_id(invoice_id)
         print(f" Es wurde folgende Rechnung erstellt:\n"
               f"{invoice}")
-
-
     except ValueError:
         print("Ungültige Eingabe.")
     except Exception as e:
         print(f"Fehler: {e}")
 
-rechnung_erstellen_nach_aufenthalt()
-
 def alle_rechnungen():
     invoices = invoice_manager.get_all_invoices()
     for invoice in invoices:
         print(invoice)
-#alle_rechnungen()
 
-def rechnungen_löschen():
-    invoices_id = int(input("ID: "))
-    invoice_manager.delete_invoice(invoices_id)
-#rechnungen_löschen()
+def rechnungen_entfernen():
+    while True:
+        user_input = input("Rechnungs-ID zum Löschen eingeben (oder '0' zum Abbrechen): ").strip()
+        if user_input.lower() in ('q', 'quit', 'abbrechen', 'exit'):
+            print("Vorgang abgebrochen.")
+            return
+
+        # Eingabe validieren
+        try:
+            invoices_id = int(user_input)
+        except ValueError:
+            print("Ungültige Eingabe: Bitte eine Zahl eingeben.")
+            continue
+
+        # Existenz prüfen
+        invoice = invoice_manager.get_invoice_by_id(invoices_id)
+        if invoice is None:
+            print(f"Keine Rechnung mit der ID {invoices_id} gefunden.")
+            continue
+
+        # Vor dem Löschen anzeigen und bestätigen
+        print("\nGefundene Rechnung:")
+        print(invoice)  # nutzt __repr__
+        confirm = input(f"Wirklich löschen? (j=Ja / n=Nein): ").strip().lower()
+        if confirm not in ('j', 'ja'):
+            print("Löschung abgebrochen.")
+            return
+
+        # Löschen und Ergebnis melden
+        try:
+            deleted = invoice_manager.delete_invoice(invoices_id)
+            if deleted is False or (isinstance(deleted, int) and deleted == 0):
+                print(f"Rechnung mit ID {invoices_id} konnte nicht gelöscht werden (nicht gefunden).")
+            else:
+                print(f"Rechnung mit ID {invoices_id} wurde erfolgreich gelöscht.")
+        except Exception as e:
+            print(f"Fehler beim Löschen der Rechnung: {e}")
+        return
+
+user_stroy_menu()

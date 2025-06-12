@@ -3,17 +3,13 @@ from datetime import timedelta
 from model.booking import Booking
 
 class Invoice:
-    invoice_counter = 1 # Automatische vergebene Rechnungs-ID (nur Interne Verwendung)
-
-    def __init__(self, total_amount: float, booking: Booking):
+    def __init__(self,invoice_id:int,booking:Booking, total_amount: float, issue_date:datetime,is_paid: bool):
         # Automatisch vergebene Rechnungs-ID
-        self.__invoice_id = Invoice.invoice_counter
-        Invoice.invoice_counter += 1
-
+        self.__invoice_id = invoice_id
+        self.__booking = booking  # Zugehörige Buchung
         self.__total_amount =  total_amount # Rechnungsbetrag
-        self.__issue_date = datetime.today() # Datum der Rechnungserstellung
-        self.__is_paid = False # Bezahlstatus
-        self.__booking = booking # Zugehörige Buchung
+        self.__issue_date = issue_date# Datum der Rechnungserstellung
+        self.__is_paid = is_paid # Bezahlstatus
 
     # Getter/Setter für Eigenschaften (mit Validierungen)
     @property
@@ -55,7 +51,7 @@ class Invoice:
         return (f"<Invoice #{self.invoice_id} | "
                 f"Booking ID: {self.booking.booking_id} | "
                 f"Amount: {self.total_amount:.2f} CHF | "
-                f"Date: {self.issue_date.date()} | "
+                f"Date: {self.issue_date} | "
                 f"Status: {status}>")
 
 
