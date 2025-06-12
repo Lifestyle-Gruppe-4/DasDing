@@ -73,7 +73,7 @@ def alle_rechnungen():
     invoices = invoice_manager.get_all_invoices()
     for invoice in invoices:
         print(invoice)
-alle_rechnungen()
+#alle_rechnungen()
 
 def rechnungen_löschen():
     invoices_id = int(input("ID: "))
