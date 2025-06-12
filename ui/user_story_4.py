@@ -65,9 +65,49 @@ def user_story_4():
             return
 
         hotel, room = results[selection - 1]
-        guest_id = int(input("Gäste-ID: "))
+
+        while True:
+            print("0 = Exit | 1 = Bestehende Kunde | 2 = Neue Kunde")
+            option = input("Wähle eine Option: ").strip()
+
+            if option == "0":
+                print("Abgebrochen.")
+                return
+
+            elif option == "1":
+                first_name = input("Vorname des Kunden: ").strip()
+                last_name = input("Nachname des Kunden: ").strip()
+                guest = next((g for g in guest_manager.get_all_guests()
+                              if g.first_name.lower() == first_name.lower()
+                              and g.last_name.lower() == last_name.lower()), None)
+
+                if not guest:
+                    print("Kunde nicht gefunden.")
+                    continue
+                guest_id = guest.guest_id
+                break
+
+            elif option == "2":
+                print("\n-- Neuer Kunde --")
+                first_name = input("Vorname: ").strip()
+                last_name = input("Nachname: ").strip()
+                email = input("Email: ").strip()
+                street = input("Street: ").strip()
+                guest_city = input("City: ").strip()
+                guest_zip = input("Zip: ").strip()
+
+                address = Address(address_id=None, street=street, city=guest_city, zip_code=guest_zip)
+                created_address = address_manager.create_address(address)
+                new_guest = Guest(None, first_name, last_name, email, created_address)
+                guest_id = guest_manager.add_guest(new_guest)
+                break
+
+            else:
+                print("Ungültige Auswahl.")
+
         booking_id = booking_manager.create_booking(check_in, check_out, guest_id, room.room_id, room.price_per_night)
         print(f"Buchung abgeschlossen. Buchung-ID: {booking_id}")
+
     except Exception as e:
         print(f"Fehler: {e}")
 
