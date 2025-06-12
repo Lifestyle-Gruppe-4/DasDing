@@ -48,3 +48,4 @@ def user_story_6():
     except Exception as e:
         print(f"Fehler: {e}")
 
+user_story_6()
