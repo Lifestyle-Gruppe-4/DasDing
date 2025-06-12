@@ -38,7 +38,7 @@ def user_stroy_menu():
         print("6. Wünsche kombinieren")
         print("0. Exit")
 
-        choice = input("Wählen Sie eine Option")
+        choice = input("Wählen Sie eine Option: ")
 
         if choice == "0":
             print("Auf Wiedersehen")
@@ -116,11 +116,13 @@ def suche_hotel_stadt_gast():
 def hotel_suche_nach_zeitraum():
     city = input("Stadt: ").strip()
     try:
-        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date() # Wandelt Eingabe in Datum um
         check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        # prüft ob Datum in der Vergangenheit liegt
         if check_in < date.today():
             print("Das Check-in Datum darf nicht in der Vergangenheit liegen")
             return
+        # Prüft das Datumangabe korrekt ist (checkin vor checkout)
         if check_out <= check_in:
             print("Das Check-out Datum muss nach dem Check-in Datum liegen")
             return
@@ -139,18 +141,20 @@ def hotel_suche_nach_zeitraum():
 def wunsch_kombi():
     city = input("Stadt: ").strip()
     try:
-        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        check_in = datetime.strptime(input("Check-in (YYYY-MM-DD): "), "%Y-%m-%d").date() # Wandelt Eingabe in Datum um
         check_out = datetime.strptime(input("Check-out (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        # Prüft das Datum nicht in der Vergangenheit liegt
         if check_in < date.today():
             print("Das Check-in Datum darf nicht in der Vergangenheit liegen")
             return
+        # Prüft das Datumangabe korrekt ist (checkin vor checkout)
         if check_out <= check_in:
             print("Das Check-out Datum muss nach dem Check-in Datum liegen")
             return
     except ValueError:
-        print("Ungpltiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
+        print("Ungültiges Datum. Bitte das Format YYYY-MM-DD verwenden.")
         return
-
+    # Prüft die korrekte Eingabe von Gästen und Sterne und gibt allenfalls einen Fehler
     try:
         guests = int(input("Geben Sie die Anzahl Ihrer Gäste ein: "))
         stars = int(input("Geben Sie die Mindestanzahl der gewünschten Sterne ein: "))

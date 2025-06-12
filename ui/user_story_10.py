@@ -26,27 +26,6 @@ room_manager = RoomManager(room_dal)
 room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
-
-# --- Datenbankpfad und Initialisierung der DALs ---
-db_path = "../database/hotel_sample.db"
-facility_dal   = FacilityDataAccess(db_path)
-room_type_dal  = RoomTypeDataAccess(db_path)
-
-# --- Initialisierung der DAL & Manager ---
-facility_manager   = FacilityManager(facility_dal)
-room_type_manager  = RoomTypeManager(room_type_dal)
-
-from business_logic.room_type_manager import RoomTypeManager
-from data_access.room_type_data_access import RoomTypeDataAccess
-from business_logic.room_type_manager import RoomTypeManager
-from business_logic.room_manager import RoomManager
-from data_access.room_type_data_access import RoomTypeDataAccess
-from data_access.room_data_access import RoomDataAccess
-
-db_path = "../database/hotel_sample.db"
-room_type_manager = RoomTypeManager(RoomTypeDataAccess(db_path))
-room_manager = RoomManager(RoomDataAccess(db_path))
-
 def user_story_10():
     """User Story 10: Stammdaten verwalten (Zimmertypen & Preise)"""
     while True:
