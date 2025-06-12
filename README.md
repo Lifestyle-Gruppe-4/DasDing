@@ -97,7 +97,7 @@ Jewils am anfang der individuellen Coaching-Session nach der Vorlesung, haben wi
 
 ---
 
-## Fazit & Lessons Learned
+## 5. Fazit & Lessons Learned
 
 Was wir erreicht haben
 
@@ -129,7 +129,7 @@ Im Verlauf des Projekts haben wir:
 Das Projekt war ein wertvoller Schritt in Richtung praxisnaher Softwareentwicklung mit Python und hat uns gezeigt, wie wichtig Struktur, Planung und saubere Zusammenarbeit sind.
 
 ---
-## 5. Anmerkungen
+## 6. Anmerkungen
 
 ## Einsatz von unterstützenden Tools
 
