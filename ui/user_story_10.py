@@ -27,7 +27,7 @@ room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
 def user_story_10():
-    """User Story 10: Stammdaten verwalten (Zimmertypen & Preise)"""
+    """User Story 10: Stammdaten verwalten (Zimmertypen, Preise, Einrichtungen)"""
     while True:
         print("""
         === STAMMDATEN VERWALTEN (Admin) ===
@@ -39,14 +39,21 @@ def user_story_10():
         5. Zimmerpreise anzeigen
         6. Zimmerpreis bearbeiten
         -------------------------------------
+        7. Einrichtungen anzeigen
+        8. Neue Einrichtung anlegen
+        9. Einrichtung bearbeiten
+        10. Einrichtung löschen
+        -------------------------------------
         0. Zurück
         """)
+
         choice = input("Wähle eine Option: ").strip()
 
         if choice == "0":
             print("Zurück zum Hauptmenü.")
             break
 
+        # --- Zimmertypen ---
         elif choice == "1":
             types = room_type_manager.get_all_room_types()
             if not types:
@@ -96,6 +103,7 @@ def user_story_10():
             except Exception as e:
                 print(f"Fehler: {e}")
 
+        # --- Zimmerpreise ---
         elif choice == "5":
             rooms = room_manager.get_all_rooms()
             if not rooms:
@@ -114,7 +122,47 @@ def user_story_10():
                 new_price = float(input("Neuer Preis pro Nacht: "))
                 room._Room__price_per_night = new_price  # Direktzugriff wegen fehlendem Setter
                 print(f"Neuer Preis gesetzt: {new_price:.2f} CHF (⚠️ Achtung: Änderung ist nur im Objekt, nicht in DB!)")
-                # TODO: Speichern in DB → update_room() in RoomDataAccess nötig
+                # TODO: Speichern in DB → update_room_price() in RoomDataAccess nötig
+            except Exception as e:
+                print(f"Fehler: {e}")
+
+        # --- Einrichtungen ---
+        elif choice == "7":
+            facilities = facility_manager.get_all_facilities()
+            if not facilities:
+                print("Keine Einrichtungen gefunden.")
+            else:
+                for fac in facilities:
+                    print(f"ID: {fac.facility_id} | Name: {fac.facility_name}")
+
+        elif choice == "8":
+            try:
+                name = input("Name der neuen Einrichtung: ").strip()
+                new_id = facility_manager.create_facility(name)
+                print(f"Einrichtung erstellt mit ID: {new_id}")
+            except Exception as e:
+                print(f"Fehler beim Erstellen: {e}")
+
+        elif choice == "9":
+            try:
+                fac_id = int(input("ID der Einrichtung, die du bearbeiten willst: "))
+                new_name = input("Neuer Name: ").strip()
+                if facility_manager.update_facility(fac_id, new_name):
+                    print("Einrichtung erfolgreich aktualisiert.")
+                else:
+                    print("Aktualisierung fehlgeschlagen.")
+            except Exception as e:
+                print(f"Fehler: {e}")
+
+        elif choice == "10":
+            try:
+                fac_id = int(input("ID der zu löschenden Einrichtung: "))
+                confirm = input("Sicher? (j/n): ").lower()
+                if confirm == "j":
+                    if facility_manager.delete_facility(fac_id):
+                        print("Einrichtung gelöscht.")
+                    else:
+                        print("Löschen fehlgeschlagen.")
             except Exception as e:
                 print(f"Fehler: {e}")
 

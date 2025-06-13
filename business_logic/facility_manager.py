@@ -25,6 +25,12 @@ class FacilityManager:
     def add_facility(self, facility: Facility) -> Facility:
         return self.facility_dal.create_facility(facility)
 
+    def create_facility(self, name: str) -> int:
+        if not name or not name.strip():
+            raise ValueError("Einrichtungsname darf nicht leer sein.")
+        facility = Facility(facility_id=None, facility_name=name.strip())
+        return self.facility_dal.create_facility(facility)
+
     def update_facility(self, facility: Facility) -> Facility:
         return self.facility_dal.update_facility(facility)
 
