@@ -49,6 +49,21 @@ class RoomTypeDataAccess(BaseDataAccess):
         _, rows_affected = self.execute(sql, (room_type_id,))
         return rows_affected > 0
 
+    def read_room_type_by_id(self, type_id: int) -> RoomType:
+        sql = """
+              SELECT room_type_id, description, max_guests
+              FROM RoomType
+              WHERE room_type_id = ? \
+              """
+        row = self.fetchone(sql, (type_id,))
+        if row:
+            return RoomType(
+                room_type_id=row[0],
+                description=row[1],
+                max_guests=row[2]
+            )
+        return None
+
 
 if __name__ == "__main__":
     # Beispiel für einen Schnelltest

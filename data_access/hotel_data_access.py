@@ -1,4 +1,5 @@
-from data_access import RoomTypeDataAccess, FacilityDataAccess
+from data_access.room_type_data_access import RoomTypeDataAccess
+from data_access.facility_data_access import FacilityDataAccess
 from data_access.room_data_access import RoomDataAccess
 from model.hotel import Hotel
 from data_access.base_data_access import BaseDataAccess
@@ -10,6 +11,7 @@ from model.room import Room
 class HotelDataAccess(BaseDataAccess):
     def __init__(self, db_path:str=None, room_dal: RoomDataAccess = None):
         super().__init__(db_path)
+        self.db_path = db_path
         self.room_dal = room_dal
 
     def read_all_hotels(self) -> list[Hotel]:
@@ -92,7 +94,7 @@ class HotelDataAccess(BaseDataAccess):
         row = rows[0]
 
         room_type_dal = RoomTypeDataAccess(self.db_path)
-        room_type = room_type_dal.read_all_room_types(row[2])
+        room_type = room_type_dal.read_room_type_by_id(row[2])
 
         fac_dal = FacilityDataAccess(self.db_path)
         facilities = fac_dal.read_facilities_by_room_id(row[0])
