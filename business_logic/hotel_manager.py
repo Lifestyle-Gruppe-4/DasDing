@@ -106,17 +106,16 @@ class HotelManager:
                 available.append(room)
         return available
 
-    def add_room_to_hotel(self,
-                          hotel_id: int,
-                          room_type_id: int,
-                          price: float) -> Room:
-
+    def add_room_to_hotel(self,hotel_id: int,room_number:str, type_id: int, price_per_night: float) -> Room:
         # Zuerst prüfen, ob das Hotel existiert
         hotel = self.find_by_id(hotel_id)
         if not hotel:
             return None
 
         new_room_id = self.hotel_dal.create_room_for_hotel(
-            hotel_id, room_type_id, price
+            hotel_id,
+            room_number,
+            type_id,
+            price_per_night
         )
         return self.hotel_dal.read_room_by_id(new_room_id)

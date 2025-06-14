@@ -170,6 +170,11 @@ def user_story_3():
                 print("Hotel nicht gefunden.")
                 continue
 
+            room_number = input("Raumnummer eingeben: ").strip()
+            if not room_number:
+                print("Raumnummer darf nicht leer sein.")
+                continue
+
         # Zimmertypen abfragen
             room_types = room_type_manager.get_all_room_types()
             print("\nVerfügbare Zimmertypen:")
@@ -184,12 +189,9 @@ def user_story_3():
                 continue
 
         # Zimmer anlegen
-            new_room = hotel_manager.add_room_to_hotel(hid, rtid, price)
+            new_room = hotel_manager.add_room_to_hotel(hid, room_number, rtid, price)
             if new_room:
-                print(f"✅ Zimmer {new_room.room_id} zum Hotel '{hotel.name}' hinzugefügt.")
+                print(f"Zimmer {new_room.room_id} ({new_room.room_number}) zum Hotel '{hotel.name}' hinzugefügt.")
             else:
                 print("Fehler beim Anlegen des Zimmers.")
-
-    else:
-        print("Ungültige Auswahl.")
 user_story_3()

@@ -1,3 +1,4 @@
+from data_access import RoomTypeDataAccess, FacilityDataAccess
 from data_access.room_data_access import RoomDataAccess
 from model.hotel import Hotel
 from data_access.base_data_access import BaseDataAccess
@@ -68,33 +69,57 @@ class HotelDataAccess(BaseDataAccess):
         _, rows_affected = self.execute(sql, params)
         return rows_affected > 0
 
-    def create_room_for_hotel(self, hotel_id: int, room_type_id: int, price: float) -> int:
-
+    def create_room_for_hotel(self,hotel_id:int,room_number:str,type_id:int, price_per_night:float) -> int:
         sql = """
-              INSERT INTO Room (hotel_id, room_type_id, price)
-              VALUES (?, ?, ?) \
+              INSERT INTO Room (hotel_id, room_number, type_id, price_per_night)
+              VALUES (?, ?, ?, ?)
               """
-        cursor = self.conn.cursor()
-        cursor.execute(sql, (hotel_id, room_type_id, price))
-        self.conn.commit()
-        return cursor.lastrowid
+        params = (hotel_id,room_number,type_id,price_per_night)
+        lastrowid, _ = self.execute(sql, params)
+        return lastrowid
 
     def read_room_by_id(self, room_id: int) -> Room:
+        sql = """
+        SELECT room_id, room_number, type_id, price_per_night
+        FROM Room 
+        WHERE room_id = ?
+        """
 
-        sql = "SELECT room_id, hotel_id, room_type_id, price FROM Room WHERE room_id = ?"
-        cursor = self.conn.cursor()
-        cursor.execute(sql, (room_id,))
-        row = cursor.fetchone()
-        if not row:
+        rows = self.fetchall(sql, (room_id,))
+        if not rows:
             return None
+
+        row = rows[0]
+
+        room_type_dal = RoomTypeDataAccess(self.db_path)
+        room_type = room_type_dal.read_all_room_types(row[2])
+
+        fac_dal = FacilityDataAccess(self.db_path)
+        facilities = fac_dal.read_facilities_by_room_id(row[0])
+
         return Room(
             room_id=row[0],
-            hotel_id=row[1],
-            room_type_id=row[2],
-            price=row[3],
-            bookings=[],  # falls du Bookings später nachladen willst
-            facilities=[]  # falls du Facilities später nachladen willst
+            room_number=row[1],
+            price_per_night=[3],
+            hotel=None,
+            room_type=room_type,
+            facilities=facilities,
         )
+
+        # sql = "SELECT room_id, hotel_id, room_type_id, price FROM Room WHERE room_id = ?"
+        # cursor = self.conn.cursor()
+        # cursor.execute(sql, (room_id,))
+        # row = cursor.fetchone()
+        # if not row:
+        #     return None
+        # return Room(
+        #     room_id=row[0],
+        #     hotel_id=row[1],
+        #     room_type_id=row[2],
+        #     price=row[3],
+        #     bookings=[],  # falls du Bookings später nachladen willst
+        #     facilities=[]  # falls du Facilities später nachladen willst
+        # )
 
 # if __name__ == "__main__":
 #    db_path = "../database/hotel_sample.db"

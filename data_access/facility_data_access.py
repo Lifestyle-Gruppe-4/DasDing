@@ -49,3 +49,24 @@ class FacilityDataAccess(BaseDataAccess):
         params = (facility_id,)
         _, rows_affected = self.execute(sql, params)
         return rows_affected > 0
+
+    def read_facilities_by_room_id(self, room_id: int) -> list[Facility]:
+        sql = """
+            SELECT f.facility_id,
+                   f.facility_name,
+                   f.description
+            FROM Facility AS f
+            JOIN Room_Facilities AS rf
+              ON f.facility_id = rf.facility_id
+            WHERE rf.room_id = ?
+        """
+        rows = self.fetchall(sql, (room_id,))
+        # Aus jeder Zeile ein Facility-Objekt bauen und zurückgeben
+        return [
+            Facility(
+                facility_id   = row[0],
+                facility_name = row[1],
+                description   = row[2]
+            )
+            for row in rows
+        ]
