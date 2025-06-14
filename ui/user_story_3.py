@@ -191,7 +191,10 @@ def user_story_3():
         # Zimmer anlegen
             new_room = hotel_manager.add_room_to_hotel(hid, room_number, rtid, price)
             if new_room:
-                print(f"Zimmer {new_room.room_id} ({new_room.room_number}) zum Hotel '{hotel.name}' hinzugefügt.")
+                print(f"\nDas Zimmer mit der ID: {new_room.room_id} wurde dem Hotel {hotel.name} hinzugefügt."
+                      f"\nZimmernummer: {new_room.room_number}"
+                      f"\nRaumtyp: {new_room.room_type.description}"
+                      f"\nEinrichtungen: --")
             else:
                 print("Fehler beim Anlegen des Zimmers.")
 user_story_3()

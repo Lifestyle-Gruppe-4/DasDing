@@ -1,9 +1,9 @@
-from datetime import datetime, date
+
 
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
+
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -26,29 +26,51 @@ room_manager = RoomManager(room_dal)
 room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
-from data_access.room_data_access import RoomDataAccess
 
-def user_story_9():
+def alle_zimmer_anzeigen():
+    # Liste aller Hotels anzeigen
+    hotels = hotel_manager.get_all_hotels()
+    if not hotels:
+        print("Keine Hotels vorhanden")
+        return
+    print("\nAlle Hotels")
+    for idx, hotel in enumerate(hotels, start=1):
+        print(f"{idx}. Name: {hotel.name}, Adresse: {hotel.address.street}, {hotel.address.city}")
+
+    # Hotel Auswahl für Zimmer
     try:
-        # Zimmer aus der Datenbank laden
-        rooms = room_dal.read_all_rooms()
+        choice = int(input("\nWählen Sie eine Hotel-Nummer für welches Sie die Zimmer sehen möchten: "))
+    except ValueError:
+        print("Ungültige Eingabe")
+        return
 
-        if not rooms:
-            print("Keine Zimmer gefunden.")
-            return
+    #Gewähltes Hotel ermitteln
+    try:
+        selected_hotel = hotels[choice-1]
+    except IndexError:
+        print("Kein Hotel mit dieser ID gefunden.")
+        return
 
-        print("\nZimmerliste mit Ausstattung:")
+    #Zimmer laden
+    rooms = selected_hotel.rooms
+
+    #Ausgabe
+    if not rooms:
+        print(f"Kein Zimmer für Hotel '{selected_hotel.name}' gefunden.")
+    else:
+        print(f"\nAlle Zimmer in Hotel '{selected_hotel.name}':")
         for room in rooms:
-            hotel_name    = room.hotel.name
-            room_number   = room.room_number
-            amenity_names = [f.facility_name for f in room.facilities] or []
-            amenities_str = ", ".join(amenity_names) if amenity_names else "Keine Ausstattung vorhanden"
-            print(f"{hotel_name} – Zimmer {room_number}: {amenities_str}")
+            # Zieht aus dem Facility-Objekt nur den Namen
+            if room.facilities:
+                facility_names = ", ".join(f.facility_name for f in room.facilities)
+            else:
+                facility_names = "Keine Ausstattungen"
 
-    except Exception as e:
-        print(f"Fehler: {e}")
+            print(f"Zimmernummer: {room.room_number}\n"
+                  f"Typ: {room.room_type.description}\n"
+                  f"Ausstattung: {facility_names}\n"
+                  f"Preis/Nacht: {room.price_per_night:.2f} CHF\n")
 
-if __name__ == "__main__":
-    user_story_9()
+alle_zimmer_anzeigen()
 
 
