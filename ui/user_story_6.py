@@ -1,9 +1,6 @@
-from datetime import datetime, date
-
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -29,37 +26,71 @@ hotel_manager = HotelManager(hotel_dal)
 def user_story_6():
     """Buchung stornieren"""
     try:
-        bid = int(input("Geben Sie ihre Buchungs-ID ein: "))
+        # Übersicht aller Gäste, um User Story durchführen zu können
+        print("\nVerfügbare Gäste:")
+        for g in guest_manager.get_all_guests():
+            print(f" {g.guest_id}. {g.first_name} {g.last_name}")
+
+        first_name = input("Vorname des Gastes: ").strip()
+        last_name = input("Nachname des Gastes: ").strip()
+
+        bookings = booking_manager.get_bookings_by_guest(first_name,last_name)
+        if not bookings:
+            print("Keine Buchung zu diesem Namen gefunden.")
+            return
+
+        print("\nIhre Buchungen: ")
+        for b in bookings:
+            print(booking_manager.get_booking_details(b))
+
+        try:
+            bid = int(input("Geben Sie die Buchungs-ID ein, die Sie gerne stornieren möchten: "))
+        except ValueError:
+            print("Ungültig Eingabe.")
+            return
+
         booking = booking_dal.get_booking_by_id(bid)
         if not booking:
             print("Buchung nicht gefunden!")
             return
+
         #Prüfen, ob die Rechnung bereits storniert wurde
         if booking.is_cancelled:
             print("Buchung wurde bereits storniert.")
             return
 
-        guest = guest_manager.find_by_id(bid)
-        if guest:
-            print(f"\nDiese Buchung gehört zu: '{guest.first_name}, {guest.last_name}'")
-        else:
-            print("\nGastdaten konnten nicht gefunden werden!\n")
-
-        confirm = input("Soll diese Buchung storniert werden? 'j' für JA, 'beliebige Taste für NEIN. ")
-
+        confirm = input("\nSoll diese Buchung storniert werden? (j/n) ")
         if confirm != 'j':
             print("Abbruch. Auf wiedersehen.")
             return
 
         # Markiere die Buchung als storniert
         booking_manager.booking_dal.execute(
-            "Update Booking Set is_cancelled = 1 WHERE booking_id = ?", (bid,)
+            "Update Booking Set is_cancelled = 1 WHERE booking_id = ?", (bid,),
         )
+
         # Optionale Storno-Rechnungen erzeugen
         invoice_manager.create_invoice(bid, 0.0)
         print("Buchung storniert.")
     except Exception as e:
         print(f"Fehler: {e}")
 
-user_story_6()
+def user_story_6_menu():
+    while True:
+        print("\nGuten Tag - Sie möchten gerne ihre Buchung stornieren? \nBitte beachten Sie die folgende Überischt:")
+        print("\n-- Optionen --")
+        print("0 = Exit")
+        print("1 = Buchung stornieren")
+
+        choice = input("Wählen Sie eine Option (0/1): ").strip()
+
+        if choice == "0":
+            print("Auf Wiedersehen")
+            break
+        elif choice == "1":
+            user_story_6()
+        else:
+            print("Ungültige Eingabe.")
+
+user_story_6_menu()
 
