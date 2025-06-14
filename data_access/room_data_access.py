@@ -143,7 +143,7 @@ class RoomDataAccess(BaseDataAccess):
         ]
 
 if __name__ == "__main__":
-   db_path = "../database/hotel_sample_old.db"
+   db_path = "../database/hotel_sample.db"
    room_dal = RoomDataAccess(db_path)
    bookings = room_dal.read_bookings_for_room(1)
 
