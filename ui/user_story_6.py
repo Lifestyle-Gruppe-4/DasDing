@@ -29,7 +29,7 @@ hotel_manager = HotelManager(hotel_dal)
 def user_story_6():
     """Buchung stornieren"""
     try:
-        bid = int(input("Buchung ID: "))
+        bid = int(input("Geben Sie ihre Buchungs-ID ein: "))
         booking = booking_dal.get_booking_by_id(bid)
         if not booking:
             print("Buchung nicht gefunden!")
@@ -38,6 +38,19 @@ def user_story_6():
         if booking.is_cancelled:
             print("Buchung wurde bereits storniert.")
             return
+
+        guest = guest_manager.find_by_id(bid)
+        if guest:
+            print(f"\nDiese Buchung gehört zu: '{guest.first_name}, {guest.last_name}'")
+        else:
+            print("\nGastdaten konnten nicht gefunden werden!\n")
+
+        confirm = input("Soll diese Buchung storniert werden? 'j' für JA, 'beliebige Taste für NEIN. ")
+
+        if confirm != 'j':
+            print("Abbruch. Auf wiedersehen.")
+            return
+
         # Markiere die Buchung als storniert
         booking_manager.booking_dal.execute(
             "Update Booking Set is_cancelled = 1 WHERE booking_id = ?", (bid,)
@@ -49,3 +62,4 @@ def user_story_6():
         print(f"Fehler: {e}")
 
 user_story_6()
+
