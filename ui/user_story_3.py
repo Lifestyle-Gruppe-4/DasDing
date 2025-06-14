@@ -16,6 +16,7 @@ room_dal = RoomDataAccess(db_path)
 room_type_dal = RoomTypeDataAccess(db_path)
 hotel_dal = HotelDataAccess(db_path,room_dal)
 
+
 # Intialisierung der Manager
 address_manager = AddressManager(address_dal)
 booking_manager = BookingManager(booking_dal)
@@ -26,6 +27,7 @@ room_manager = RoomManager(room_dal)
 room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
+
 def user_story_3():
     while True:
         print("\n-- Hotelverwaltung (Admin) --")
@@ -33,13 +35,14 @@ def user_story_3():
         print("2. Hotel entfernen")
         print("3. Hotel aktualisieren")
         print("4. Alle Hotels anzeigen")
+        print("5. Zimmer zu Hotel hinzufügen")
         print("0. Zurück")
         choice = input("Wähle eine Option: ").strip()
 
         if choice == "0":
             break
 
-        # 3.1 Hotel hinzufügen
+        # Hotel hinzufügen
         elif choice == "1":
             print("\n--- Neues Hotel mit Adresse erstellen ---")
 
@@ -67,7 +70,7 @@ def user_story_3():
             print(f"\nHotel '{name}' wurde erfolgreich erstellt (ID: {hotel_id})")
 
 
-        # 3.2 Hotel entfernen
+        #Hotel entfernen
         elif choice == "2":
             # Alle Hotels abrufen und anzeigen
             hotels = hotel_manager.get_all_hotels()
@@ -84,7 +87,7 @@ def user_story_3():
             success = hotel_manager.delete_hotel(hid)
             print("Hotel entfernt." if success else "Hotel nicht gefunden.")
 
-        # 3.3 Hotel aktualisieren
+        # Hotel aktualisieren
         elif choice == "3":
             # Alle Hotels abrufen und anzeigen
             hotels = hotel_manager.get_all_hotels()
@@ -145,7 +148,48 @@ def user_story_3():
             for h in hotels:
                 print(f"  {h.hotel_id}: {h.name} ({h.stars} Sterne) in {h.address.street} {h.address.zip_code} {h.address.city}")
 
-        else:
-            print("Ungültige Auswahl.")
 
+        elif choice == "5":
+            hotels = hotel_manager.get_all_hotels()
+            if not hotels:
+                print("Keine Hotels vorhanden.")
+                continue
+
+            print("\nVerfügbare Hotels:")
+            for h in hotels:
+                print(f"  {h.hotel_id}: {h.name} ({h.stars} Sterne)")
+
+            try:
+                hid = int(input("Hotel-ID zum Hinzufügen von Zimmern: ").strip())
+            except ValueError:
+                print("Ungültige Eingabe!")
+                continue
+
+            hotel = hotel_manager.find_by_id(hid)
+            if not hotel:
+                print("Hotel nicht gefunden.")
+                continue
+
+        # Zimmertypen abfragen
+            room_types = room_type_manager.get_all_room_types()
+            print("\nVerfügbare Zimmertypen:")
+            for t in room_types:
+                print(f"  {t.room_type_id}: {t.description} (max {t.max_guests} Gäste)")
+
+            try:
+                rtid = int(input("Zimmertyp-ID auswählen: ").strip())
+                price = float(input("Preis pro Nacht eingeben: ").strip())
+            except ValueError:
+                print("Ungültige Eingabe!")
+                continue
+
+        # Zimmer anlegen
+            new_room = hotel_manager.add_room_to_hotel(hid, rtid, price)
+            if new_room:
+                print(f"✅ Zimmer {new_room.room_id} zum Hotel '{hotel.name}' hinzugefügt.")
+            else:
+                print("Fehler beim Anlegen des Zimmers.")
+
+    else:
+        print("Ungültige Auswahl.")
 user_story_3()

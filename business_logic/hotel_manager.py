@@ -19,10 +19,10 @@ class HotelManager:
     def update_hotel(self, hotel: Hotel) -> bool:
         return self.hotel_dal.update_hotel(hotel)
 
-    def find_by_id(self, hotel_id:int) -> Hotel:
-        hotels = self.hotel_dal.read_all_hotels()
-        for hotel in hotels:
-            if hotels.hotel_id == hotel_id:
+    def find_by_id(self, hotel_id: int) -> Hotel:
+
+        for hotel in self.hotel_dal.read_all_hotels():
+            if hotel.hotel_id == hotel_id:
                 return hotel
         return None
 
@@ -106,4 +106,17 @@ class HotelManager:
                 available.append(room)
         return available
 
+    def add_room_to_hotel(self,
+                          hotel_id: int,
+                          room_type_id: int,
+                          price: float) -> Room:
 
+        # Zuerst prüfen, ob das Hotel existiert
+        hotel = self.find_by_id(hotel_id)
+        if not hotel:
+            return None
+
+        new_room_id = self.hotel_dal.create_room_for_hotel(
+            hotel_id, room_type_id, price
+        )
+        return self.hotel_dal.read_room_by_id(new_room_id)

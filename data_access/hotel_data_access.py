@@ -2,6 +2,7 @@ from data_access.room_data_access import RoomDataAccess
 from model.hotel import Hotel
 from data_access.base_data_access import BaseDataAccess
 from model.address import Address
+from model.room import Room
 
 
 
@@ -67,6 +68,33 @@ class HotelDataAccess(BaseDataAccess):
         _, rows_affected = self.execute(sql, params)
         return rows_affected > 0
 
+    def create_room_for_hotel(self, hotel_id: int, room_type_id: int, price: float) -> int:
+
+        sql = """
+              INSERT INTO Room (hotel_id, room_type_id, price)
+              VALUES (?, ?, ?) \
+              """
+        cursor = self.conn.cursor()
+        cursor.execute(sql, (hotel_id, room_type_id, price))
+        self.conn.commit()
+        return cursor.lastrowid
+
+    def read_room_by_id(self, room_id: int) -> Room:
+
+        sql = "SELECT room_id, hotel_id, room_type_id, price FROM Room WHERE room_id = ?"
+        cursor = self.conn.cursor()
+        cursor.execute(sql, (room_id,))
+        row = cursor.fetchone()
+        if not row:
+            return None
+        return Room(
+            room_id=row[0],
+            hotel_id=row[1],
+            room_type_id=row[2],
+            price=row[3],
+            bookings=[],  # falls du Bookings später nachladen willst
+            facilities=[]  # falls du Facilities später nachladen willst
+        )
 
 # if __name__ == "__main__":
 #    db_path = "../database/hotel_sample.db"
