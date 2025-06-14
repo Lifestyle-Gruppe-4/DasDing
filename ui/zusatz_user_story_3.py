@@ -84,7 +84,7 @@ def bewertung_abgeben():
     except Exception as e:
         print(f"Fehler beim Speichern der Bewertung: {e}")
 
-bewertung_abgeben()
+#bewertung_abgeben()
 
 def bewertungen_lesen():
     # Liste aller Hotels anzeigen
@@ -100,7 +100,7 @@ def bewertungen_lesen():
 
     # Hotel Auswahl
     try:
-        sel = int(input("Wählen Sie das Hotel, für welches Sie die Bewrtungen sehen möchten (Nummer): ").strip())
+        sel = int(input("Wählen Sie das Hotel, für welches Sie die Bewertungen sehen möchten (Nummer): ").strip())
     except ValueError:
         print("Ungültige Eingabe")
         return
@@ -124,4 +124,4 @@ def bewertungen_lesen():
             print(f"Kommentar: {r.comment}")
         print(f"Erfasst am: {r.created_at}")
 
-# bewertungen_lesen()
+bewertungen_lesen()
