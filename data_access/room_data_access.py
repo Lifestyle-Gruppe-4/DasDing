@@ -73,7 +73,7 @@ class RoomDataAccess(BaseDataAccess):
                 room_number=row[1],
                 price_per_night=row[2],
                 hotel=None, #wird später dem Hotel zugewiesen
-                room_type=RoomType(room_type_id=row[3],description=row[4],max_guests=row[5]),
+                room_type=RoomType(type_id=row[3],description=row[4],max_guests=row[5]),
                 facilities=self.read_facilities_for_room(room_id)
             )
             # Buchungen hinzufügen
@@ -97,7 +97,7 @@ class RoomDataAccess(BaseDataAccess):
         VALUES (?,?,?,?)
         """
 
-        params = (room.hotel_id, room.room_number,room.room_type.room_type_id, room.price_per_night)
+        params = (room.hotel_id, room.room_number,room.room_type.type_id, room.price_per_night)
         room_id, _ = self.fetchone(sql, params)
         return room_id
 
@@ -142,11 +142,4 @@ class RoomDataAccess(BaseDataAccess):
             for row in rows
         ]
 
-if __name__ == "__main__":
-   db_path = "../database/hotel_sample.db"
-   room_dal = RoomDataAccess(db_path)
-   bookings = room_dal.read_bookings_for_room(1)
-
-   for booking in bookings:
-       print(f"{booking.check_in_date} bis {booking.check_out_date}, storniert: {booking.is_cancelled}")
 

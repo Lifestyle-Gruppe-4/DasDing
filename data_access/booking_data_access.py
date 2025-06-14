@@ -1,5 +1,4 @@
 
-
 from data_access.base_data_access import BaseDataAccess
 from model.room import Room
 from model.guest import Guest

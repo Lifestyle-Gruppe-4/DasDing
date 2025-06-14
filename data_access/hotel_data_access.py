@@ -102,33 +102,10 @@ class HotelDataAccess(BaseDataAccess):
         return Room(
             room_id=row[0],
             room_number=row[1],
-            price_per_night=[3],
+            price_per_night=row[3],
             hotel=None,
             room_type=room_type,
             facilities=facilities,
         )
 
-        # sql = "SELECT room_id, hotel_id, room_type_id, price FROM Room WHERE room_id = ?"
-        # cursor = self.conn.cursor()
-        # cursor.execute(sql, (room_id,))
-        # row = cursor.fetchone()
-        # if not row:
-        #     return None
-        # return Room(
-        #     room_id=row[0],
-        #     hotel_id=row[1],
-        #     room_type_id=row[2],
-        #     price=row[3],
-        #     bookings=[],  # falls du Bookings später nachladen willst
-        #     facilities=[]  # falls du Facilities später nachladen willst
-        # )
-
-# if __name__ == "__main__":
-#    db_path = "../database/hotel_sample.db"
-#    room_dal = RoomDataAccess(db_path)
-#    hotel_dal = HotelDataAccess(db_path, room_dal)
-#    hotels = hotel_dal.read_all_hotels()
-#
-#    for hotel in hotels:
-#        print(hotel)
 

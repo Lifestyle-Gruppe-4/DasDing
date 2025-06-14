@@ -179,7 +179,7 @@ def user_story_3():
             room_types = room_type_manager.get_all_room_types()
             print("\nVerfügbare Zimmertypen:")
             for t in room_types:
-                print(f"  {t.room_type_id}: {t.description} (max {t.max_guests} Gäste)")
+                print(f"  {t.type_id}: {t.description} (max {t.max_guests} Gäste)")
 
             try:
                 rtid = int(input("Zimmertyp-ID auswählen: ").strip())

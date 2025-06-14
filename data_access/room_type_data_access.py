@@ -1,4 +1,4 @@
-# data_access/room_type_dal.py
+
 
 from model.room_type import RoomType
 from data_access.base_data_access import BaseDataAccess
@@ -18,7 +18,7 @@ class RoomTypeDataAccess(BaseDataAccess):
         rows = self.fetchall(sql)
         return [
             RoomType(
-                room_type_id=row[0],
+                type_id=row[0],
                 description=row[1],
                 max_guests=row[2]
             )
@@ -44,47 +44,24 @@ class RoomTypeDataAccess(BaseDataAccess):
         _, rows_affected = self.execute(sql, params)
         return rows_affected > 0
 
-    def delete_room_type(self, room_type_id: int) -> bool:
+    def delete_room_type(self, type_id: int) -> bool:
         sql = "DELETE FROM Room_Type WHERE type_id = ?"
-        _, rows_affected = self.execute(sql, (room_type_id,))
+        _, rows_affected = self.execute(sql, (type_id,))
         return rows_affected > 0
 
     def read_room_type_by_id(self, type_id: int) -> RoomType:
         sql = """
-              SELECT room_type_id, description, max_guests
-              FROM RoomType
-              WHERE room_type_id = ? \
+              SELECT type_id, description, max_guests
+              FROM Room_Type
+              WHERE type_id = ?
               """
         row = self.fetchone(sql, (type_id,))
-        if row:
-            return RoomType(
-                room_type_id=row[0],
-                description=row[1],
-                max_guests=row[2]
-            )
-        return None
+        if not row:
+            return None
+        return RoomType(
+            type_id=row[0],
+            description=row[1],
+            max_guests=row[2]
+        )
 
 
-if __name__ == "__main__":
-    # Beispiel für einen Schnelltest
-    db_path = "../database/hotel_sample.db"
-    dal = RoomTypeDataAccess(db_path)
-
-    print("=== Alle RoomTypes ===")
-    for rt in dal.read_all_room_types():
-        print(rt)
-
-    # Neu anlegen
-    print("\n=== Erstelle neuen RoomType ===")
-    temp = RoomType(room_type_id=0, description="TestTyp", max_guests=3)
-    new_id = dal.create_room_type(temp)
-    print(f"Neue ID: {new_id}")
-
-    # Update
-    print("\n=== Aktualisiere RoomType ===")
-    updated = RoomType(room_type_id=new_id, description="TestTyp-Updated", max_guests=4)
-    print("Erfolgreich geupdated?", dal.update_room_type(updated))
-
-    # Löschen
-    print("\n=== Lösche neuen RoomType ===")
-    print("Erfolgreich gelöscht?", dal.delete_room_type(new_id))
