@@ -12,7 +12,7 @@
 ###  Projektziel  
 Ziel dieses Projekts war die schrittweise Konzeption und Entwicklung eines funktionsfähigen **Hotelreservierungssystems** mithilfe der Programmiersprache Python. Das System sollte es Gästen ermöglichen, gezielt nach Hotels und verfügbaren Zimmern zu suchen, Buchungen vorzunehmen sowie Rechnungen zu generieren. Gleichzeitig sollten Administratoren in der Lage sein, die Stammdaten der Hotels und Zimmer effizient zu verwalten. Diese Anforderungen wurden uns gemäss der vordefinierten User Storys mitgegeben. 
 
-Das Projekt war im Rahmen des Moduls *Anwendungsentwicklung mit Python* eingebettet, das projektbasiertes Lernen mit schrittweiser Einführung in Programmierkonzepte kombiniert. Die Umsetzung orientierte sich an vordefinierten User Stories, die reale Anwendungsfälle aus dem Bereich der Hotelbuchung abbilden. Diese decken sowohl grundlegende Funktionen (z. B. Hotelsuche, Buchung, Rechnung) als auch fortgeschrittene Anforderungen (z. B......) ab.
+Das Projekt war im Rahmen des Moduls *Anwendungsentwicklung mit Python* eingebettet, das projektbasiertes Lernen mit schrittweiser Einführung in Programmierkonzepte kombiniert. Die Umsetzung orientierte sich an vordefinierten User Stories, die reale Anwendungsfälle aus dem Bereich der Hotelbuchung abbilden. Diese decken sowohl grundlegende Funktionen (z. B. Hotelsuche, Buchung, Rechnung) als auch fortgeschrittene Anforderungen (z. B Bewertungen nach Aufenthalt, Anpassungen von Stammdaten) ab.
 
 Ein besonderes Augenmerk lag auf folgenden Zielen:
 - Anwendung der erlernten Python-Konzepte in einem realistischen Szenario
@@ -37,10 +37,10 @@ Alle Tasks wurden im GitHub-Project Board geplant und verwaltet.
 ##  2. Technische Umsetzung
 
 ###  Architekturübersicht
-- **models/**: Python-Klassen (Hotel, Zimmer, Buchung etc.)  
-- **managers/**: Geschäftslogik (z. B. Buchungslogik, Admin-Funktionen)  
-- **database/**: Verbindung und Methoden für SQLite  
-- **ui/**: Konsolen-Interface zur Benutzerinteraktion  
+- **Model Layer: model/**: Python-Klassen (Hotel, Zimmer, Buchung etc.)  
+- **Logic Layer: business_logic/**: Geschäftslogik (z. B. Buchungslogik, Admin-Funktionen)  
+- **Data Layer: data_access/**: Verbindung und Methoden für SQLite  
+- **Presentation Layer: ui/**: Konsolen-Interface zur Benutzerinteraktion  
 
 ###  Umsetzung von User Stories
 
@@ -51,12 +51,14 @@ Alle Tasks wurden im GitHub-Project Board geplant und verwaltet.
 - Buchungsstornierung
 
 ####  Erweiterte User Stories (mit DB-Schemaänderung)
-- .... ?? Hotelbewertungen abgeben & lesen (`Reviews`-Tabelle)
-- Buchungshistorie für Gäste
+- Hotelbewertungen nach Aufenthalt abgeben (`Reviews`-Tabelle)
+- Hotelbewertungen pro Hotel anschauen
+- Rechnungsstatus auf "Bezahlt" stellen können
 
 ####  User Story mit Datenvisualisierung
-- ....?? **Auslastung pro Zimmertyp** mittels Deepnote Charts  
-  Beispiel: Balkendiagramm zur Darstellung gebuchter Zimmer je Typ
+- Anzahl Buchungen pro Hotel 
+- Duchschnittlicher Zimmerpreis pro Hotel
+- Buchungen pro Zimmertyp in einem Hotel
 
 #### Vorgehen 
 Zu Beginn des Projekts haben wir uns intensiv mit den Grundlagen der Python-Programmierung beschäftigt sowie die verwendeten Tools wie Deepnote, GitHub und PyCharm eingerichtet. Danach wurde gemeinsam ein Klassendiagramm in Visual Paradigm erstellt, um die Datenbankstruktur und die logischen Entitäten festzulegen.
@@ -67,14 +69,14 @@ Als nächster Schritt wurde die gesamte Struktur in PyCharm nachgebildet, um kom
 
 Im Verlauf des Projekts mussten einzelne User Stories sowie Klassen und Layers nochmals angepasst werden, da sich durch Anforderungen oder neue Erkenntnisse Änderungen am Datenbankschema ergaben. Diese Änderungen wurden iterativ vorgenommen.
 
-Zum Abschluss haben wir Visualisierungen mit dem "Charts"-Block in Deepnote erstellt, z. B. um die durchschnittliche Auslastung von Hotels oder Preistrends pro Saison darzustellen. Die entsprechenden Daten wurden zuvor mit SQL-Abfragen ausgelesen, in einem Pandas DataFrame gespeichert und dann grafisch aufbereitet.
+Zum Abschluss haben wir Visualisierungen mit dem "Charts"-Block in Deepnote erstellt, z. B. um die Buchungen pro Zimmertyp in einem Hotel oder der durchschnittliche Zimmerpreis pro Hotel darzustellen. Die entsprechenden Daten wurden zuvor mit SQL-Abfragen ausgelesen, in einem Pandas DataFrame gespeichert und dann grafisch aufbereitet.
 
 ---
 
 ##  3. Kommunikation und Informationen
 
 -  **GitHub Project Board** zur Organisation, für Task-Zuweisung, Issues und Reviews genutzt 
--  **MS Teams** Chatfunktion für kurze Absprachen, Neuigkeiten und Infos zum individuellen Fortschritt, und Video-Aufnahme. 
+-  **MS Teams** für kurze Absprachen, Neuigkeiten und Infos zum individuellen Fortschritt, und Video-Aufnahme. 
 -  **Deepnote Notebooks** hilfreich für Analysen, Demos, Abbidung der verschiedenen Layers, Datenabfragen und Abbildung der User Storys.
 -  **Visual Paradigm** für die Erstellung der Klassen
 -  **README.md** für Dokumentation
@@ -89,9 +91,10 @@ Zum Abschluss haben wir Visualisierungen mit dem "Charts"-Block in Deepnote erst
 ##  4. Projektmanagement mit GitHub Board
 
 Das Project Board enthielt:
-- **User Story-Tickets** mit Beschreibung und Subtasks
+- Zu erledigende Aufgaben mit Beschreibung und Subtasks
 - Zuweisung an Gruppenmitglieder
 - Statusspalten: `To Do → In Progress → Done`
+- Backlog
 
 ---
 
@@ -115,7 +118,7 @@ Anfangs hat jeder an seinen eigenen Aufgaben gearbeitet. Doch je näher das Proj
 
 ## 6. Ausführung der Notebooks in Deepnote & Python Files
 ### Deepnote
-Die Notebooks sollten von oben nach unten in der angegebenen Reihenfolge ausgeführt werden. Am wichtigsten ist das erste Notebook - dort werden alle notwendigen Bibliotheken importiert und die Datenbankverbindungen aufgebaut. Ohnde dieses Notebook funktionieren die anderen nicht richtig. Für jede User Story gibt es ein eigenes Notebook mit einer kurzen Beschreibung, wie es ausgeführt werden soll. So kann man gezielt einzelne Funktionen nachvollziehen und testen.
+Das Notebook sollten von oben nach unten in der angegebenen Reihenfolge ausgeführt werden. Am wichtigsten ist der erste Codeblock - dort werden alle notwendigen Bibliotheken importiert und die Datenbankverbindungen aufgebaut. Ohnde dieses Block funktionieren die anderen Blöcke nicht. Für jede User Story gibt es einen eigenen Code-Block mit einer kurzen Beschreibung, wie es ausgeführt werden soll. So kann man gezielt einzelne Funktionen nachvollziehen und testen.
 
 ### Python
 Im Ordner "ui" befinden sich mehrere Python-Dateien, die nach den jeweiligen User-Story-Nummern benannt sind (z.B. user_stroy_1, user_story_2 usw.) Jede Datei enthält den Code für ein bestimmte User Story. Diese Dateien lassen sich unabhängig voneinander ausführen. Man kann sie direkt in der Konsole starten, um die jeweiligen Funktionen zu testen oder zu überprüfen, ob alles korrekt funktioniert.
