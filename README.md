@@ -93,6 +93,8 @@ Das Project Board enthielt:
 - Zuweisung an Gruppenmitglieder
 - Statusspalten: `To Do → In Progress → Done`
 
+---
+
 ## 5. Themenaufteilung
 
 Zu Beginn unseres Projektes haben wir die Modellierung der wichtigsten Klassen untereinander aufgeteilt:
@@ -108,6 +110,15 @@ Auch die User Stories haben wir klar unter uns verteilt:
 - Michele Lepori: User Stories 8, 9 und 10
 
 Anfangs hat jeder an seinen eigenen Aufgaben gearbeitet. Doch je näher das Projekt dem Ende kam, desto mehr haben wir uns gegenseitig unterstützt - sei es beim Programmieren, Testen oder Kontrollieren. Unere Zusaammenarbeit wurde dadurch deutlich agiler, was sich positiv auf die Qualität und den Teamgeist ausgewirkt hat.
+
+---
+
+## 6. Ausführung der Notebooks in Deepnote & Python Files
+### Deepnote
+Die Notebooks sollten von oben nach unten in der angegebenen Reihenfolge ausgeführt werden. Am wichtigsten ist das erste Notebook - dort werden alle notwendigen Bibliotheken importiert und die Datenbankverbindungen aufgebaut. Ohnde dieses Notebook funktionieren die anderen nicht richtig. Für jede User Story gibt es ein eigenes Notebook mit einer kurzen Beschreibung, wie es ausgeführt werden soll. So kann man gezielt einzelne Funktionen nachvollziehen und testen.
+
+### Python
+Im Ordner "ui" befinden sich mehrere Python-Dateien, die nach den jeweiligen User-Story-Nummern benannt sind (z.B. user_stroy_1, user_story_2 usw.) Jede Datei enthält den Code für ein bestimmte User Story. Diese Dateien lassen sich unabhängig voneinander ausführen. Man kann sie direkt in der Konsole starten, um die jeweiligen Funktionen zu testen oder zu überprüfen, ob alles korrekt funktioniert.
 
 ---
 
