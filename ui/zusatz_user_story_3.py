@@ -28,6 +28,26 @@ room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 review_manager = ReviewManager(review_dal)
 
+def user_stroy_menu():
+    while True:
+        print("\n --User Stories--")
+        print("1. Bewertungen lesen")
+        print("2. Bewertung abgeben")
+        print("0. Exit")
+
+        choice = input("Wählen Sie eine Option: ")
+
+        if choice == "0":
+            print("Auf Wiedersehen")
+            break
+        elif choice == "1":
+            bewertungen_lesen()
+        elif choice == "2":
+            bewertung_abgeben()
+        else:
+            print("Ungültige Eingabe. Bitte geben Sie eine Zahl von 1 bis 2 ein.")
+
+
 def bewertung_abgeben():
     #Gast identifizieren
     first_name = input("Geben Sie Ihren Vornamen ein: ").lower().strip()
@@ -84,7 +104,6 @@ def bewertung_abgeben():
     except Exception as e:
         print(f"Fehler beim Speichern der Bewertung: {e}")
 
-#bewertung_abgeben()
 
 def bewertungen_lesen():
     # Liste aller Hotels anzeigen
@@ -119,9 +138,9 @@ def bewertungen_lesen():
 
     print(f"\nBewertungen für '{hotel.name}':")
     for r in reviews:
-        print(f"Review-ID {r.review_id}: Buchung {r.booking_id} - {r.rating} Sterne")
+        print(f"Bewertung-Nr {r.review_id} - {r.rating} Sterne")
         if r.comment:
             print(f"Kommentar: {r.comment}")
         print(f"Erfasst am: {r.created_at}")
 
-bewertungen_lesen()
+user_stroy_menu()
