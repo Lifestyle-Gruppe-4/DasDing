@@ -96,10 +96,6 @@ def rechnung_erstellen_nach_aufenthalt():
     except Exception as e:
         print(f"Fehler: {e}")
 
-def alle_rechnungen():
-    invoices = invoice_manager.get_all_invoices()
-    for invoice in invoices:
-        print(invoice)
 
 def rechnungen_entfernen():
     while True:
@@ -139,5 +135,10 @@ def rechnungen_entfernen():
         except Exception as e:
             print(f"Fehler beim Löschen der Rechnung: {e}")
         return
+
+def alle_rechnungen():
+    invoices = invoice_manager.get_all_invoices()
+    for invoice in invoices:
+        print(invoice)
 
 user_stroy_menu()
