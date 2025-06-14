@@ -37,13 +37,13 @@ class RoomManager:
         season_price = base_price * factor
         return season_price, factor
 
-    def create_room(self, hotel_id: int, room_type_id: int, price: float) -> Room:
+    def create_room(self, hotel_id: int, type_id: int, price: float) -> Room:
 
         # Erzeuge ein Room-Objekt mit None als ID
         new_room = Room(
             room_id=None,
             hotel_id=hotel_id,
-            room_type_id=room_type_id,
+            type_id=type_id,
             price=price,
             bookings=[],  # noch keine Buchungen
             facilities=[]  # falls du Facilities später anhängen willst
@@ -52,5 +52,14 @@ class RoomManager:
         new_id = self.room_dal.create_room(new_room)
         # Objekt auslesen und zurückgeben
         return self.room_dal.read_room_by_id(new_id)
+
+    def update_room_price(self, room_id: int, new_price: float) -> bool:
+        #Validierung
+        if new_price <= 0:
+            raise ValueError("Der Preis muss größer als 0 sein.")
+
+        #Delegation an den Data-Access
+        success = self.room_dal.update_room_price(room_id, new_price)
+        return success
 
 

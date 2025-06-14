@@ -31,9 +31,11 @@ class FacilityManager:
         facility = Facility(facility_id=None, facility_name=name.strip())
         return self.facility_dal.create_facility(facility)
 
-    def update_facility(self, facility: Facility) -> Facility:
-        return self.facility_dal.update_facility(facility)
+    def update_facility(self, facility_id: int, new_name:str) -> bool:
+        if not new_name.strip():
+            raise ValueError("Einrichtungsname darf nicht leer sein.")
+        return self.facility_dal.update_facility(facility_id, new_name)
 
-    def delete_facility(self, facility: Facility) -> Facility:
-        return self.facility_dal.delete_facility(facility)
+    def delete_facility(self, facility_id: int) -> bool:
+        return self.facility_dal.delete_facility(facility_id)
 

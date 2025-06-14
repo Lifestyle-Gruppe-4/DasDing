@@ -31,14 +31,13 @@ class FacilityDataAccess(BaseDataAccess):
         facility_id, _ = self.execute(sql, params)
         return facility_id
 
-    def update_facility(self, facility: Facility) -> bool:
+    def update_facility(self, facility_id: int, facility_name:str) -> bool:
         sql = """
         UPDATE Facilities
         SET facility_name = ?
         WHERE facility_id = ?
         """
-        params = (facility.facility_name,)
-        _, rows_affected = self.execute(sql, params)
+        _, rows_affected = self.execute(sql, (facility_name, facility_id))
         return rows_affected > 0
 
     def delete_facility(self, facility_id:int) -> bool:

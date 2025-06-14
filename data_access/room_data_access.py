@@ -34,7 +34,7 @@ class RoomDataAccess(BaseDataAccess):
                 room_number=row[1],
                 price_per_night=row[2],
                 room_type=RoomType(
-                    room_type_id=row[3],
+                    type_id=row[3],
                     description=row[4],
                     max_guests=row[5]
                 ),
@@ -142,4 +142,11 @@ class RoomDataAccess(BaseDataAccess):
             for row in rows
         ]
 
-
+    def update_room_price(self, room_id: int,new_price:float) -> bool:
+        sql = """
+            UPDATE Room
+               SET price_per_night = ?
+             WHERE room_id = ?
+        """
+        _, rows_affected = self.execute(sql, (new_price, room_id))
+        return rows_affected > 0

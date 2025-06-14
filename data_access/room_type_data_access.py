@@ -30,18 +30,16 @@ class RoomTypeDataAccess(BaseDataAccess):
         INSERT INTO Room_Type(description, max_guests)
         VALUES (?, ?)
         """
-        params = (rt.description, rt.max_guests)
-        new_id, _ = self.execute(sql, params)
-        return new_id
+        lastrowid, _ = self.execute(sql,(rt.description,rt.max_guests))
+        return lastrowid
 
-    def update_room_type(self, rt: RoomType) -> bool:
+    def update_room_type(self, type_id:int, description:str,max_guests:int) -> bool:
         sql = """
         UPDATE Room_Type
         SET description = ?, max_guests = ?
         WHERE type_id = ?
         """
-        params = (rt.description, rt.max_guests, rt.room_type_id)
-        _, rows_affected = self.execute(sql, params)
+        _, rows_affected = self.execute(sql,(description,max_guests,type_id))
         return rows_affected > 0
 
     def delete_room_type(self, type_id: int) -> bool:
