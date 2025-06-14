@@ -37,3 +37,7 @@ class FacilityManager:
     def delete_facility(self, facility: Facility) -> Facility:
         return self.facility_dal.delete_facility(facility)
 
+    def assign_facility_to_room(self, room_id: int, facility_id: int) -> bool:
+        return self.facility_dal.assign_facility_to_room(room_id, facility_id)
+
+

@@ -36,6 +36,7 @@ def user_story_3():
         print("3. Hotel aktualisieren")
         print("4. Alle Hotels anzeigen")
         print("5. Zimmer zu Hotel hinzufügen")
+        print("6. Facilities zu Zimmer hinzufügen")
         print("0. Zurück")
         choice = input("Wähle eine Option: ").strip()
 
@@ -197,4 +198,53 @@ def user_story_3():
                       f"\nEinrichtungen: --")
             else:
                 print("Fehler beim Anlegen des Zimmers.")
+
+
+        elif choice == "6":
+            hotels = hotel_manager.get_all_hotels()
+            if not hotels:
+                print("Keine Hotels vorhanden.")
+                continue
+
+            print("\nVerfügbare Hotels:")
+            for h in hotels:
+                print(f"  {h.hotel_id}: {h.name} ({h.stars} Sterne)")
+            try:
+                hid = int(input("Hotel-ID wählen: ").strip())
+            except ValueError:
+                print("Ungültige Eingabe.")
+                continue
+
+            rooms = room_manager.get_rooms_by_hotel_id(hid)
+            if not rooms:
+                print("Keine Zimmer für dieses Hotel vorhanden.")
+                continue
+
+            print("\nZimmer im Hotel:")
+            for r in rooms:
+                print(f"  {r.room_id}: Nr. {r.room_number}, {r.room_type.description} (max {r.room_type.max_guests} Gäste), {r.price_per_night} CHF")
+
+            try:
+                rid = int(input("Room-ID wählen: ").strip())
+            except ValueError:
+                print("Ungültige Eingabe.")
+                continue
+
+            all_facilities = facility_manager.get_all_facilities()
+            print("\nVerfügbare Ausstattungen:")
+            for f in all_facilities:
+                print(f"  {f.facility_id}: {f.facility_name}")
+            try:
+                selected_ids = input("Facility-IDs (kommagetrennt, z.B. 1,3,5): ").strip()
+                id_list = [int(fid.strip()) for fid in selected_ids.split(",") if fid.strip()]
+            except ValueError:
+                print("Ungültige Eingabe.")
+                continue
+
+            for fid in id_list:
+                success = facility_manager.assign_facility_to_room(rid, fid)
+                if success:
+                    print(f"Facility {fid} erfolgreich zugewiesen.")
+                else:
+                    print(f"Zuweisung von Facility {fid} fehlgeschlagen oder schon vorhanden.")
 user_story_3()
