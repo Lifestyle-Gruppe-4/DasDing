@@ -105,7 +105,7 @@ Auch die User Stories haben wir klar unter uns verteilt:
 - Silian Gyger: User Stories 1 und 2
 - Simon Manger: User Stories 3 und 4
 - Thomas Bartels: User Stories 5, 6 und 7
-- Michele Lepori: User Stories 8,9 und 10
+- Michele Lepori: User Stories 8, 9 und 10
 
 Anfangs hat jeder an seinen eigenen Aufgaben gearbeitet. Doch je näher das Projekt dem Ende kam, desto mehr haben wir uns gegenseitig unterstützt - sei es beim Programmieren, Testen oder Kontrollieren. Unere Zusaammenarbeit wurde dadurch deutlich agiler, was sich positiv auf die Qualität und den Teamgeist ausgewirkt hat.
 
