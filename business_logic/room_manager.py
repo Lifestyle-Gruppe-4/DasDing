@@ -16,6 +16,9 @@ class RoomManager:
                 return room
         return None
 
+    def get_rooms_by_hotel_id(self, hotel_id: int) -> list[Room]:
+        return self.room_dal.read_rooms_for_hotel(hotel_id)
+
     def get_room_by_max_guests(self, max_guests: int) -> list[Room]:
         rooms = self.room_dal.read_all_rooms()
         matching_rooms = [room for room in rooms if room.room_type.max_guests == max_guests]

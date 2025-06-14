@@ -67,3 +67,10 @@ class FacilityDataAccess(BaseDataAccess):
             )
             for row in rows
         ]
+    def assign_facility_to_room(self, room_id: int, facility_id: int) -> bool:
+        sql = """
+        INSERT OR IGNORE INTO Room_Facilities (room_id, facility_id)
+        VALUES (?, ?)
+        """
+        _, rows_affected = self.execute(sql, (room_id, facility_id))
+        return rows_affected > 0
