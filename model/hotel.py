@@ -59,38 +59,5 @@ class Hotel:
     def rooms(self):
         return self.__rooms
 
-# #Räume hinzufügen
-#     def add_room(self, room):
-#         self.__rooms.append(room)
-#
-# #Räume löschen
-#     def delete_room(self, room):
-#         if room in self.__rooms:
-#             self.__rooms.remove(room)
-#
-# #Verfügbare Räume anzeigen lassen
-#     def get_available_rooms(self, start_date:datetime, end_date:datetime):
-#         return  [room for room in self.__rooms if room.is_available(start_date, end_date)
-#                  ]
-# #Methoden von Thomas:
-#     def get_rooms_by_stars(self, min_stars: int, max_stars: int) -> list['Room']:
-#         if min_stars <= self.stars <= max_stars:
-#             return self.rooms
-#         else:
-#             return []
-#
-#     def get_hotel_list(self):
-#         return self.name, self.stars, self.address, self.rooms
-
-
-#hotel = Hotel(hotel_id= 1,name= "Hotel Sunshine",stars= 4, address= addr1)
-#print(hotel)
-
-
-
-#hotel.add_room("Room 101")
-#hotel.add_room("Room 102")
-
-#print(hotel.rooms)
 
 
