@@ -1,7 +1,9 @@
 # gui/main_menu.py
-"""
-Hauptmenü für alle Read-Only User-Stories
-"""
+
+#############
+#Aus Zeitgründen konnte das GUI nicht rechtzeitig umgesetzt werden.
+##############
+
 import PySimpleGUI as sg
 
 # Platzhalter-Funktion für jede User Story
