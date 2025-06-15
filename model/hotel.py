@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Hotel:
-    def __init__(self, hotel_id: int, name: str, stars: int, address: Address, rooms=None):
+    def __init__(self, hotel_id: int | None, name: str, stars: int, address: Address, rooms=None):
         if hotel_id is not None and hotel_id < 0:
             raise ValueError("Hotel ID must be positive if provided")
         if not name:
