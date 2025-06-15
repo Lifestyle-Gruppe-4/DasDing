@@ -38,10 +38,3 @@ class AddressManager:
     def find_address_by_zip(self, zip_code: str) -> List[Address]:
         return self.address_dal.find_addresses_by_zip(zip_code)
 
-# address_dal = AddressDataAccess("../database/hotel_sample.db")
-# manager = AddressManager(address_dal)
-#
-#
-# addresses = manager.get_all_addresses()
-# for addr in addresses:
-#     print(addr)
