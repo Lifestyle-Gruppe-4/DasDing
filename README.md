@@ -118,7 +118,7 @@ Anfangs hat jeder an seinen eigenen Aufgaben gearbeitet. Doch je näher das Proj
 
 ## 6. Ausführung der Notebooks in Deepnote & Python Files
 ### Deepnote
-Das Notebook sollten von oben nach unten in der angegebenen Reihenfolge ausgeführt werden. Am wichtigsten ist der erste Codeblock - dort werden alle notwendigen Bibliotheken importiert und die Datenbankverbindungen aufgebaut. Ohnde dieses Block funktionieren die anderen Blöcke nicht. Für jede User Story gibt es einen eigenen Code-Block mit einer kurzen Beschreibung, wie es ausgeführt werden soll. So kann man gezielt einzelne Funktionen nachvollziehen und testen.
+Das Notebook sollten von oben nach unten in der angegebenen Reihenfolge ausgeführt werden. Am wichtigsten ist der erste Codeblock - dort werden alle notwendigen Bibliotheken importiert und die Datenbankverbindungen aufgebaut. Ohne dieses Block funktionieren die anderen Blöcke nicht. Für jede User Story gibt es einen eigenen Code-Block mit einer kurzen Beschreibung, wie es ausgeführt werden soll. So kann man gezielt einzelne Funktionen nachvollziehen und testen.
 
 ### Python
 Im Ordner "ui" befinden sich mehrere Python-Dateien, die nach den jeweiligen User-Story-Nummern benannt sind (z.B. user_stroy_1, user_story_2 usw.) Jede Datei enthält den Code für ein bestimmte User Story. Diese Dateien lassen sich unabhängig voneinander ausführen. Man kann sie direkt in der Konsole starten, um die jeweiligen Funktionen zu testen oder zu überprüfen, ob alles korrekt funktioniert.
