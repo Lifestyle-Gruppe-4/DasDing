@@ -23,7 +23,7 @@ Ein besonderes Augenmerk lag auf folgenden Zielen:
 Durch diese praxisnahe Projektarbeit konnten wir nicht nur unsere technischen Fähigkeiten mit Python festigen, sondern auch wertvolle Erfahrung im Bereich Teamarbeit und Projektmanagement sammeln.
 
 ###  Zeitplanung  
-Das Projekt wurde iterativ in mehreren Sprints gemäss dem Semesterplan (siehe [Semesterprogramm PDF](./BAI%20Semesterprogramm%20AEP%202025%20v2.pdf)) durchgeführt.  
+Das Projekt wurde iterativ in mehreren Sprints gemäss dem Semesterplan durchgeführt.  
 Die Sprintstruktur war wie folgt:
 - **Sprint 0:** Setup, Teambildung, GitHub/Deepnote
 - **Sprint 1–2:** Grundlagen, OOP, erste User Stories
@@ -166,10 +166,6 @@ Während der Entwicklung haben wir ChatGPT punktuell zur Unterstützung verwende
 
  Chatgpt wurde nicht als Ersatz für eigene Arbeit, sondern als Ergänzung genutzt 
 
-## Projektlinks
-Deepnote-Projekt
-Github Repository
-Github Project Board
 
 
 
