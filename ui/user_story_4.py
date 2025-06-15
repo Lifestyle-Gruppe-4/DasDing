@@ -3,7 +3,7 @@ from datetime import datetime, date
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
+from model import Address,Guest
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -27,14 +27,18 @@ room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
 def user_story_4():
+    """Hotelzimmer buchen - Auswahl nach Stadt und Zeitraum"""
     try:
+        # Stadtname abfragen
         city = input("In welcher Stadt möchten Sie Ihren Aufenthalt buchen? ").strip()
+
         # Prüft ob in dieser Stadt ein Hotel existiert
         result_city = hotel_manager.find_by_city(city)
         if not result_city:
             print("Keine Hotel in dieser Stadt gefunden")
             return
 
+        # Check-in und Check-out-Daten eingeben und validieren
         check_in = datetime.strptime(input("Check_in (YYYY-MM-DD): "), "%Y-%m-%d").date()
         check_out = datetime.strptime(input("Check_out (YYYY-MM-DD: "), "%Y-%m-%d").date()
         # Prüft das check_in Datum nicht in der Vergangenheit lieget
@@ -46,15 +50,18 @@ def user_story_4():
             print("Das Check-out Datum muss nach dem Check-in Datum liegen!")
             return
 
+        # Verfügbare Hotels/Zimmer im angegebenen Zeitraum und Ort finden
         results = hotel_manager.find_available_hotels_by_date(city, check_in, check_out)
         if not results:
             print("Keine verfügbaren Zimmer gefunden.")
             return
 
+        # Verfügbare Zimmer zur Auswahl
         print("\nVerfügbare Hotels und Zimmer:")
         for idx, (hotel, room) in enumerate(results, start=1):
             print(f"{idx}. {hotel.name} -  Zimmer {room.room_number} (Preis/Nacht: {room.price_per_night} CHF)")
 
+        # Benutzer wählt ein Zimmer
         try:
             selection = int(input("Wähle ein Hotel/Zimmer (0 zum Abbrechen): "))
         except ValueError:
@@ -66,6 +73,7 @@ def user_story_4():
 
         hotel, room = results[selection - 1]
 
+        # Kundenidentifikation: bestehend oder neu
         while True:
             print("0 = Exit | 1 = Bestehende Kunde | 2 = Neue Kunde")
             option = input("Wähle eine Option: ").strip()
@@ -75,6 +83,7 @@ def user_story_4():
                 return
 
             elif option == "1":
+                # Bestehenden Kunden suchen
                 first_name = input("Vorname des Kunden: ").strip()
                 last_name = input("Nachname des Kunden: ").strip()
                 guest = next((g for g in guest_manager.get_all_guests()
@@ -88,6 +97,7 @@ def user_story_4():
                 break
 
             elif option == "2":
+                # Neuen Kunden anlegen
                 print("\n-- Neuer Kunde --")
                 first_name = input("Vorname: ").strip()
                 last_name = input("Nachname: ").strip()
@@ -105,6 +115,7 @@ def user_story_4():
             else:
                 print("Ungültige Auswahl.")
 
+        # Buchung anlegen
         booking_id = booking_manager.create_booking(check_in, check_out, guest_id, room.room_id, room.price_per_night)
         print(f"Buchung abgeschlossen. Buchung-ID: {booking_id}")
 

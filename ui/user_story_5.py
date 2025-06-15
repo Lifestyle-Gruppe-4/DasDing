@@ -3,7 +3,7 @@ from datetime import datetime
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import booking
+
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -29,6 +29,7 @@ hotel_manager = HotelManager(hotel_dal)
 ### User Story 5
 
 def user_stroy_menu():
+    """Menü für Rechnungsverwaltung (Anzeigen, Erstellen, Löschen)"""
     while True:
         print("\n --User Stories--")
         print("1. Alle Rechnungen Anzeigen")
@@ -61,11 +62,13 @@ def rechnung_erstellen_nach_aufenthalt():
         if not past_bookings:
             print("Alle abgeschlossenen Buchungen wurden bereits abgerechnet.")
             return
+
         # Alle gültigen Buchungen werden mit fortlaufender Nummer angezeigt
         print("Abgeschlossene Buchungen:")
         for i, b in enumerate(past_bookings):
             print(f"{i + 1}. {BookingManager.get_booking_details(b)}")
 
+        # Benutzer wählt eine Buchung aus
         try:
             user_choice = int(input("Für welche Buchung soll eine Rechnung erstellt werden? (Nummer eingeben) - Abbrechen -> 0: "))
         except ValueError:
@@ -98,6 +101,7 @@ def rechnung_erstellen_nach_aufenthalt():
 
 
 def rechnungen_entfernen():
+    """Löscht eine Rechnung anhand ihrer ID nach Bestätigung"""
     while True:
         user_input = input("Rechnungs-ID zum Löschen eingeben (oder '0' zum Abbrechen): ").strip()
         if user_input.lower() in ('q', 'quit', 'abbrechen', 'exit'):

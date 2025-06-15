@@ -26,11 +26,13 @@ hotel_manager = HotelManager(hotel_dal)
 
 def print_booking_by_hotels(bookings):
     """Gruppert Buchungen nach Hotels und gibt diese aus"""
-    grouped = {}
+    grouped = {} # Dictionary zum Gruppieren der Buchungen nach Hotel-ID
     for b in bookings:
-        hid = b.room.hotel.hotel_id
+        hid = b.room.hotel.hotel_id # Hotel-ID der aktuellen Buchung
+        # Falls Hotel-ID noch nicht vorhanden ist, neuen Entrag anlegen.
         grouped.setdefault(hid, {"hotel": b.room.hotel, "bookings": []})["bookings"].append(b) #ChatGPT gefragt
 
+    # Buchungen nach Hotel-ID sortiert ausgeben
     for hid in sorted(grouped):
         hotel = grouped[hid]["hotel"]
         print(f"Hotel-ID: {hid} | Name: {hotel.name}")
@@ -38,16 +40,19 @@ def print_booking_by_hotels(bookings):
             print("   " + booking_manager.get_booking_details(booking))
 
 def select_hotels():
+    """Lässt den Benutzer Hotel-IDs auswählen und gibt die ausgewählte IDs zurück"""
     hotels = hotel_manager.get_all_hotels()
     if not hotels:
         print("Keine Hotels vorhanden.")
         return []
 
+    # Liste verfügbare Hotels anzeigen
     print("\nVerfügbare Hotels: ")
     for h in hotels:
         print(f"{h.hotel_id}. {h.name}")
 
-    ids = input("Welche Hotels möchtest du gerne die Buchungen sehen? (Hotel-IDs (kommagetrennt): ").split(",")
+    # Eingabe von Hotel-IDs durch Benutzer
+    ids = input("Von welche Hotels möchten Sie gerne die Buchungen sehen? (Hotel-IDs (kommagetrennt): ").split(",")
     selected = []
     for ident in ids:
         ident = ident.strip()
@@ -56,6 +61,7 @@ def select_hotels():
         if not ident.isdigit():
             continue
         hid = int(ident)
+        # Prüfen, ob due eingegebene Hotel-ID existieren
         if any(h.hotel_id == hid for h in hotels):
             selected.append(hid)
         else:
@@ -63,6 +69,7 @@ def select_hotels():
     return selected
 
 def user_story_8_menu():
+    """Menü zur Anzeige von Buchungen nach Hotels (User Story 8)"""
     while True:
         print("\nWillkommen! Falls Sie ihre Buchungen überprüfen möchten, dann bitte die folgede Ausgaben ansehen:")
         print("\n-- Buchungsanzeige --")
@@ -75,10 +82,12 @@ def user_story_8_menu():
             print("Auf Wiedersehen!")
             break
         elif choice == "1":
+            # Alle Buchungen abrufen und nach Hotels anzeigen
             print("\nHier ist eine Liste von Hotels mit alle ihre Buchungen:\n")
             bookings = booking_manager.get_all_bookings()
             print_booking_by_hotels(bookings)
         elif choice == "2":
+            # Nur Buchungen von ausgewählten Hotels anzeigen
             selected = select_hotels()
             bookings = booking_manager.get_all_bookings()
             filtered = [b for b in bookings if b.room.hotel.hotel_id in selected]
