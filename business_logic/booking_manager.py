@@ -1,11 +1,7 @@
-
 from datetime import datetime, date
 from model.booking import Booking
 from model.invoice import Invoice
 from data_access.booking_data_access import BookingDataAccess
-from business_logic.room_manager import RoomManager
-from business_logic.hotel_manager import HotelManager
-
 
 class BookingManager:
     def __init__(self, booking_dal: BookingDataAccess):
