@@ -1,9 +1,6 @@
-from datetime import datetime, date
-
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
@@ -27,6 +24,7 @@ room_type_manager = RoomTypeManager(room_type_dal)
 hotel_manager = HotelManager(hotel_dal)
 
 def user_story_menu():
+    """Hauptmenü zur Verwaltung von Zimmertypen, Preisen und Einrichtungen (Adminbereich)"""
     while True:
         print("\n --Stammdaten Verwalten (Admin)--")
         print("1. Zimmertypen anzeigen")
@@ -67,8 +65,10 @@ def user_story_menu():
         elif choice == "10":
             facilities_entfernen()
 
+# === Zimmertypen ===
+
 def zimmertypen_anzeigen():
-    # Zieht alle Zimmertypen
+    """Zeigt alle vorhandenen Zimmtertypen mit Beschreibung und maximaler Gästeanzahl an"""
     types = room_type_manager.get_all_room_types()
     if not types:
         print("Keine Zimmertypen gefunden.")
@@ -79,7 +79,7 @@ def zimmertypen_anzeigen():
             print(f"ID: {rt.type_id} | Beschreibung: {rt.description} | Max Gäste: {rt.max_guests}")
 
 def zimmertyp_hinzufügen():
-    # definiert die Inputs
+    """Erstellt einen neuen Zimmertyp anhand der Benutzereingaben"""
     try:
         desc = input("Beschreibung des Zimmertyps: ").strip()
         max_guests = int(input("Max. Gästeanzahl: "))
@@ -91,6 +91,7 @@ def zimmertyp_hinzufügen():
 
 def zimmertyp_bearbeiten():
     try:
+        """Bearbeitet einen vorhandenen Zimmertyp anhand der ID"""
         rt_id = int(input("ID des zu bearbeitenden Zimmertyps: "))
         existing = room_type_manager.get_room_type_by_id(rt_id)
         if not existing:
@@ -107,6 +108,7 @@ def zimmertyp_bearbeiten():
         print(f"Fehler beim Bearbeiten: {e}")
 
 def zimmertyp_löschen():
+    """Löscht einen Zimmertyp nach Eingabe der ID und Bestätigung"""
     try:
         rt_id = int(input("ID des zu löschenden Zimmertyps: "))
         if input("Sicher löschen? (j/n): ").lower() != 'j':
@@ -118,7 +120,10 @@ def zimmertyp_löschen():
     except Exception as e:
         print(f"Fehler beim Löschen: {e}")
 
+# === Zimmerpreise ===
+
 def zimmerpreis_anzeigen():
+    """Zeigt alle Zimmer mit akutellen Preis und zugehörigem Hotel"""
     # Zieht alle Zimmers
     rooms = room_manager.get_all_rooms()
     if not rooms:
@@ -130,6 +135,7 @@ def zimmerpreis_anzeigen():
             print(f"Zimmer-ID: {r.room_id} | Nummer: {r.room_number} | Preis: {r.price_per_night:.2f} CHF | Hotel: {r.hotel.name}")
 
 def zimmerpreise_bearbeiten():
+    """Ermöglicht die Bearbeitung des Zimmerpreises anhand der Zimmer-ID"""
     try:
         # Zieht gewünschtes Zimmer
         room_id = int(input("Zimmer-ID für Preisänderung: "))
@@ -145,6 +151,8 @@ def zimmerpreise_bearbeiten():
     except Exception as e:
         print(f"Fehler beim Bearbeiten: {e}")
 
+# === Einrichtungen ===
+
 def facilities_anzeigen():
     #zieht alle Facilities aus der Liste
     facs = facility_manager.get_all_facilities()
@@ -156,6 +164,7 @@ def facilities_anzeigen():
             print(f"ID: {fac.facility_id} | Name: {fac.facility_name}")
 
 def facilities_hinzufügen():
+    """Fügt eine neue Einrichtung hinzu"""
     try:
         name = input("Name der neuen Einrichtung: ").strip()
         # Übergibt neue Facility an den Manager und fügt diese hinzu
@@ -165,6 +174,7 @@ def facilities_hinzufügen():
         print(f"Fehler beim Erstellen: {e}")
 
 def facilities_bearbeiten():
+    """Bearbeitet den Namen einer vorhandenen Einrichtungen"""
     try:
         fac_id = int(input("ID der zu bearbeitenden Einrichtung: "))
         existing = facility_manager.find_by_id(fac_id)
@@ -179,6 +189,7 @@ def facilities_bearbeiten():
         print(f"Fehler beim Bearbeiten: {e}")
 
 def facilities_entfernen():
+    """Löscht eine Einrichtung nach Eingabe der ID und Bestätigung"""
     try:
         fac_id = int(input("ID der zu löschenden Einrichtung: "))
         if input("Sicher löschen? (j/n): ").lower() != 'j':
