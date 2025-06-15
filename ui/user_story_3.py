@@ -1,9 +1,7 @@
-from datetime import datetime, date
-
 # Importiere alle Manager,DataAccess-Klassen und Models
 from business_logic import AddressManager,BookingManager,FacilityManager,GuestManager,HotelManager,InvoiceManager,RoomManager,RoomTypeManager
 from data_access import AddressDataAccess,BookingDataAccess,FacilityDataAccess,GuestDataAccess,HotelDataAccess,InvoiceDataAccess,RoomDataAccess,RoomTypeDataAccess
-from model import Address,Booking,Facility,Guest,Hotel,Invoice,Room,RoomType
+from model import Address,Hotel
 
 # Datenbankpfad und Initialisierung der DALs
 db_path = "../database/hotel_sample.db"
