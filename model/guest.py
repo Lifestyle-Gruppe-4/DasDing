@@ -2,7 +2,7 @@ from model.address import Address
 
 
 class Guest:
-    def __init__(self, guest_id:int, first_name:str, last_name:str, email:str, address:Address):
+    def __init__(self, guest_id:int|None, first_name:str, last_name:str, email:str, address:Address):
         if guest_id is not None and guest_id < 0:
             raise ValueError("guest ID must be postive if provided")
         if not first_name:
