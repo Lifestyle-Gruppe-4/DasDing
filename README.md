@@ -63,6 +63,10 @@ Alle Tasks wurden im GitHub-Project Board geplant und verwaltet.
 #### Vorgehen 
 Zu Beginn des Projekts haben wir uns intensiv mit den Grundlagen der Python-Programmierung beschäftigt sowie die verwendeten Tools wie Deepnote, GitHub und PyCharm eingerichtet. Danach wurde gemeinsam ein Klassendiagramm in Visual Paradigm erstellt, um die Datenbankstruktur und die logischen Entitäten festzulegen.
 
+Hier unser Klassendiagram. 
+![image](https://github.com/user-attachments/assets/bdb2970f-07f6-4924-abcf-7c3fc1cc10b4)
+Um die Struktur unseres Hotelreservierungssystems frühzeitig zu planen, haben wir gemeinsam ein Klassendiagramm in Visual Paradigm erstellt. Das Klassendiagramm diente als Grundlage für die objektorientierte Modellierung unseres Projekts und half uns, die Beziehungen zwischen den verschiedenen Entitäten zu verstehen und sauber zu trennen. Durch das Klassendiagramm konnten wir frühzeitig logische Fehler vermeiden, z. B. doppelte Informationen oder falsche Beziehungen, und es diente uns als Blaupause für die spätere Implementierung in den model/-Klassen.
+
 Basierend auf diesem Klassendiagramm wurden die Model-Klassen zuerst in Deepnote erstellt. Anschliessend haben wir in der gleichen Umgebung auch den Data Access Layer (DAL) sowie den Business Logic Manager implementiert. Erste einfache User Stories wie „Hotel hinzufügen“ oder „Zimmer anzeigen“ wurden direkt in Deepnote getestet, um die Interaktion zwischen den Schichten zu verifizieren.
 
 Als nächster Schritt wurde die gesamte Struktur in PyCharm nachgebildet, um komplexere Imports und Dateiabhängigkeiten korrekt abzubilden. In PyCharm testeten wir nacheinander alle User Stories und passten die Business-Logik sowie Datenbankabfragen entsprechend an. Sobald diese erfolgreich funktionierten, wurden sie wieder zurück in Deepnote-Notebooks übertragen und dort mit erklärendem Text dokumentiert.
