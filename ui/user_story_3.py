@@ -107,7 +107,7 @@ def user_story_3():
                 print("Hotel nicht gefunden.")
                 continue
 
-            # Neue Werte abfragen
+            # Neue Werte abfragen #TODO: Bestehende Werte müssen ebenfalls eingegeben Werten. Apassen das leere bleiben kann
             name_input = input(f"Neuer Name ({hotel.name}): ").strip()
             stars_input = input(f"Neue Sterne ({hotel.stars}): ").strip()
 
@@ -191,7 +191,7 @@ def user_story_3():
                 print("Ungültige Eingabe!")
                 continue
 
-        # Zimmer anlegen
+        # Zimmer anlegen #TODO: identische Zimmererstellung verhindern
             new_room = hotel_manager.add_room_to_hotel(hid, room_number, rtid, price)
             if new_room:
                 print(f"\nDas Zimmer mit der ID: {new_room.room_id} wurde dem Hotel {hotel.name} hinzugefügt."
@@ -202,7 +202,7 @@ def user_story_3():
                 print("Fehler beim Anlegen des Zimmers.")
 
 
-        # Einrichtungen zu Zimmer hinzufügen
+        # Einrichtungen zu Zimmer hinzufügen #TODO: Einrichtungen können zurzeit in Zimmer hinzugefügt werden, die nicht existieren. Anpassen
         elif choice == "6":
             hotels = hotel_manager.get_all_hotels()
             if not hotels:
@@ -244,7 +244,7 @@ def user_story_3():
                 print("Ungültige Eingabe.")
                 continue
 
-            # Einrichtungen zuweisen
+            # Einrichtungen zuweisen #TODO: bestehende Facilities anzeigen
             for fid in id_list:
                 success = facility_manager.assign_facility_to_room(rid, fid)
                 if success:
