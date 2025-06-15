@@ -38,6 +38,3 @@ class GuestManager:
     def delete_guest(self, guest_id:int) -> bool:
         return self.guest_dal.delete_guest(guest_id)
 
-# guest_dal = GuestDataAccess("../database/hotel_sample.db")
-# manager = GuestManager(guest_dal)
-# print(manager.get_all_guests())
