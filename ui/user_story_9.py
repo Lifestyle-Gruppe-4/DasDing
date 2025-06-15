@@ -33,15 +33,16 @@ def alle_zimmer_anzeigen():
     if not hotels:
         print("Keine Hotels vorhanden")
         return
+    # Alle verfügbaren Hotels mit Adresse auflisten
     print("\nAlle Hotels")
     for idx, hotel in enumerate(hotels, start=1):
         print(f"{idx}. Name: {hotel.name}, Adresse: {hotel.address.street}, {hotel.address.city}")
 
-    # Hotel Auswahl für Zimmer
+    # Benutzer wählt ein Hotel aus der Liste aus
     try:
         choice = int(input("\nWählen Sie eine Hotel-Nummer für welches Sie die Zimmer sehen möchten: "))
     except ValueError:
-        print("Ungültige Eingabe")
+        print("Ungültige Eingabe") # Keine Zahl eingeben
         return
 
     #Gewähltes Hotel ermitteln
@@ -51,10 +52,10 @@ def alle_zimmer_anzeigen():
         print("Kein Hotel mit dieser ID gefunden.")
         return
 
-    #Zimmer laden
+    #Alle Zimmer des gewählten Hotels abrufen
     rooms = selected_hotel.rooms
 
-    #Ausgabe
+    #Zimmer anzigen oder Hinweis, falls keine vorhanden
     if not rooms:
         print(f"Kein Zimmer für Hotel '{selected_hotel.name}' gefunden.")
     else:
