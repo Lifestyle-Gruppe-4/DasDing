@@ -63,7 +63,7 @@ Alle Tasks wurden im GitHub-Project Board geplant und verwaltet.
 #### Vorgehen 
 Zu Beginn des Projekts haben wir uns intensiv mit den Grundlagen der Python-Programmierung beschäftigt sowie die verwendeten Tools wie Deepnote, GitHub und PyCharm eingerichtet. Danach wurde gemeinsam ein Klassendiagramm in Visual Paradigm erstellt, um die Datenbankstruktur und die logischen Entitäten festzulegen.
 
-Hier unser Klassendiagram. 
+Hier unser Klassendiagram: 
 
 ![image](https://github.com/user-attachments/assets/bdb2970f-07f6-4924-abcf-7c3fc1cc10b4)
 
