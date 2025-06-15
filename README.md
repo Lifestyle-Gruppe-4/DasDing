@@ -101,6 +101,7 @@ Das Project Board enthielt:
 - Zuweisung an Gruppenmitglieder
 - Statusspalten: `To Do → In Progress → Done`
 - Backlog
+![image](https://github.com/user-attachments/assets/4ba2b050-06ee-4ac1-9e23-f94be265bd88)
 
 ---
 
