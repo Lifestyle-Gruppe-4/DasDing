@@ -107,7 +107,7 @@ def user_story_3():
                 print("Hotel nicht gefunden.")
                 continue
 
-            # Neue Werte abfragen (Enter = unverändert)
+            # Neue Werte abfragen
             name_input = input(f"Neuer Name ({hotel.name}): ").strip()
             stars_input = input(f"Neue Sterne ({hotel.stars}): ").strip()
 
