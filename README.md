@@ -103,7 +103,7 @@ Das Project Board enthielt:
 Zu Beginn unseres Projektes haben wir die Modellierung der wichtigsten Klassen untereinander aufgeteilt:
 - Silian Gyger: Facility und Guest
 - Simon Manger: Room und RoomType
-- Michele Lepori: Hotel und Adress
+- Michele Lepori: Hotel und Address
 - Thomas Bartels: Booking und Invoice
 
 Auch die User Stories haben wir klar unter uns verteilt:
