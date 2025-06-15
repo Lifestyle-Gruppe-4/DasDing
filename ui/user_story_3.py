@@ -29,6 +29,7 @@ hotel_manager = HotelManager(hotel_dal)
 
 
 def user_story_3():
+    """Hotelverwaltung: Hotels, Zimmer und Einrichtungen verwalten"""
     while True:
         print("\n-- Hotelverwaltung (Admin) --")
         print("1. Hotel hinzufügen")
@@ -54,6 +55,7 @@ def user_story_3():
             city = input("Stadt: ").strip()
             zip_code = input("PLZ: ").strip()
 
+            # Adresse und Hotelobjekt erstellen
             new_address = Address(address_id=None,
                                   street=street,
                                   city=city,
@@ -140,6 +142,7 @@ def user_story_3():
             hotel_manager.update_hotel(updated)
             print("Hotelinformationen aktualisiert.")
 
+        # Alle Hotels anzeigen
         elif choice == "4":
             hotels = hotel_manager.get_all_hotels()
             if not hotels:
@@ -150,6 +153,7 @@ def user_story_3():
                 print(f"  {h.hotel_id}: {h.name} ({h.stars} Sterne) in {h.address.street} {h.address.zip_code} {h.address.city}")
 
 
+        # Zimmer zu Hotel hinzufügen
         elif choice == "5":
             hotels = hotel_manager.get_all_hotels()
             if not hotels:
@@ -200,6 +204,7 @@ def user_story_3():
                 print("Fehler beim Anlegen des Zimmers.")
 
 
+        # Einrichtungen zu Zimmer hinzufügen
         elif choice == "6":
             hotels = hotel_manager.get_all_hotels()
             if not hotels:
@@ -241,6 +246,7 @@ def user_story_3():
                 print("Ungültige Eingabe.")
                 continue
 
+            # Einrichtungen zuweisen
             for fid in id_list:
                 success = facility_manager.assign_facility_to_room(rid, fid)
                 if success:
