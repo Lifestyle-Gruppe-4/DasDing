@@ -29,15 +29,18 @@ hotel_manager = HotelManager(hotel_dal)
 def user_story_7():
     """Dynamische Preisberechnung anzeigen"""
     try:
+        # Alle Hotels laden
         hotels = hotel_manager.get_all_hotels()
         if not hotels:
             print("Keine Hotels gefunden.")
             return
 
+        # Verfügbare Hotels anzeigen
         print("\nVerfügbare Hotels: ")
         for h in hotels:
             print(f" {h.hotel_id}. {h.name}")
 
+        # Benutzer gobt gewünschte Hotel-IDs ein
         selection = input("\nWelche Hotels möchten Sie gerne vergleichen? (IDs mit Komma trennen): ").strip()
         try:
             ids = [int(x) for x in selection.split(",") if x.strip()]
@@ -45,6 +48,7 @@ def user_story_7():
             print("Ungültige Eingabe.")
             return
 
+        # Gültige Hotels anhand der Eingabe sammeln
         chosen = []
         for i in ids:
             hotel = hotel_manager.find_by_id(i)
@@ -57,6 +61,7 @@ def user_story_7():
             print("Keine gültigen Hotels ausgewählt.")
             return
 
+        # Saison-Auswahlmenü
         print("\nFür welche Saison möchten Sie die Preise vergleichen?")
         print("0 = Abbruch")
         print("1 = Nebensaison  (März, April, Mai, Oktober, November)")
@@ -79,31 +84,26 @@ def user_story_7():
             "hoch": [2, 7, 8, 12],
         }
 
+        # Namen der Monate für Anzeige
         month_names = {
-            1: "Januar",
-            2: "Februar",
-            3: "März",
-            4: "April",
-            5: "Mai",
-            6: "Juni",
-            7: "Juli",
-            8: "August",
-            9: "September",
-            10: "Oktober",
-            11: "November",
-            12: "Dezember",
+            1: "Januar", 2: "Februar", 3: "März", 4: "April",
+            5: "Mai", 6: "Juni", 7: "Juli", 8: "August",
+            9: "September", 10: "Oktober", 11: "November", 12: "Dezember",
         }
 
-        year = date.today().year
+        year = date.today().year # Aktuelles Jahr
 
+        # lesbare Stringliste für die Monate
         def months_to_string(month_list):
             return ", ".join(month_names[m] for m in month_list)
 
+        # Preisvergleich für jedes gewählte Hotel
         for hotel in chosen:
             print(f"\nHotel: {hotel.name}")
             for room in hotel.rooms:
                 base_price = room.price_per_night
 
+                # Saisonpreise berechnen (jeweils ein Beispielmonat aus jeder Saison verwenden)
                 hoch_price, hoch_factor = room_manager.calculate_seasonal_price(
                     base_price, date(year, season_months["hoch"][0], 1)
                 )
@@ -114,6 +114,7 @@ def user_story_7():
                     base_price, date(year, season_months["normal"][0], 1)
                 )
 
+                # Ausgabe für das Zimmer
                 print(f" Zimmer {room.room_number}")
                 print(f"   Basispreis: {base_price:.2f} CHF")
                 if season_choice in {"1", "4"}:
@@ -135,6 +136,7 @@ def user_story_7():
         print(f"Fehler: {e}")
 
 def user_story_7_menu():
+    """Menü zur Auswahl der Preisberechnung (User Story 7)"""
     while True:
         print("\n-- Preisgestaltung --")
         print("0 = Exit")
