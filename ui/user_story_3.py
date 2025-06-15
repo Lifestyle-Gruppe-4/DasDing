@@ -173,6 +173,7 @@ def user_story_3():
                 print("Hotel nicht gefunden.")
                 continue
 
+                 #TODO: Keine prüfung ob Zimmernummer bereits besteht.
             room_number = input("Raumnummer eingeben: ").strip()
             if not room_number:
                 print("Raumnummer darf nicht leer sein.")
