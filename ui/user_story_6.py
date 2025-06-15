@@ -31,34 +31,40 @@ def user_story_6():
         for g in guest_manager.get_all_guests():
             print(f" {g.guest_id}. {g.first_name} {g.last_name}")
 
+        # Eingabe des Namens zur Identifikation
         first_name = input("Vorname des Gastes: ").strip()
         last_name = input("Nachname des Gastes: ").strip()
 
+        # Buchungen des Gastes abrufen
         bookings = booking_manager.get_bookings_by_guest(first_name,last_name)
         if not bookings:
             print("Keine Buchung zu diesem Namen gefunden.")
             return
 
+        # Alle Buchungen anzeigen
         print("\nIhre Buchungen: ")
         for b in bookings:
             print(booking_manager.get_booking_details(b))
 
+        # Benutzer wählt eine Buchungs-ID zur Stornierung
         try:
             bid = int(input("Geben Sie die Buchungs-ID ein, die Sie gerne stornieren möchten: "))
         except ValueError:
             print("Ungültig Eingabe.")
             return
 
+        # Buchung über ID abrufen
         booking = booking_dal.get_booking_by_id(bid)
         if not booking:
             print("Buchung nicht gefunden!")
             return
 
-        #Prüfen, ob die Rechnung bereits storniert wurde
+        #Prüfen, ob die Buchung bereits storniert wurde
         if booking.is_cancelled:
             print("Buchung wurde bereits storniert.")
             return
 
+        # Benutzer muss Stornierung bestätigen
         confirm = input("\nSoll diese Buchung storniert werden? (j/n) ")
         if confirm != 'j':
             print("Abbruch. Auf wiedersehen.")
@@ -76,6 +82,7 @@ def user_story_6():
         print(f"Fehler: {e}")
 
 def user_story_6_menu():
+    """Menü zur Auswahl der Stornierungsfunktion (User Story 6)"""
     while True:
         print("\nGuten Tag - Sie möchten gerne ihre Buchung stornieren? \nBitte beachten Sie die folgende Überischt:")
         print("\n-- Optionen --")
