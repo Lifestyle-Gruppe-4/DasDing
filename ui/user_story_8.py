@@ -26,9 +26,9 @@ hotel_manager = HotelManager(hotel_dal)
 
 def print_booking_by_hotels(bookings):
     """Gruppert Buchungen nach Hotels und gibt diese aus"""
-    grouped = {}
+    grouped = {} # Dictionary zum Gruppieren der Buchungen nach Hotel-ID
     for b in bookings:
-        hid = b.room.hotel.hotel_id
+        hid = b.room.hotel.hotel_id # Hotel-ID der aktuellen Buchung
         # Falls Hotel-ID noch nicht vorhanden ist, neuen Entrag anlegen.
         grouped.setdefault(hid, {"hotel": b.room.hotel, "bookings": []})["bookings"].append(b) #ChatGPT gefragt
 
@@ -61,6 +61,7 @@ def select_hotels():
         if not ident.isdigit():
             continue
         hid = int(ident)
+        # Prüfen, ob due eingegebene Hotel-ID existieren
         if any(h.hotel_id == hid for h in hotels):
             selected.append(hid)
         else:
