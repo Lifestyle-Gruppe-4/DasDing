@@ -166,10 +166,6 @@ Während der Entwicklung haben wir ChatGPT punktuell zur Unterstützung verwende
 
  Chatgpt wurde nicht als Ersatz für eigene Arbeit, sondern als Ergänzung genutzt 
 
-## Projektlinks
-Deepnote-Projekt
-Github Repository
-Github Project Board
 
 
 
